@@ -1,0 +1,102 @@
+<project name="Microcontroller" basedir="." default="generate">
+	<property file="${user.home}/.xtext.properties" />
+	<property file="./build.properties.default" />
+
+	<property name="bin-path"     value="./bin"/>
+	<property name="lib-path"     value="./lib"/>
+	<property name="src-path"     value="./src/main/java"/>
+	<property name="res-path"     value="./src/main/resources"/>
+	<property name="gen-path"     value="../mc"/>
+
+	<!-- ==================================================== -->
+	<!--              Setting up classpaths                   --> 
+	<!-- ==================================================== -->
+
+	<path id="log4j.lib">
+		<fileset dir="${eclipse.home.plugins}">
+			<include name="org.eclipse.xtext.logging_*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="plugins">
+		<path refid="log4j.lib"/>
+		<fileset dir="${eclipse.home.plugins}">
+			<include name="org.eclipse.emf*.jar"/>
+			<include name="org.eclipse.jface*.jar"/>
+			<include name="org.eclipse.text*.jar"/>
+			<include name="org.eclipse.equinox*.jar"/>
+			<include name="org.eclipse.jdt*.jar"/>
+			<exclude name="org.eclipse*junit*.jar"/>
+			<exclude name="**/*.source*.jar"/>
+			<exclude name="**/*.src*.jar"/>
+			<exclude name="**/*.editor*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="oaw.lib">
+		<fileset dir="${eclipse.home.plugins}">
+			<include name="**/org.eclipse.core*.jar"/>
+			<include name="**/org.eclipse.emf*.jar"/>
+			<include name="**/org.eclipse.xtend*.jar"/>
+			<include name="**/org.eclipse.xpand*.jar"/>
+			<include name="**/org.eclipse.uml2*.jar"/>
+			<include name="**/org.apache.commons.*.jar"/>
+			<include name="com.ibm.*.jar"/>
+			<include name="*tools5*.jar"/>
+			<include name="**/antlr*.jar"/>
+			<include name="**/*xerces*.jar"/>
+			<exclude name="**/*.source*.jar"/>
+			<exclude name="**/*.src*.jar"/>
+			<exclude name="**/*.editor*.jar"/>
+		</fileset>
+		<path refid="plugins"/>
+	</path>
+
+	<path id="generate.classpath-x">
+		<fileset dir="${eclipse.home.plugins}">
+			<include name="**/org.eclipse.core*.jar"/>
+			<include name="**/org.eclipse.emf*.jar"/>
+			<include name="**/org.eclipse.xtend*.jar"/>
+			<include name="**/org.eclipse.xpand*.jar"/>
+			<include name="**/org.apache.commons.*.jar"/>
+			<include name="**/antlr*.jar"/>
+			<include name="**/*xerces*.jar"/>
+			<include name="**/*log4j*1.2.8*.jar"/>
+			<include name="org.apache.commons.*.jar"/>
+			<include name="org.eclipse.emf*.jar"/>
+			<include name="org.eclipse.jface*.jar"/>
+			<include name="org.eclipse.text*.jar"/>
+			<include name="org.eclipse.equinox*.jar"/>
+			<include name="org.eclipse.jdt*.jar"/>
+			<include name="org.eclipse.uml2*.jar"/>
+			<exclude name="org.eclipse*junit*.jar"/>
+			<exclude name="**/*.source*.jar"/>
+			<exclude name="**/*.src*.jar"/>
+			<exclude name="**/*.editor*.jar"/>
+		</fileset>
+		<fileset dir="${lib-path}">
+		</fileset>
+		<pathelement path="${res-path}" />
+	</path>
+
+	<path id="generate.classpath">
+		<path refid="oaw.lib"/>
+		<fileset dir="${lib-path}"/>
+		<pathelement path="${res-path}" />
+	</path>
+
+	<!-- ==================================================== -->
+	<!--            Setting up target definitions             --> 
+	<!-- ==================================================== -->
+
+	<taskdef name="workflow" classname="org.eclipse.emf.mwe.core.ant.WorkflowAntTask" classpathref="generate.classpath"/>
+
+	<target name="generate">
+		<mkdir dir="${gen-path}" />
+		<workflow file="Microcontroller.mwe" classpathref="generate.classpath" failonerror="true"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin-path}"/>
+	</target>
+</project>

@@ -1,0 +1,126 @@
+/*
+**
+**	$Id: sm.ext 944 2010-04-23 07:01:13Z smork $
+**	$Revision: 944 $
+**	$Date: 2010-04-23 09:01:13 +0200 (Fr, 23. Apr 2010) $
+**	$Author: smork $
+**
+**	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**
+**	This program and the accompanying materials are made available under the
+**	terms of the Eclipse Public License v1.0.
+**
+**	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+**
+**
+*/
+
+import uml;
+
+String programmify(String s) :
+	s.replaceAll(" ", "_").replaceAll("-", "_").replaceAll("\\.", "_");
+
+String method(String s) :
+	s.replaceAll(" ", "").replaceAll("!","").replaceAll("=","").replaceAll("-", "_").replaceAll("\\.", "");
+
+String smName(StateMachine sm) :
+	programmify(sm.name);
+
+String smCheckCommand(StateMachine sm) :
+	"check_command_" + programmify(sm.name); 
+
+String smGetState(StateMachine sm) :
+	"get_state_" + programmify(sm.name); 
+
+String smInit(StateMachine sm) :
+	"init_" + programmify(sm.name); 
+
+String smIncludeFileName(StateMachine sm) :
+	programmify(sm.name) + ".h";
+
+String smImplFileName(StateMachine sm) :
+	programmify(sm.name) + ".c";
+
+String smIncludeName(StateMachine sm) :
+	programmify(sm.name).toUpperCase() + "_H";
+
+String smIncludeCommandFileName(StateMachine sm) :
+	programmify(sm.name) + "Cmd.h";
+
+String smIncludeCommandName(StateMachine sm) :
+	programmify(sm.name).toUpperCase() + "_CMD_H";
+
+String smIncludeActivityFileName(StateMachine sm) :
+	programmify(sm.name) + "Activity.h";
+
+String smImplActivityFileName(StateMachine sm) :
+	programmify(sm.name) + "Activity.c";
+
+String smIncludeActivityName(StateMachine sm) :
+	programmify(sm.name).toUpperCase() + "_ACTIVITY_H";
+
+String defaultTransition(State s) :
+	"wrong" + s.name.toFirstUpper() + "Trigger";
+
+cached Boolean named(NamedElement ne) :
+	(ne.name != null) && (ne.name.length > 0);
+
+private String stateName(Vertex v) :
+	"vertex";
+
+private String stateName(Pseudostate ps) :
+	ps.kind.toString();
+
+private String stateName(State s) :
+	s.name;
+
+String stateDefinition(Vertex s) :
+	smName(s.containingStateMachine()).toUpperCase() + "__" + stateName(s).toUpperCase();
+
+String initialDefinition(StateMachine sm) :
+	stateDefinition(getInitials(sm).first());
+
+private getBody(ValueSpecification vs) :
+	null;
+
+private String getBody(OpaqueExpression oe) :
+	oe.body.first();
+	
+cached String getGuard(Transition t) :
+	t.guard == null ? null : getBody(t.guard.specification);
+
+cached Set[String] callbacks(StateMachine sm) :
+	sm.eAllContents.typeSelect(Activity).name.toSet().sortBy(n|n);
+
+cached Set[String] guards(StateMachine sm) :
+	sm.eAllContents.typeSelect(OpaqueExpression).body.method().toSet().sortBy(e|e);
+
+private List[Pseudostate] getPseaudoStates(StateMachine sm, PseudostateKind k) :
+	sm.region.subvertex.typeSelect(Pseudostate).select(e|e.kind == k);
+
+cached List[Pseudostate] getChoices(StateMachine sm) :
+	getPseaudoStates(sm, PseudostateKind::choice);
+
+cached List[Pseudostate] getInitials(StateMachine sm) :
+	getPseaudoStates(sm, PseudostateKind::initial);
+
+cached List[State] getStates(StateMachine sm) :
+	sm.region.subvertex.typeSelect(State).select(e|named(e));
+
+cached List[Transition] getTransitions(StateMachine sm) :
+	sm.region.transition.select(e|named(e));
+
+cached Set[String] getCommands(StateMachine sm) :
+	getTransitions(sm).name.toSet().sortBy(e|e);
+
+private cached Boolean isChoice(Pseudostate ps) :
+	ps.kind == PseudostateKind::choice;
+
+cached Boolean isChoice(Vertex v) :
+	false;
+
+cached Boolean isCommandTransition(Transition t) :
+	State.isInstance(t.source) && (!FinalState.isInstance(t.target));
+
+String svnTag(String tag) :
+	"$" + tag + "$";

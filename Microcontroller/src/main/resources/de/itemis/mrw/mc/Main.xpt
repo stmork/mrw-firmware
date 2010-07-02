@@ -1,0 +1,91 @@
+«REM»
+«»
+«»
+«»	$Id: Main.xpt 944 2010-04-23 07:01:13Z smork $
+«»	$Revision: 944 $
+«»	$Date: 2010-04-23 09:01:13 +0200 (Fr, 23. Apr 2010) $
+«»	$Author: smork $
+«»
+«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+«»
+«»	This program and the accompanying materials are made available under the
+«»	terms of the Eclipse Public License v1.0.
+«»
+«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+«»
+«»
+«»
+«ENDREM»
+
+«IMPORT uml»
+
+«EXTENSION de::itemis::mrw::mc::sm»
+
+«DEFINE Main FOR Model»
+«FILE "elements.log" LOG»
+«EXPAND xpt::Tools::Comment»
+«EXPAND Main FOREACH ownedElement.typeSelect(Package).select(e|e.name == "diagram")»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Main FOR Package»
+«EXPAND Main FOREACH ownedElement.typeSelect(StateMachine)»
+«ENDDEFINE»
+
+«DEFINE Main FOR StateMachine»
+«EXPAND xpt::StateHeader::Main»
+«EXPAND xpt::StateImplementation::Main»
+«EXPAND xpt::CommandHeader::Main»
+«EXPAND xpt::ActivityHeader::Main»
+«EXPAND xpt::ActivityImplementation::Main»
+(State Machine)«name»
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Transition»
+(Transition)«name»: «this.source.name» -> «this.target.name»
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Activity»
+(Activity)«name» («metaType.name»)
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Trigger»
+(Trigger)«name» («metaType.name»)
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Signal»
+(Signal)«name» («metaType.name»)
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Pseudostate»
+(Pseudostate)«name» («metaType.name») «kind.toString()»
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR State»
+(State)«name» («metaType.name»)
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR OpaqueExpression»
+(Opaque Expression)«name» («metaType.name»)
+«FOREACH body AS text»
+  «text»
+«ENDFOREACH»
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR NamedElement»
+(«this.metaType.name»)«this.name»
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»
+
+«DEFINE Main FOR Element»
+(«this.metaType.name»)
+«EXPAND Main FOREACH ownedElement»
+«ENDDEFINE»

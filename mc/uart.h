@@ -1,0 +1,32 @@
+/*
+**
+**	$Filename:	uart.h $
+**	$Revision: 931 $
+**	$Date: 2010-04-14 10:39:15 +0200 (Mi, 14. Apr 2010) $
+**	$Author: smork $
+**	$Id: uart.h 931 2010-04-14 08:39:15Z smork $
+**
+**	UART handler
+**
+**	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**
+**	This program and the accompanying materials are made available under the
+**	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
+**	which accompanies this distribution.
+**
+**	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+**
+**
+*/
+
+#ifndef UART_H
+#define UART_H
+
+#include <avr/io.h>
+
+extern void    uart_init(void);
+extern void    uart_tx_byte(uint8_t val);
+extern uint8_t uart_rx_byte(void);
+extern void    uart_enable_tx_interrupt(uint8_t enable);
+
+#endif

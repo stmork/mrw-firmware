@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:MagicDrawProfile="http:///schemas/MagicDrawProfile/_FPcTQEb2Ed-Jsvq-bwqZkQ/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/2.0.0/UML" xsi:schemaLocation="http:///schemas/MagicDrawProfile/_FPcTQEb2Ed-Jsvq-bwqZkQ/0 UML_Standard_Profile.MagicDraw_Profile.profile.uml#_FTOnI0b2Ed-Jsvq-bwqZkQ">
+  <uml:Model xmi:id="eee_1045467100313_135436_1" name="Data" viewpoint="">
+    <ownedComment xmi:id="_12_5_1_694022d_1203415649218_713230_98" body="Author:Steffen A. Mork.&#xA;Created:2/19/08 10:07 AM.&#xA;Title:Firmware für CAN-Knoten der Modelleisenbahnsteuerung.&#xA;Comment:In diesem Modell sind alle Diagramme verzeichnet, aus&#xA;denen sich Bestandteile der Modelleisenbahnsteuerung&#xA;generieren lassen.&#xA;.&#xA;" annotatedElement="eee_1045467100313_135436_1"/>
+    <packageImport xmi:id="_0primitiveTypesData">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:id="_0javaPrimitiveTypesData">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_12_5_1_15500e1_1226750032157_312067_1322" name="diagram">
+      <packagedElement xmi:type="uml:StateMachine" xmi:id="_12_5_1_15500e1_1226749163540_790244_140" name="CAN-Node">
+        <ownedComment xmi:id="_12_5_1_15500e1_1226845369655_938493_685" body="Dieser Zustandsautomat verarbeitet eingehende&#xA;CAN-Kommandos abhängig vom inneren&#xA;Betriebszustand des CAN-Knotens." annotatedElement="_12_5_1_15500e1_1226749163540_790244_140"/>
+        <region xmi:id="_12_5_1_15500e1_1226749163566_668214_174" name="" visibility="public">
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_12_5_1_15500e1_1226749163591_293348_1016" name="" visibility="public" outgoing="_12_5_1_15500e1_1226753766121_489976_697"/>
+          <subvertex xmi:type="uml:State" xmi:id="_12_5_1_15500e1_1226749163592_483711_1018" name="Operating" visibility="public" outgoing="_12_5_1_15500e1_1226749163594_251520_1026 _12_5_1_15500e1_1226749163594_589793_1027 _12_5_1_15500e1_1226749163595_979123_1035 _12_5_1_15500e1_1226749163595_388137_1036 _12_5_1_15500e1_1226752560626_110344_447 _12_5_1_15500e1_1226753093570_308584_562 _12_5_1_15500e1_1226753198065_71251_574 _12_5_1_15500e1_1226753241290_145225_586 _12_5_1_15500e1_1226753468470_268201_598 _12_5_1_15500e1_1226753507762_420492_610 _12_5_1_15500e1_1226764205491_814684_832 _12_5_1_15500e1_1226764257718_507806_844 _12_5_1_694022d_1226920850484_948389_678 _12_5_1_694022d_1227261841640_746561_565" incoming="_12_5_1_15500e1_1226753047985_617118_544 _12_5_1_15500e1_1226749163594_251520_1026 _12_5_1_15500e1_1226749163595_979123_1035 _12_5_1_15500e1_1226749163595_388137_1036 _12_5_1_15500e1_1226752933718_123088_508 _12_5_1_15500e1_1226753093570_308584_562 _12_5_1_15500e1_1226753198065_71251_574 _12_5_1_15500e1_1226753241290_145225_586 _12_5_1_15500e1_1226753468470_268201_598 _12_5_1_15500e1_1226753507762_420492_610 _12_5_1_15500e1_1226753759072_287664_694 _12_5_1_15500e1_1226764205491_814684_832 _12_5_1_15500e1_1226764257718_507806_844 _12_5_1_694022d_1226920873273_766738_698 _12_5_1_694022d_1227261841640_746561_565">
+            <ownedComment xmi:id="_12_5_1_15500e1_1226845661320_148426_686" body="Dieser Zustand entspricht dem normelen Betriebsmodus. Hier werden&#xA;Steuerkommandos verarbeitet." annotatedElement="_12_5_1_15500e1_1226749163592_483711_1018"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_12_5_1_15500e1_1226749163592_775361_1019" name="Configuring" visibility="public" outgoing="_12_5_1_15500e1_1226764019451_905352_808 _12_5_1_15500e1_1226765170909_588601_892 _12_5_1_15500e1_1226749163595_818457_1037 _12_5_1_15500e1_1226765025114_590323_856 _12_5_1_15500e1_1226767132911_975138_984 _12_5_1_15500e1_1226749163594_871575_1029 _12_5_1_15500e1_1226749163595_998773_1032 _12_5_1_15500e1_1226749163595_744738_1038 _12_5_1_15500e1_1226763824747_140676_721 _12_5_1_15500e1_1226763868042_333762_733 _12_5_1_15500e1_1226763967462_403619_796 _12_5_1_15500e1_1226764072080_269780_820 _12_5_1_15500e1_1226765036599_333266_865 _12_5_1_15500e1_1226765043237_614179_874 _12_5_1_15500e1_1226765211901_604251_905 _12_5_1_15500e1_1226765246511_599202_926" incoming="_12_5_1_15500e1_1226764019451_905352_808 _12_5_1_15500e1_1226765170909_588601_892 _12_5_1_694022d_1226920864427_446118_682 _12_5_1_15500e1_1226749163595_818457_1037 _12_5_1_15500e1_1226765025114_590323_856 _12_5_1_15500e1_1226749163594_31637_1031 _12_5_1_15500e1_1226749163595_998773_1032 _12_5_1_15500e1_1226749163595_744738_1038 _12_5_1_15500e1_1226763824747_140676_721 _12_5_1_15500e1_1226763868042_333762_733 _12_5_1_15500e1_1226763967462_403619_796 _12_5_1_15500e1_1226764072080_269780_820 _12_5_1_15500e1_1226765036599_333266_865 _12_5_1_15500e1_1226765043237_614179_874 _12_5_1_15500e1_1226765211901_604251_905 _12_5_1_15500e1_1226765246511_599202_926">
+            <ownedComment xmi:id="_12_5_1_15500e1_1226846069533_435189_688" body="Im Konfigurationsmodus werden Konfigurationskommandos&#xA;verarbeitet. Dieser Zustand kann nur in einen Reset überführt&#xA;werden. Durch den Reset wird dann die hardware neu&#xA;initialisiert." annotatedElement="_12_5_1_15500e1_1226749163592_775361_1019"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_12_5_1_15500e1_1226749163592_33343_1020" name="Resetting" visibility="public" outgoing="_12_5_1_15500e1_1226749163594_438998_1028 _12_5_1_15500e1_1226749163595_379143_1033 _12_5_1_15500e1_1226765658618_982310_938 _12_5_1_15500e1_1226765747994_502105_951" incoming="_12_5_1_15500e1_1226749163594_589793_1027 _12_5_1_15500e1_1226749163594_871575_1029 _12_5_1_15500e1_1226749163595_379143_1033 _12_5_1_15500e1_1226752972172_492174_526 _12_5_1_15500e1_1226765658618_982310_938 _12_5_1_15500e1_1226765747994_502105_951 _12_5_1_15500e1_1226767029516_993460_965 _12_5_1_15500e1_1226767132911_975138_984">
+            <ownedComment xmi:id="_12_5_1_15500e1_1226846144583_781196_689" body="Dieser Zustand ist ein Übergangszustand. Es wurde ein Watchdog Reset&#xA;ausgelöst. Dieser wird erst nach einer Sekunde durchgeführt. Während&#xA;dessen ist der Mikrocontroller in diesem Zustand und kann keine Aufgaben&#xA;durchführen." annotatedElement="_12_5_1_15500e1_1226749163592_33343_1020"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_12_5_1_15500e1_1226749163592_577900_1021" name="Unconfigured" visibility="public" outgoing="_12_5_1_15500e1_1226749163595_793329_1034 _12_5_1_15500e1_1226844421886_234417_670 _12_5_1_15500e1_1226749163594_31637_1031 _12_5_1_15500e1_1226841567704_895784_656 _12_5_1_15500e1_1226767029516_993460_965" incoming="_12_5_1_15500e1_1226753749805_492490_666 _12_5_1_15500e1_1226749163595_793329_1034 _12_5_1_15500e1_1226844421886_234417_670 _12_5_1_15500e1_1226841567704_895784_656">
+            <ownedComment xmi:id="_12_5_1_15500e1_1226845789537_279547_687" body="Dieser Betriebsmodus wird nach dem Booten erreicht, wenn&#xA;keine gültige Konfiguration im EEPROM abgelegt ist. Von hier&#xA;aus kann nur konfiguriert oder gebootet werden." annotatedElement="_12_5_1_15500e1_1226749163592_577900_1021"/>
+          </subvertex>
+          <subvertex xmi:type="uml:FinalState" xmi:id="_12_5_1_15500e1_1226749163593_264761_1022" name="" visibility="public" incoming="_12_5_1_15500e1_1226749163594_438998_1028"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_12_5_1_15500e1_1226752503001_728012_437" name="checkIdButton" visibility="public" outgoing="_12_5_1_15500e1_1226753047985_617118_544 _12_5_1_15500e1_1226752894680_25707_490" incoming="_12_5_1_15500e1_1226752560626_110344_447" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_12_5_1_15500e1_1226752890587_694998_481" name="checkId" visibility="public" outgoing="_12_5_1_15500e1_1226752933718_123088_508 _12_5_1_15500e1_1226752972172_492174_526" incoming="_12_5_1_15500e1_1226752894680_25707_490" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_12_5_1_15500e1_1226753745785_255525_658" name="checkConfiguration" visibility="public" outgoing="_12_5_1_15500e1_1226753749805_492490_666 _12_5_1_15500e1_1226753759072_287664_694" incoming="_12_5_1_15500e1_1226753766121_489976_697" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_12_5_1_694022d_1226920845739_310645_670" name="checkPendingCommand" visibility="public" outgoing="_12_5_1_694022d_1226920864427_446118_682 _12_5_1_694022d_1226920873273_766738_698" incoming="_12_5_1_694022d_1226920850484_948389_678" kind="choice"/>
+          <transition xmi:id="_12_5_1_15500e1_1226749163594_251520_1026" name="SETRGT" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163597_465137_1044" name="right"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163598_332572_1045" name="SETRGT" visibility="public" event="_12_5_1_15500e1_1226749163544_440234_148"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163594_589793_1027" name="RESET" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163599_968777_1046" name="reset"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163599_622834_1048" name="RESET" visibility="public" event="_12_5_1_15500e1_1226751963090_891474_302"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163594_438998_1028" name="" visibility="public" target="_12_5_1_15500e1_1226749163593_264761_1022" source="_12_5_1_15500e1_1226749163592_33343_1020">
+            <trigger xmi:id="_12_5_1_15500e1_1226765853291_174159_963" name="wdtOverflow" visibility="public" event="_12_5_1_15500e1_1226765853291_228966_962"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163594_871575_1029" name="CFGEND" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163599_558249_1049" name="configEnd"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163599_48401_1050" name="CFGEND" visibility="public" event="_12_5_1_15500e1_1226749163543_162227_143"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163594_31637_1031" name="CFGBGN" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_577900_1021">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163600_718687_1053" name="configBegin"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163600_910456_1054" name="CFGBGN" visibility="public" event="_12_5_1_15500e1_1226749163543_428997_145"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_998773_1032" name="PING" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163600_623778_1055" name="ping"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163600_102753_1056" name="PING" visibility="public" event="_12_5_1_15500e1_1226749163543_464397_146"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_379143_1033" name="PING" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_33343_1020">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163600_469584_1057" name="ping"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163601_778519_1058" name="PING" visibility="public" event="_12_5_1_15500e1_1226749163543_912971_142"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_793329_1034" name="PING" visibility="public" target="_12_5_1_15500e1_1226749163592_577900_1021" source="_12_5_1_15500e1_1226749163592_577900_1021">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163601_423896_1059" name="ping"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163601_902299_1060" name="PING" visibility="public" event="_12_5_1_15500e1_1226749163544_855274_150"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_979123_1035" name="PING" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163601_572674_1061" name="ping"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163601_172605_1062" name="PING" visibility="public" event="_12_5_1_15500e1_1226749163544_600876_147"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_388137_1036" name="SETLFT" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163601_732089_1063" name="left"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163602_930972_1064" name="SETLFT" visibility="public" event="_12_5_1_15500e1_1226749163544_405803_149"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_818457_1037" name="CFGSWN" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163602_371847_1065" name="configSwitchNew"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163602_952717_1066" name="CFGSWN" visibility="public" event="_12_5_1_15500e1_1226749163544_838621_151"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226749163595_744738_1038" name="CFGSWO" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226749163602_371789_1067" name="configSwitchOld"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226749163602_796112_1068" name="CFGSWO" visibility="public" event="_12_5_1_15500e1_1226749163544_902756_152"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226752560626_110344_447" name="SET_ID" visibility="public" target="_12_5_1_15500e1_1226752503001_728012_437" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <trigger xmi:id="_12_5_1_15500e1_1226752654254_505019_479" name="SET_ID" visibility="public" event="_12_5_1_15500e1_1226752654254_886508_478"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226752894680_25707_490" name="" visibility="public" target="_12_5_1_15500e1_1226752890587_694998_481" guard="_12_5_1_15500e1_1226752919475_686641_505" source="_12_5_1_15500e1_1226752503001_728012_437">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226752919475_686641_505" name="unnamed4">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226752919477_83526_506" name="">
+                <language>English</language>
+                <body>idButtonPressed</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226752933718_123088_508" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" guard="_12_5_1_15500e1_1226752950016_402214_523" source="_12_5_1_15500e1_1226752890587_694998_481">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226752950016_402214_523" name="unnamed5">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226752950017_561484_524" name="">
+                <language>English</language>
+                <body>!idChanged</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1226916492279_104987_535" name="idNotChanged"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226752972172_492174_526" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" guard="_12_5_1_15500e1_1226752985070_924274_541" source="_12_5_1_15500e1_1226752890587_694998_481">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226752985070_924274_541" name="unnamed6">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226752985071_212496_542" name="">
+                <language>English</language>
+                <body>idChanged</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226756448680_829323_719" name="setId"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753047985_617118_544" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" guard="_12_5_1_15500e1_1226753054730_322330_559" source="_12_5_1_15500e1_1226752503001_728012_437">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226753054730_322330_559" name="unnamed7">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226753054731_70267_560" name="">
+                <language>English</language>
+                <body>!idButtonPressed</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1226916445606_194343_534" name="idChangeDisabled"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753093570_308584_562" name="SETSGN" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226753111675_942817_572" name="setSignal"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226753102243_62819_571" name="SETSGN" visibility="public" event="_12_5_1_15500e1_1226753102243_846575_570"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753198065_71251_574" name="SETRON" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226753213696_372178_584" name="railOn"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226753206587_697469_583" name="SETRON" visibility="public" event="_12_5_1_15500e1_1226753206587_305627_582"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753241290_145225_586" name="SETROF" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226753260197_187781_596" name="railOff"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226753250547_120867_595" name="SETROF" visibility="public" event="_12_5_1_15500e1_1226753250547_946926_594"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753468470_268201_598" name="QRYBUF" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226753494361_957712_608" name="queryBufferState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226753481494_833847_607" name="QRYBUF" visibility="public" event="_12_5_1_15500e1_1226753481493_227403_606"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753507762_420492_610" name="QRYERR" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226753528016_458193_621" name="queryErrorState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226753518650_473981_619" name="QRYERR" visibility="public" event="_12_5_1_15500e1_1226753518649_722901_618"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753749805_492490_666" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_577900_1021" guard="_12_5_1_15500e1_1226753749805_842752_667" source="_12_5_1_15500e1_1226753745785_255525_658">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226753749805_842752_667" name="unnamed2">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226753749806_696467_668" name="">
+                <language>English</language>
+                <body>!isConfigured</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753759072_287664_694" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" guard="_12_5_1_15500e1_1226753759072_656215_695" source="_12_5_1_15500e1_1226753745785_255525_658">
+            <ownedRule xmi:id="_12_5_1_15500e1_1226753759072_656215_695" name="unnamed3">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_15500e1_1226753759073_835543_696" name="">
+                <language>English</language>
+                <body>isConfigured</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226753766121_489976_697" name="" visibility="public" target="_12_5_1_15500e1_1226753745785_255525_658" source="_12_5_1_15500e1_1226749163591_293348_1016">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1227262735294_381377_711" name="initFirmware"/>
+            <trigger xmi:id="_12_5_1_694022d_1227262707344_562550_710" name="" visibility="public"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226763824747_140676_721" name="CFGRAI" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226763842643_894888_731" name="configRail"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226763836177_327599_730" name="CFGRAI" visibility="public" event="_12_5_1_15500e1_1226763836177_777357_729"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226763868042_333762_733" name="CFGMF2" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226763915853_54571_743" name="configMainForm2"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226763883440_694487_742" name="CFGMF2" visibility="public" event="_12_5_1_15500e1_1226763883440_334241_741"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226763967462_403619_796" name="CFGMF3" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226763986049_72907_806" name="configMainForm3"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226763977668_749904_805" name="CFGMF3" visibility="public" event="_12_5_1_15500e1_1226763977668_141932_804"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226764019451_905352_808" name="CFGPF2" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226764041713_850568_818" name="configPreForm2"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226764029922_775000_817" name="CFGPF2" visibility="public" event="_12_5_1_15500e1_1226764029922_910986_816"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226764072080_269780_820" name="CFGPF3" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226764092486_887973_830" name="configPreForm3"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226764083348_656328_829" name="CFGPF3" visibility="public" event="_12_5_1_15500e1_1226764083348_135781_828"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226764205491_814684_832" name="GETDIR" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226764222224_614549_842" name="getDirection"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226764214166_711695_841" name="GETDIR" visibility="public" event="_12_5_1_15500e1_1226764214166_520050_840"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226764257718_507806_844" name="GETRBS" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226764278299_276584_854" name="getRailOccupation"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226764271867_450681_853" name="GETRBS" visibility="public" event="_12_5_1_15500e1_1226764271867_347027_852"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765025114_590323_856" name="CFGPL2" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765094599_506564_884" name="configPreLight2"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765087473_916435_883" name="CFGPL2" visibility="public" event="_12_5_1_15500e1_1226765087473_383794_882"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765036599_333266_865" name="CFGML2" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765130125_715105_887" name="configMainLight2"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765122060_115348_886" name="CFGML2" visibility="public" event="_12_5_1_15500e1_1226765122060_450191_885"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765043237_614179_874" name="CFGSL2" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765156509_179526_890" name="configRaillockLight2"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765147231_973604_889" name="CFGSL2" visibility="public" event="_12_5_1_15500e1_1226765147231_967803_888"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765170909_588601_892" name="CFGPL3" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765192129_503496_903" name="configPreLight3"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765180817_339027_901" name="CFGPL3" visibility="public" event="_12_5_1_15500e1_1226765183166_748421_902"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765211901_604251_905" name="CFGML3" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765227506_898890_915" name="configMainLight3"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765220219_305507_914" name="CFGML3" visibility="public" event="_12_5_1_15500e1_1226765220215_409383_913"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765246511_599202_926" name="CFGML4" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765267756_200866_936" name="configMainLight4"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765259253_497741_935" name="CFGML4" visibility="public" event="_12_5_1_15500e1_1226765259253_508037_934"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765658618_982310_938" name="QRYBUF" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_33343_1020">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765684129_210341_949" name="queryBufferState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765673189_58093_947" name="QRYBUF" visibility="public" event="_12_5_1_15500e1_1226765675614_332471_948"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226765747994_502105_951" name="QRYERR" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_33343_1020">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226765784581_908054_961" name="queryErrorState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226765779069_731820_960" name="QRYERR" visibility="public" event="_12_5_1_15500e1_1226765779069_8123_959"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226767029516_993460_965" name="RESET" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_577900_1021">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226767078880_425118_982" name="reset"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226767075327_658554_981" name="RESET" visibility="public" event="_12_5_1_15500e1_1226767075327_530828_980"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226767132911_975138_984" name="RESET" visibility="public" target="_12_5_1_15500e1_1226749163592_33343_1020" source="_12_5_1_15500e1_1226749163592_775361_1019">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226767172709_335395_1001" name="reset"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226767166239_420296_1000" name="RESET" visibility="public" event="_12_5_1_15500e1_1226767166239_772455_999"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226841567704_895784_656" name="QRYERR" visibility="public" target="_12_5_1_15500e1_1226749163592_577900_1021" source="_12_5_1_15500e1_1226749163592_577900_1021">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226843255855_169091_667" name="queryErrorState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226841636582_18777_665" name="QRYERR" visibility="public" event="_12_5_1_15500e1_1226843815109_970227_668"/>
+          </transition>
+          <transition xmi:id="_12_5_1_15500e1_1226844421886_234417_670" name="QRYBUF" visibility="public" target="_12_5_1_15500e1_1226749163592_577900_1021" source="_12_5_1_15500e1_1226749163592_577900_1021">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_15500e1_1226844432175_52734_678" name="queryBufferState"/>
+            <trigger xmi:id="_12_5_1_15500e1_1226844446794_670360_680" name="QRYBUF" visibility="public" event="_12_5_1_15500e1_1226844446793_880057_679"/>
+          </transition>
+          <transition xmi:id="_12_5_1_694022d_1226920850484_948389_678" name="CFGBGN" visibility="public" target="_12_5_1_694022d_1226920845739_310645_670" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <trigger xmi:id="_12_5_1_694022d_1226920850485_470566_680" name="CFGBGN" visibility="public" event="_12_5_1_15500e1_1226749163543_236875_144"/>
+          </transition>
+          <transition xmi:id="_12_5_1_694022d_1226920864427_446118_682" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_775361_1019" guard="_12_5_1_694022d_1226920919444_291564_715" source="_12_5_1_694022d_1226920845739_310645_670">
+            <ownedRule xmi:id="_12_5_1_694022d_1226920919444_291564_715" name="unnamed9">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_694022d_1226920919445_498129_716" name="">
+                <language>English</language>
+                <body>!isCommandPending</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1226921177435_762520_717" name="configBegin"/>
+          </transition>
+          <transition xmi:id="_12_5_1_694022d_1226920873273_766738_698" name="" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" guard="_12_5_1_694022d_1226920909225_283132_713" source="_12_5_1_694022d_1226920845739_310645_670">
+            <ownedRule xmi:id="_12_5_1_694022d_1226920909225_283132_713" name="unnamed8">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_12_5_1_694022d_1226920909232_497405_714" name="">
+                <language>English</language>
+                <body>isCommandPending</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1226921529363_753298_718" name="notConfiguring"/>
+          </transition>
+          <transition xmi:id="_12_5_1_694022d_1227261841640_746561_565" name="GETVER" visibility="public" target="_12_5_1_15500e1_1226749163592_483711_1018" source="_12_5_1_15500e1_1226749163592_483711_1018">
+            <effect xmi:type="uml:Activity" xmi:id="_12_5_1_694022d_1227261865583_970909_575" name="getVersion"/>
+            <trigger xmi:id="_12_5_1_694022d_1227261854165_866984_574" name="GETVER" visibility="public" event="_12_5_1_694022d_1227261854161_288812_573"/>
+          </transition>
+        </region>
+      </packagedElement>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163543_912971_142" name="PING"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163543_162227_143" name="CFGEND"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163543_236875_144" name="CFGBGN"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163543_428997_145" name="CFGBGN"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163543_464397_146" name="PING"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_600876_147" name="PING"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_440234_148" name="SETRGT"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_405803_149" name="SETLFT"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_855274_150" name="PING"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_838621_151" name="CFGSWN"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226749163544_902756_152" name="CFGSWO"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226751963090_891474_302" name="RESET"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226752654254_886508_478" name="SET_ID"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226753102243_846575_570" name="SETSGN"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226753206587_305627_582" name="SETRON"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226753250547_946926_594" name="SETROF"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226753481493_227403_606" name="QRYBUF"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226753518649_722901_618" name="QRYERR"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226763836177_777357_729" name="CFGRAI"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226763883440_334241_741" name="CFGMF2"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226763977668_141932_804" name="CFGMF3"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226764029922_910986_816" name="CFGPF2"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226764083348_135781_828" name="CFGPF3"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226764214166_520050_840" name="GETDIR"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226764271867_347027_852" name="GETRBS"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765087473_383794_882" name="CFGPL2"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765122060_450191_885" name="CFGML2"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765147231_967803_888" name="CFGSL2"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765183166_748421_902" name="CFGPL3"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765220215_409383_913" name="CFGML3"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765259253_508037_934" name="CFGML4"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765675614_332471_948" name="QRYBUF"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226765779069_8123_959" name="QRYERR"/>
+      <packagedElement xmi:type="uml:TimeEvent" xmi:id="_12_5_1_15500e1_1226765853291_228966_962" name="wdtOverflow"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226767075327_530828_980" name="RESET"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226767166239_772455_999" name="RESET"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226843815109_970227_668" name="QRYERR"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_15500e1_1226844446793_880057_679" name="QRYBUF"/>
+      <packagedElement xmi:type="uml:SignalEvent" xmi:id="_12_5_1_694022d_1227261854161_288812_573" name="GETVER"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="magicdraw_uml_standard_profile_v_0001" name="UML Standard Profile">
+      <ownedComment xmi:id="_be00301_1078843546940_242228_131" body="UML Standard Profile contains several popular stereotypes, tag definitions and constraints described in UML  2 Specifications." annotatedElement="magicdraw_uml_standard_profile_v_0001"/>
+    </packagedElement>
+    <profileApplication xmi:id="_be00301_1073394351331_445580_2profileApplicationData">
+      <eAnnotations xmi:id="_FTiJHEb2Ed-Jsvq-bwqZkQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="UML_Standard_Profile.MagicDraw_Profile.profile.uml#_FTOnI0b2Ed-Jsvq-bwqZkQ"/>
+      </eAnnotations>
+      <appliedProfile href="UML_Standard_Profile.MagicDraw_Profile.profile.uml#_be00301_1073394351331_445580_2"/>
+    </profileApplication>
+    <profileApplication xmi:id="_11_5_be00301_1153310565718_226811_161profileApplicationData">
+      <eAnnotations xmi:id="_FTiJHkb2Ed-Jsvq-bwqZkQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="UML_Standard_Profile.MagicDraw_Profile.DSL_Customization.profile.uml#_FTLjwUb2Ed-Jsvq-bwqZkQ"/>
+      </eAnnotations>
+      <appliedProfile href="UML_Standard_Profile.MagicDraw_Profile.DSL_Customization.profile.uml#_11_5_be00301_1153310565718_226811_161"/>
+    </profileApplication>
+    <profileApplication xmi:id="_9_0_be00301_1108050582343_527400_10847profileApplicationData">
+      <eAnnotations xmi:id="_FTiJIEb2Ed-Jsvq-bwqZkQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="UML_Standard_Profile.UML_Standard_Profile.profile.uml#_FTiJJUb2Ed-Jsvq-bwqZkQ"/>
+      </eAnnotations>
+      <appliedProfile href="UML_Standard_Profile.UML_Standard_Profile.profile.uml#_9_0_be00301_1108050582343_527400_10847"/>
+    </profileApplication>
+    <profileApplication xmi:id="_11_5_f720368_1159529670215_231387_1profileApplicationData">
+      <eAnnotations xmi:id="_FTiJIkb2Ed-Jsvq-bwqZkQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="UML_Standard_Profile.Validation_Profile.profile.uml#_FTvkhUb2Ed-Jsvq-bwqZkQ"/>
+      </eAnnotations>
+      <appliedProfile href="UML_Standard_Profile.Validation_Profile.profile.uml#_11_5_f720368_1159529670215_231387_1"/>
+    </profileApplication>
+  </uml:Model>
+  <MagicDrawProfile:auxiliaryResource xmi:id="_FWLNYEb2Ed-Jsvq-bwqZkQ" base_Element="magicdraw_uml_standard_profile_v_0001" base_Package="magicdraw_uml_standard_profile_v_0001"/>
+</xmi:XMI>

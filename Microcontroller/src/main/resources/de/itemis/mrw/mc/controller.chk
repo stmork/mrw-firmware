@@ -1,0 +1,50 @@
+/*
+**
+**	$Id: controller.chk 944 2010-04-23 07:01:13Z smork $
+**	$Revision: 927 $
+**	$Date: 2010-04-23 09:01:13 +0200 (Fr, 23. Apr 2010) $
+**	$Author: smork $
+**
+**	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**
+**	This program and the accompanying materials are made available under the
+**	terms of the Eclipse Public License v1.0.
+**
+**	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+**
+**
+*/
+
+import uml;
+
+extension de::itemis::mrw::mc::sm;
+
+context Transition if isCommandTransition() ERROR "Eine Transition (" + source.name + " -> " + target.name + ") muss benannt sein!" :
+	named();
+
+context Transition if isCommandTransition() ERROR "Die Transition " + name + " muss exakt einen Auslöser haben!" :
+	trigger.size == 1;
+
+context Transition if isCommandTransition() ERROR "Transition aus Zustand " + source.name + " muss einen Auslöser haben!" :
+	MessageEvent.isInstance(trigger.first().event);
+
+context Transition if isCommandTransition() ERROR "Ein Auslöser muss einen Namen haben!" :
+	named(trigger.first());
+
+context Transition if isCommandTransition() ERROR "Ein Ereignis muss einen Namen haben!" :
+	named(trigger.first().event);
+
+context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleichen Namen wie sein Auslöser haben!" :
+	trigger.first().name == trigger.first().event.name;
+
+context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleichen Namen wie seine Transition!" :
+	trigger.first().name == name;
+
+context Transition if isCommandTransition() && State.isInstance(target) ERROR "Eine Transition muss eine Activity haben!" :
+	effect != null;
+
+context Transition if isChoice(source) ERROR "Ausgehende Transitionen von Entscheidungen müssen eine Bedingung haben!" :
+	guard != null;
+
+context Activity ERROR "Eine Aktivität muss benannt sein!" :
+	named();

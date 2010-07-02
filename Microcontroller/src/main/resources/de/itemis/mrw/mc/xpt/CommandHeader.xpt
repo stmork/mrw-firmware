@@ -1,0 +1,36 @@
+«REM»
+«»
+«»
+«»	$Id: CommandHeader.xpt 944 2010-04-23 07:01:13Z smork $
+«»	$Revision: 944 $
+«»	$Date: 2010-04-23 09:01:13 +0200 (Fr, 23. Apr 2010) $
+«»	$Author: smork $
+«»
+«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+«»
+«»	This program and the accompanying materials are made available under the
+«»	terms of the Eclipse Public License v1.0.
+«»
+«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+«»
+«»
+«»
+«ENDREM»
+
+«IMPORT uml»
+
+«EXTENSION de::itemis::mrw::mc::sm»
+
+«DEFINE Main FOR StateMachine»
+«FILE smIncludeCommandFileName() ONCE»
+«EXPAND Tools::Header(smIncludeCommandFileName(), name)»
+#ifndef «smIncludeCommandName()»
+#define «smIncludeCommandName()»
+«LET getCommands().toList() AS commands»
+«FOREACH 1.upTo(commands.size) AS idx»
+#define «commands.get(idx-1)» «idx»
+«ENDFOREACH»
+«ENDLET»
+#endif
+«ENDFILE»
+«ENDDEFINE»
