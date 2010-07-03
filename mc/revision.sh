@@ -28,7 +28,7 @@ echo ""  >>$file
 echo "#ifndef REVISION_H" >>$file
 echo "#define REVISION_H" >>$file
 echo "" >>$file
-echo "#define FIRMWARE_VERSION  2" >>$file
+echo "#define FIRMWARE_VERSION  3" >>$file
 echo "#define FIRMWARE_REVISION $revision" >>$file
 echo "" >>$file
 echo "#endif" >>$file
