@@ -40,6 +40,9 @@ config:	config.o can_pc.o mrw_dump.o
 
 setid:	setid.o can_pc.o mrw_dump.o
 
+test:
+	splint $(CPPFLAGS) $(SRC)
+
 clean:
 	rm -rf *.o $(PROGS) .dep
 

@@ -67,13 +67,22 @@ int uart_send_can_msg(int fd, CAN_message *msg)
 	}
 	dump_mrw_msg(msg, sum, ">");
 
-	result  = write(fd, msg, len++);
-	result += write(fd, &sum, 1);
+	result = write(fd, msg, len);
+	if (result == len)
+	{
+		if (write(fd, &sum, 1) == 1)
+		{
+			result++;
+		}
+	}
+	len++;
+
 	if (result != len)
 	{
-		fprintf(stderr, "%d != %d\n", len, result);
+		perror("uart_send_can_msg");
+		result = -1;
 	}
-//	usleep(1000);
+
 	return result;
 }
 

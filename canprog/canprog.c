@@ -42,11 +42,10 @@
 #define   DEFAULT_HARDWARE         1
 
 // ATmega32 signature
-#define   SIGNATURE_BYTE_1      0x1E
-#define   SIGNATURE_BYTE_2      0x95
-#define   SIGNATURE_BYTE_3      0x02 
+#define   SIGNATURE_BYTE_1      (unsigned char)0x1E
+#define   SIGNATURE_BYTE_2      (unsigned char)0x95
+#define   SIGNATURE_BYTE_3      (unsigned char)0x02 
 
-static int fd;
 static int use_reset = 1;
 
 static unsigned char * read_hex(const char *filename, size_t *size)
@@ -54,7 +53,7 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 	FILE          *file = fopen(filename, "r");
 	char           line[128];
 	unsigned char *buffer = NULL;
-	int            i, idx;
+	unsigned int   i, idx;
 	
 	if (file != NULL)
 	{
@@ -65,7 +64,7 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 			if (sscanf(line, ":%02x%04x%02x", &count, &address, &type) == 3)
 			{
 				unsigned char *bytes = NULL;
-				int checksum = type + count + (address >> 8) + (address & 0xff);
+				unsigned int   checksum = type + count + (address >> 8) + (address & 0xff);
 
 				switch(type)
 				{
@@ -76,6 +75,7 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 					for (i = 0, idx = 9;i <= count;i++)
 					{
 						int byte = 0;
+
 						sscanf(&line[idx],"%02x", &byte);
 						bytes[i] = byte & 0xff;
 						checksum += byte;
@@ -107,58 +107,65 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 	return buffer;
 }
 
-static void ping(int fd)
+static int ping(int fd)
 {
 	unsigned char  buffer[8];
 	
 	buffer[0] = PING;
-	uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
+	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
-static void send_can_data(unsigned short id, unsigned char cmd, unsigned char *buffer, int length)
+static int reset(int fd)
 {
-	buffer[0] = cmd;
-	uart_send_can_data(fd, id, buffer, length);
+	unsigned char  buffer[8];
+	
+	buffer[0] = RESET;
+	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
-static void send_can(unsigned short id, unsigned char cmd)
+static int flash(int fd, unsigned char *buffer, int size, int hid)
 {
-	unsigned char buffer[8];
-	send_can_data(id, cmd, buffer, 1);
-}
-
-static void flash(unsigned char *buffer, int size, int hid)
-{
-	unsigned int   address = 0;
+	unsigned int   address  = 0;
 	unsigned char  checksum = 0;
 	unsigned char  msg[8];
 	int            i;
 
 	if (use_reset)
 	{
-		send_can(BROADCAST_SID, RESET);
+		if (reset(fd) < 0)
+		{
+			return EXIT_FAILURE;
+		}
 		usleep(DELAY_RESET);
 	}
 	
-	msg[1] = hid;
+	msg[0] = FLASH_REQ;
+	msg[1] = (unsigned char)(hid & 0xff);
 	msg[2] = SIGNATURE_BYTE_1;
 	msg[3] = SIGNATURE_BYTE_2;
 	msg[4] = SIGNATURE_BYTE_3;
 	for (i = 0;i < 5;i++)
 	{
-		send_can_data(BROADCAST_SID, FLASH_REQ, msg, 5);
+		if (uart_send_can_data(fd, BROADCAST_SID, msg, 5) < 0)
+		{
+			return EXIT_FAILURE;
+		}
 		usleep(DELAY_FLASH_REQUEST);
 	}
-	ping(fd);
+	if (ping(fd) < 0)
+	{
+		return EXIT_FAILURE;
+	}
 
 	while (size >= SPM_PAGESIZE)
 	{
 		int loop;
 		for (loop = 0; loop < SPM_PAGESIZE; loop += 4)
 		{
-			msg[1] = address & 0xff;
-			msg[2] = address >>  8;
-			msg[3] = address >> 16;
+			msg[0] = FLASH_DATA;
+			msg[1] = (unsigned char)(address & 0xff);
+			msg[2] = (unsigned char)(address >>  8);
+			msg[3] = (unsigned char)(address >> 16);
 			msg[4] = buffer[address++];
 			msg[5] = buffer[address++];
 			msg[6] = buffer[address++];
@@ -168,7 +175,7 @@ static void flash(unsigned char *buffer, int size, int hid)
 			checksum += msg[5];
 			checksum += msg[6];
 			checksum += msg[7];
-			send_can_data(BROADCAST_SID, FLASH_DATA, msg, 8);
+			uart_send_can_data(fd, BROADCAST_SID, msg, 8);
 		}
 		size -= SPM_PAGESIZE;
 		printf("-\n");
@@ -177,32 +184,35 @@ static void flash(unsigned char *buffer, int size, int hid)
 	
 	while (size >= 0)
 	{
-		unsigned char msg[8];
-		msg[1] = address & 0xff;
-		msg[2] = address >> 8;
-		msg[3] = address >> 16;
+		msg[0] = FLASH_DATA;
+		msg[1] = (unsigned char)(address & 0xff);
+		msg[2] = (unsigned char)(address >> 8);
+		msg[3] = (unsigned char)(address >> 16);
 		msg[4] = buffer[address++];
 		msg[5] = buffer[address++];
 
 		checksum += msg[4];
 		checksum += msg[5];
-		send_can_data(BROADCAST_SID, FLASH_DATA, msg, 6);
+		uart_send_can_data(fd, BROADCAST_SID, msg, 6);
 
 		size -= 2;
 	}
 	printf("-\n");
 	usleep(DELAY_FLASH_PAGE);
 
-	msg[1] = address & 0xff;
-	msg[2] = address >> 8;
+	msg[0] = FLASH_CHECK;
+	msg[1] = (unsigned char)(address & 0xff);
+	msg[2] = (unsigned char)(address >> 8);
 	msg[3] = 0;
 	msg[4] = checksum;
-	send_can_data(BROADCAST_SID, FLASH_CHECK, msg, 5);
+	return uart_send_can_data(fd, BROADCAST_SID, msg, 5) < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
 int main(int argc,char *argv[])
 {
 	int hid = DEFAULT_HARDWARE;
+	int fd;
+	int result = EXIT_FAILURE;
 
 	if (argc < 3)
 	{
@@ -235,9 +245,9 @@ int main(int argc,char *argv[])
 	if (buffer != NULL)
 	{
 		printf("size: %d\n", count);
-		flash(buffer, count, hid);
+		result = flash(fd, buffer, count, hid);
 		free(buffer);
 	}
 	close(fd);
-	return EXIT_SUCCESS;
+	return result;
 }

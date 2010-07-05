@@ -43,59 +43,59 @@
 #define CMD_ILLEGAL        0
 
 // command definitions
-#define SETLFT	(CAT_SWITCH|0x01)
-#define SETRGT	(CAT_SWITCH|0x02)
-#define GETDIR	(CAT_SWITCH|0x03)
+#define SETLFT	(unsigned char)(CAT_SWITCH|0x01)
+#define SETRGT	(unsigned char)(CAT_SWITCH|0x02)
+#define GETDIR	(unsigned char)(CAT_SWITCH|0x03)
 
-#define SETRON	(CAT_RAIL|0x01)
-#define SETROF	(CAT_RAIL|0x02)
-#define GETRBS	(CAT_RAIL|0x03)
+#define SETRON	(unsigned char)(CAT_RAIL|0x01)
+#define SETROF	(unsigned char)(CAT_RAIL|0x02)
+#define GETRBS	(unsigned char)(CAT_RAIL|0x03)
 
-#define SETSGN	(CAT_SIGNAL|0x01)
+#define SETSGN	(unsigned char)(CAT_SIGNAL|0x01)
 
-#define CFGSWN	(CAT_CONFIG|0x01)
-#define CFGSWO	(CAT_CONFIG|0x02)
-#define CFGRAI	(CAT_CONFIG|0x03)
-#define CFGPF2	(CAT_CONFIG|0x04)
-#define CFGPF3	(CAT_CONFIG|0x05)
-#define CFGMF2	(CAT_CONFIG|0x06)
-#define CFGMF3	(CAT_CONFIG|0x07)
-#define CFGPL2	(CAT_CONFIG|0x08)
-#define CFGPL3	(CAT_CONFIG|0x09)
-#define CFGSL2	(CAT_CONFIG|0x0a)
-#define CFGML2	(CAT_CONFIG|0x0b)
-#define CFGML3	(CAT_CONFIG|0x0c)
-#define CFGML4	(CAT_CONFIG|0x0d)
+#define CFGSWN	(unsigned char)(CAT_CONFIG|0x01)
+#define CFGSWO	(unsigned char)(CAT_CONFIG|0x02)
+#define CFGRAI	(unsigned char)(CAT_CONFIG|0x03)
+#define CFGPF2	(unsigned char)(CAT_CONFIG|0x04)
+#define CFGPF3	(unsigned char)(CAT_CONFIG|0x05)
+#define CFGMF2	(unsigned char)(CAT_CONFIG|0x06)
+#define CFGMF3	(unsigned char)(CAT_CONFIG|0x07)
+#define CFGPL2	(unsigned char)(CAT_CONFIG|0x08)
+#define CFGPL3	(unsigned char)(CAT_CONFIG|0x09)
+#define CFGSL2	(unsigned char)(CAT_CONFIG|0x0a)
+#define CFGML2	(unsigned char)(CAT_CONFIG|0x0b)
+#define CFGML3	(unsigned char)(CAT_CONFIG|0x0c)
+#define CFGML4	(unsigned char)(CAT_CONFIG|0x0d)
 
-#define CFGBGN	    (CAT_EXT|0x01)
-#define CFGEND	    (CAT_EXT|0x02)
-#define SET_ID      (CAT_EXT|0x03)
-#define PING		(CAT_EXT|0x04)
-#define RESET		(CAT_EXT|0x05)
-#define GETCFG		(CAT_EXT|0x06)
-#define GETDVC		(CAT_EXT|0x07)
-#define FLASH_REQ	(CAT_EXT|0x08)
-#define FLASH_DATA	(CAT_EXT|0x09)
-#define FLASH_CHECK	(CAT_EXT|0x0a)
-#define QRYBUF      (CAT_EXT|0x0b)
-#define QRYERR      (CAT_EXT|0x0c)
-#define GETVER      (CAT_EXT|0x0d)
+#define CFGBGN	    (unsigned char)(CAT_EXT|0x01)
+#define CFGEND	    (unsigned char)(CAT_EXT|0x02)
+#define SET_ID      (unsigned char)(CAT_EXT|0x03)
+#define PING		(unsigned char)(CAT_EXT|0x04)
+#define RESET		(unsigned char)(CAT_EXT|0x05)
+#define GETCFG		(unsigned char)(CAT_EXT|0x06)
+#define GETDVC		(unsigned char)(CAT_EXT|0x07)
+#define FLASH_REQ	(unsigned char)(CAT_EXT|0x08)
+#define FLASH_DATA	(unsigned char)(CAT_EXT|0x09)
+#define FLASH_CHECK	(unsigned char)(CAT_EXT|0x0a)
+#define QRYBUF      (unsigned char)(CAT_EXT|0x0b)
+#define QRYERR      (unsigned char)(CAT_EXT|0x0c)
+#define GETVER      (unsigned char)(CAT_EXT|0x0d)
 
 // Signal types
-#define SIGNAL_OFF 0
-#define SIGNAL_HP0 1
-#define SIGNAL_HP1 2
-#define SIGNAL_HP2 3
-#define SIGNAL_VR0 4
-#define SIGNAL_VR1 5
-#define SIGNAL_VR2 6
-#define SIGNAL_SH0 7
-#define SIGNAL_SH1 8
-#define SIGNAL_TST 9
+#define SIGNAL_OFF (unsigned char)0
+#define SIGNAL_HP0 (unsigned char)1
+#define SIGNAL_HP1 (unsigned char)2
+#define SIGNAL_HP2 (unsigned char)3
+#define SIGNAL_VR0 (unsigned char)4
+#define SIGNAL_VR1 (unsigned char)5
+#define SIGNAL_VR2 (unsigned char)6
+#define SIGNAL_SH0 (unsigned char)7
+#define SIGNAL_SH1 (unsigned char)8
+#define SIGNAL_TST (unsigned char)9
 
 // Switch states
-#define SWITCH_STATE_LEFT  1
-#define SWITCH_STATE_RIGHT 2
+#define SWITCH_STATE_LEFT  (unsigned char)1
+#define SWITCH_STATE_RIGHT (unsigned char)2
 
 // result definitions
 #define NO_RESULT                -1 // not really sent

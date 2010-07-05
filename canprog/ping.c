@@ -31,17 +31,18 @@
 static int flood =   0;
 static int max   = 500;
 
-static void ping(int fd)
+static int ping(int fd)
 {
 	unsigned char  buffer[8];
 	
 	buffer[0] = PING;
-	uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
+	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
 int main(int argc,char *argv[])
 {
 	int i;
+	int result;
 
 	if (argc <= 1)
 	{
@@ -62,14 +63,14 @@ int main(int argc,char *argv[])
 	i = 0;
 	do
 	{
-		ping(fd);
+		result = ping(fd);
 		if (!flood)
 		{
 			sleep(1);
 		}
 	}
-	while(++i < max);
+	while((++i < max) && (result > 0));
 
 	close(fd);
-	return EXIT_SUCCESS;
+	return result > 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

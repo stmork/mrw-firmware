@@ -38,8 +38,6 @@ static void qryerr(int fd)
 
 int main(int argc,char *argv[])
 {
-	int i;
-
 	if (argc <= 1)
 	{
 		printf("USAGE:\n");
