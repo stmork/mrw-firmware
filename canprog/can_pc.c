@@ -71,7 +71,7 @@ int uart_send_can_msg(int fd, CAN_message *msg)
 	result += write(fd, &sum, 1);
 	if (result != len)
 	{
-		fprintf(stderr, "%ld != %d\n", len, result);
+		fprintf(stderr, "%d != %d\n", len, result);
 	}
 //	usleep(1000);
 	return result;

@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 		config(khz);
 	}
 	printf("---\n");
-	printf("%4d kHz: BRP=%d PRS=%d PS1=%d PS2=%d # CNF1=$%02x CNF2=$%02x CNF3=$%02x\n",
+	printf("%4ld kHz: BRP=%ld PRS=%d PS1=%d PS2=%d # CNF1=$%02lx CNF2=$%02x CNF3=$%02x\n",
 		Fcan / 1000, R_BRP, PROP_SEG, R_PS1, R_PS2, R_CNF1, R_CNF2, R_CNF3);
 	return EXIT_SUCCESS;
 }
