@@ -70,7 +70,7 @@ int main(int argc,char *argv[])
 		}
 	}
 	while((++i < max) && (result > 0));
-
 	close(fd);
+
 	return result > 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

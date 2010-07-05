@@ -28,16 +28,18 @@
 
 #include "can_pc.h"
 
-static void qryerr(int fd)
+static int qryerr(int fd)
 {
 	unsigned char  buffer[8];
 	
 	buffer[0] = QRYERR;
-	uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
+	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
 int main(int argc,char *argv[])
 {
+	int result;
+
 	if (argc <= 1)
 	{
 		printf("USAGE:\n");
@@ -54,8 +56,8 @@ int main(int argc,char *argv[])
 
 	uart_sync(fd);
 
-	qryerr(fd);
-
+	result = qryerr(fd);
 	close(fd);
-	return EXIT_SUCCESS;
+
+	return result > 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

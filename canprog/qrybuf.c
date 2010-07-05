@@ -31,16 +31,17 @@
 static int flood =   0;
 static int max   = 500;
 
-static void qrybuf(int fd)
+static int qrybuf(int fd)
 {
 	unsigned char  buffer[8];
 	
 	buffer[0] = QRYBUF;
-	uart_send_ext_can_data(fd, BROADCAST_SID, buffer, 1);
+	return uart_send_ext_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
 int main(int argc,char *argv[])
 {
+	int result;
 	int i;
 
 	if (argc <= 1)
@@ -62,14 +63,14 @@ int main(int argc,char *argv[])
 	i = 0;
 	do
 	{
-		qrybuf(fd);
+		result = qrybuf(fd);
 		if (!flood)
 		{
 			usleep(42000);
 		}
 	}
 	while(++i < max);
-
 	close(fd);
-	return EXIT_SUCCESS;
+
+	return result > 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
