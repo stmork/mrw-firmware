@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	qryerr.c $
-**	$Revision: 967 $
-**	$Date: 2010-06-06 20:20:38 +0200 (So, 06. Jun 2010) $
-**	$Author: smork $
-**	$Id: qryerr.c 967 2010-06-06 18:20:38Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	Query buffer state.
 **

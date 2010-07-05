@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	test.c $
-**	$Revision: 966 $
-**	$Date: 2010-06-06 13:54:27 +0200 (So, 06. Jun 2010) $
-**	$Author: smork $
-**	$Id: test.c 966 2010-06-06 11:54:27Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	Firmware for testing basic functions.
 **

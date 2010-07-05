@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	mcp_config.c $
-**	$Revision: 964 $
-**	$Date: 2010-06-05 12:53:51 +0200 (Sa, 05. Jun 2010) $
-**	$Author: smork $
-**	$Id: mcp_config.c 964 2010-06-05 10:53:51Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	Compute MCP2515 configuration bytes.
 **

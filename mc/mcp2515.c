@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	mcp2515.c $
-**	$Revision: 966 $
-**	$Date: 2010-06-06 13:54:27 +0200 (So, 06. Jun 2010) $
-**	$Author: smork $
-**	$Id: mcp2515.c 966 2010-06-06 11:54:27Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	MCP2515 CAN controller handling
 **

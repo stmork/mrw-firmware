@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	bootloader.c $
-**	$Revision: 969 $
-**	$Date: 2010-06-25 10:23:15 +0200 (Fr, 25. Jun 2010) $
-**	$Author: smork $
-**	$Id: bootloader.c 969 2010-06-25 08:23:15Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	ATmega CAN bootloader
 **

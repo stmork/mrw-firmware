@@ -1,10 +1,10 @@
 /*
 **
 **	$Filename:	gwsim.c $
-**	$Revision: 968 $
-**	$Date: 2010-06-11 12:50:26 +0200 (Fr, 11. Jun 2010) $
-**	$Author: smork $
-**	$Id: gwsim.c 968 2010-06-11 10:50:26Z smork $
+**	$Revision$
+**	$Date$
+**	$Author$
+**	$Id$
 **
 **	Gateway simulator
 **

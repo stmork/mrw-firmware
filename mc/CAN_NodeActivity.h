@@ -1,9 +1,9 @@
 /*
 **
-**	$Id: CAN_NodeActivity.h 944 2010-04-23 07:01:13Z smork $
-**	$Revision: 944 $
-**	$Date: 2010-04-23 09:01:13 +0200 (Fr, 23. Apr 2010) $
-**	$Author: smork $
+**	$Id$
+**	$Revision$
+**	$Date$
+**	$Author$
 **
 **	Modellrailway state chart generation CAN-Node.
 **
