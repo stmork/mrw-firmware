@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
 	for (ubbr = 1; ubbr < 16;ubbr++)
 	{
-		printf("UBBR: %3d = %1.5f MHz\n", ubbr,
+		printf("UBBR: %3ld = %1.5f MHz\n", ubbr,
 			(ubbr + 1) * BAUD * 16.0);
 	}
 	return EXIT_SUCCESS;
