@@ -25,7 +25,7 @@
 #define CAN_NODE__INITIAL 0
 
 /*******************************************************************
-Dieser Zustand entspricht dem normelen Betriebsmodus. Hier werden
+Dieser Zustand entspricht dem normalen Betriebsmodus. Hier werden
 Steuerkommandos verarbeitet.
 *******************************************************************/
 

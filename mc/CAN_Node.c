@@ -80,7 +80,7 @@ void CAN_Node(CAN_message *msg)
 		switch (state)
 		{
 /*******************************************************************
-Dieser Zustand entspricht dem normelen Betriebsmodus. Hier werden
+Dieser Zustand entspricht dem normalen Betriebsmodus. Hier werden
 Steuerkommandos verarbeitet.
 *******************************************************************/
 
