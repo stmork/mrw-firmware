@@ -48,6 +48,8 @@
 #define OVL_CAN    _BV(P_OVL_CAN)   // red
 #define OVL_UART   _BV(P_OVL_UART)  // green
 
+#define UART_OVL_WARNING_LEVEL 192
+
 /*
  * CAN receive Ring Buffer
  */
@@ -357,6 +359,30 @@ int main(void)
 			{
 				ring_decrease(&tx_ring);
 			}
+			
+			/*
+			 * Warnung bei drohendem UART-Überlauf.
+			 */
+			if (ring_has_overflow(&tx_ring))
+			{
+				SET_PORT_BIT(PORT_OVL, P_OVL_CAN);
+			}
+			else
+			{
+				CLR_PORT_BIT(PORT_OVL, P_OVL_CAN);
+			}
+		}
+
+		/*
+		 * Warnung bei drohendem UART-Überlauf.
+		 */
+		if ((uart_tx_count >= UART_OVL_WARNING_LEVEL) || (uart_rx_count >= UART_OVL_WARNING_LEVEL))
+		{
+			SET_PORT_BIT(PORT_OVL, P_OVL_UART);
+		}
+		else
+		{
+			CLR_PORT_BIT(PORT_OVL, P_OVL_UART);
 		}
 
 		/*

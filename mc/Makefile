@@ -87,22 +87,22 @@ bootloader.hex:	bootloader.out
 ######################
 
 install_gateway:	gateway.hex
-	$(AVRDUDE) -p m32 -U flash:w:$^ -U hfuse:w:0x09:m -U lfuse:w:0x1e:m
+	$(AVRDUDE) -p m32 -B 1 -U flash:w:$^ -U hfuse:w:0x09:m -U lfuse:w:0x1e:m
 
 install_bootloader:	bootloader.hex
-	$(AVRDUDE) -p m32 -U flash:w:$^ -U hfuse:w:0xc0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
+	$(AVRDUDE) -p m32 -B 1 -U flash:w:$^ -U hfuse:w:0xc0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
 
 install_bootloader_jtag:	bootloader.hex
-	$(AVRDUDE) -p m32 -U flash:w:$^ -U hfuse:w:0x0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
+	$(AVRDUDE) -p m32 -B 1 -U flash:w:$^ -U hfuse:w:0x0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
 
 verify_firmware:	firmware.hex
-	$(AVRDUDE) -p m32 -U flash:v:$^
+	$(AVRDUDE) -p m32 -B 1 -U flash:v:$^
 
 read_fuse:
-	$(AVRDUDE) -p m32 -U hfuse:r:-:h -U lfuse:r:-:h
+	$(AVRDUDE) -p m32 -B 1 -U hfuse:r:-:h -U lfuse:r:-:h
 
 read_lock:
-	$(AVRDUDE) -p m32 -U lock:r:-:h
+	$(AVRDUDE) -p m32 -B 1 -U lock:r:-:h
 
 #####################
 # some global targets

@@ -60,6 +60,17 @@ static void fill_message(
 	msg->data[msg->length++] = unit_no >> 8;
 }
 
+static void bump_ring(void)
+{
+	if (ring_increase(&tx_ring))
+	{
+		CAN_message *msg = ring_get_start(&tx_ring);
+
+		while(can_put_msg(msg) < 0);
+		ring_decrease(&tx_ring);
+	}
+}
+
 void queue_result(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -68,7 +79,7 @@ void queue_result(
 	CAN_message *msg = ring_get_pos(&tx_ring);
 
 	fill_message(msg, cmd, unit_no, code);
-	ring_increase(&tx_ring);
+	bump_ring();
 }
 
 void queue_info(
@@ -81,12 +92,7 @@ void queue_info(
 
 	fill_message(msg, cmd, unit_no, code);
 	msg->data[msg->length++] = info;
-
-	if (ring_increase(&tx_ring))
-	{
-		while(can_put_msg(msg) < 0);
-		ring_decrease(&tx_ring);
-	}
+	bump_ring();
 }
 
 void queue_infos(
@@ -101,12 +107,7 @@ void queue_infos(
 	fill_message(msg, cmd, unit_no, code);
 	msg->data[msg->length++] = info1;
 	msg->data[msg->length++] = info2;
-
-	if (ring_increase(&tx_ring))
-	{
-		while(can_put_msg(msg) < 0);
-		ring_decrease(&tx_ring);
-	}
+	bump_ring();
 }
 
 /**

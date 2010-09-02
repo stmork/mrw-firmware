@@ -342,13 +342,23 @@
 #define SID_MASK_LOW         0xe0
 #define SID_MASK_HIGH        0xff
 
-#define BROADCAST_SID           0
-#define BROADCAST_SID_LOW       0
-#define BROADCAST_SID_HIGH      0
+#if 0
+#	define BROADCAST_SID       0x7ff
+#	define BROADCAST_SID_LOW    0xe0
+#	define BROADCAST_SID_HIGH   0xff
 
-#define GATEWAY_SID         0x7ff
-#define GATEWAY_SID_LOW      0xe0
-#define GATEWAY_SID_HIGH     0xff
+#	define GATEWAY_SID             0
+#	define GATEWAY_SID_LOW         0
+#	define GATEWAY_SID_HIGH        0
+#else
+#	define BROADCAST_SID           0
+#	define BROADCAST_SID_LOW       0
+#	define BROADCAST_SID_HIGH      0
+ 
+#	define GATEWAY_SID         0x7ff
+#	define GATEWAY_SID_LOW      0xe0
+#	define GATEWAY_SID_HIGH     0xff
+#endif
 
 #define UNDEFINED_SID       0x7fe
 #define UNDEFINED_SID_LOW    0xc0
