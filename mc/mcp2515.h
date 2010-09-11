@@ -342,7 +342,7 @@
 #define SID_MASK_LOW         0xe0
 #define SID_MASK_HIGH        0xff
 
-#if 0
+#if 1
 #	define BROADCAST_SID       0x7ff
 #	define BROADCAST_SID_LOW    0xe0
 #	define BROADCAST_SID_HIGH   0xff

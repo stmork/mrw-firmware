@@ -73,9 +73,15 @@ static void can_fill_message(
 	msg->eid      = cid;
 	msg->status   = _BV(FRAME_EXT);			
 
-	msg->length   = 2;
-	msg->data[0] |= MSG_RESULT;
-	msg->data[1]  = code;
+	msg->length   = 0;
+	msg->data[msg->length++] |= MSG_RESULT;
+	msg->data[msg->length++]  = code;
+#ifdef USE_SID_IN_RESULT
+	msg->data[msg->length++] = cid & 0xff ;
+	msg->data[msg->length++] = cid >> 8;
+#endif
+	msg->data[msg->length++] = 0;
+	msg->data[msg->length++] = 0;
 }
 
 static void can_reply_message(
@@ -235,12 +241,19 @@ static void flash(uint16_t cid)
 		if (can_get_msg(&msg) >= 0)
 		{
 			uint8_t cmd = msg.data[0];
-			if (cmd == PING)
+
+			switch(cmd)
 			{
+			case RESET:
 				can_reply_message(&msg, cid, MSG_OK);
-			}
-			else if(cmd == FLASH_REQ)
-			{
+				reset();
+				break;
+
+			case PING:
+				can_reply_message(&msg, cid, MSG_OK);
+				break;
+
+			case FLASH_REQ:
 				// Firmware type and controller type id must match!
 				if (check_controller_type(&msg) == 0)
 				{
@@ -251,9 +264,9 @@ static void flash(uint16_t cid)
 					// Return to app if not
 					return;
 				}
-			}
-			else if(cmd == FLASH_DATA)
-			{
+				break;
+				
+			case FLASH_DATA:
 				address = GET_WORD(&msg.data[1]);
 				idx     = address & PAGE_MASK;
 				if (msg.length >= 6)
@@ -276,9 +289,9 @@ static void flash(uint16_t cid)
 				{
 					boot_program_page(address, buffer);
 				}
-			}
-			else if (cmd == FLASH_CHECK)
-			{
+				break;
+
+			case FLASH_CHECK:
 				if (msg.length == 5)
 				{
 					address = GET_WORD(&msg.data[1]);
@@ -313,16 +326,15 @@ static void flash(uint16_t cid)
 					// return to app if OK.
 					return;
 				}
-			}
-			else if (cmd == RESET)
-			{
-				can_reply_message(&msg, cid, MSG_OK);
-				reset();
-			}
-			else if (page_count == 0)
-			{
-				// return to App
-				return;
+				break;
+
+			default:
+				if (page_count == 0)
+				{
+					// return to App
+					can_reply_message(&msg, cid, MSG_IGNORED);
+					return;
+				}
 			}
 		}
 	}
@@ -360,6 +372,7 @@ int main(void)
 			else if (cmd == FLASH_REQ)
 			{
 				mcp2515_write_rx_output_pins(1);
+				can_reply_message(&msg, cid, MSG_OK);
 				flash(cid);
 				counter = 0;
 			}

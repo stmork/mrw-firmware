@@ -25,6 +25,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifdef USE_SID_IN_RESULT
+#define IDX_INFO_START 6
+#else
+#define IDX_INFO_START 4
+#endif
+
+
 struct string_map
 {
 	uint8_t  code;
@@ -192,8 +199,8 @@ void dump_mrw_msg(CAN_message *msg, uint8_t checksum, char *comment)
 				cmd_text,
 				res_text != NULL ? res_text : "<unknown>",
 				msg->eid,
-				msg->data[5], msg->data[4]);
-			for (i = 6;i < msg->length; i++)
+				msg->data[IDX_INFO_START - 1], msg->data[IDX_INFO_START - 2]);
+			for (i = IDX_INFO_START;i < msg->length; i++)
 			{
 				printf(" 0x%02x", msg->data[i]);
 			}

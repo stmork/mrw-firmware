@@ -54,8 +54,10 @@ static void fill_message(
 	msg->length  = 0;
 	msg->data[msg->length++] = cmd | MSG_RESULT;
 	msg->data[msg->length++] = code;
+#ifdef USE_SID_IN_RESULT
 	msg->data[msg->length++] = config.id & 0xff ;
 	msg->data[msg->length++] = config.id >> 8;
+#endif
 	msg->data[msg->length++] = unit_no & 0xff ;
 	msg->data[msg->length++] = unit_no >> 8;
 }
@@ -112,8 +114,9 @@ void queue_infos(
 
 /**
  * Diese Methode entleert den CAN Sendepuffer. die Routine
- * wird erst verlassen, wenn keine CAN Message mehr im Rinpuffer
- * verblieben ist.
+ * wird erst verlassen, wenn keine CAN Message mehr im Ringpuffer
+ * verblieben ist. Das Entleeren ist nur sinnvoll, wenn ein
+ * Reset ansteht, um keine Daten zu verlieren.
  */
 void flush_tx_ring(void)
 {

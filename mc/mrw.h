@@ -42,6 +42,8 @@
 
 #define CMD_ILLEGAL        0
 
+#define DONT_USE_SID_IN_RESULT
+
 // command definitions
 #define SETLFT	(unsigned char)(CAT_SWITCH|0x01)
 #define SETRGT	(unsigned char)(CAT_SWITCH|0x02)

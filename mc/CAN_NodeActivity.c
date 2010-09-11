@@ -254,6 +254,7 @@ int8_t  queryErrorState(CAN_message *msg)
 	int8_t               cmd = msg->data[0];
 
 	mcp2515_read_error_status(&status);
+
 	queue_infos(cmd, 0, MSG_OK, 0, status.eflg);
 	queue_infos(cmd, 0, MSG_OK, 1, status.rec);
 	queue_infos(cmd, 0, MSG_OK, 2, status.tec);

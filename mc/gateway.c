@@ -300,7 +300,7 @@ int main(void)
 	ring_init(&rx_ring);
 	ring_init(&tx_ring);
 	port_init();
-	mcp2515_init(GATEWAY_SID, 1, MCP2515_MULTI_TX_BUFFER);
+	mcp2515_init(GATEWAY_SID, 1, MCP2515_SINGLE_TX_BUFFER);
 	uart_init();
 	MCUCSR = 0;
 

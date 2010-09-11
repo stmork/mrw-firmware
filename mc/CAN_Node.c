@@ -39,6 +39,8 @@ static int8_t checkIdButton(CAN_message *msg);
 static int8_t checkId(CAN_message *msg);
 static int8_t checkConfiguration(CAN_message *msg);
 static int8_t checkPendingCommand(CAN_message *msg);
+static int8_t checkUConfIdButton(CAN_message *msg);
+static int8_t checkUConfId(CAN_message *msg);
 /**********************/
 /* Der aktuelle State */
 /**********************/
@@ -334,6 +336,11 @@ aus kann nur konfiguriert oder gebootet werden.
 				result = queryBufferState(msg);
 				break;
 
+			case SET_ID:
+
+				result = checkUConfIdButton(msg);
+				break;
+
 			default:
 				result = wrongUnconfiguredTrigger(msg);
 				break;
@@ -426,6 +433,46 @@ static int8_t checkPendingCommand(CAN_message *msg)
 	{
 				result = notConfiguring(msg);
 				state = CAN_NODE__OPERATING;
+
+	}
+
+	return result;
+}
+
+static int8_t checkUConfIdButton(CAN_message *msg)
+{
+	int8_t result = -1;
+
+	if (idButtonPressed(msg))
+	{
+				result = checkUConfId(msg);
+	}
+
+	if (!idButtonPressed(msg))
+	{
+				result = idChangeDisabled(msg);
+				state = CAN_NODE__UNCONFIGURED;
+
+	}
+
+	return result;
+}
+
+static int8_t checkUConfId(CAN_message *msg)
+{
+	int8_t result = -1;
+
+	if (!idChanged(msg))
+	{
+				result = idNotChanged(msg);
+				state = CAN_NODE__UNCONFIGURED;
+
+	}
+
+	if (idChanged(msg))
+	{
+				result = setId(msg);
+				state = CAN_NODE__RESETTING;
 
 	}
 
