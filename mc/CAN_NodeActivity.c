@@ -241,7 +241,7 @@ int8_t  configSwitchOld(CAN_message *msg)
 
 int8_t  queryBufferState(CAN_message *msg)
 {
-	queue_infos(msg->data[0], 0,
+	queue_infos2(msg->data[0], 0,
 		MSG_OK,
 		rx_ring.size, tx_ring.size);
 
@@ -255,9 +255,8 @@ int8_t  queryErrorState(CAN_message *msg)
 
 	mcp2515_read_error_status(&status);
 
-	queue_infos(cmd, 0, MSG_OK, 0, status.eflg);
-	queue_infos(cmd, 0, MSG_OK, 1, status.rec);
-	queue_infos(cmd, 0, MSG_OK, 2, status.tec);
+	queue_infos4(cmd, 0, MSG_OK, 3,
+		status.eflg, status.rec, status.tec);
 
 	return NO_RESULT;
 }
@@ -426,9 +425,10 @@ int8_t getVersion(CAN_message *msg)
 {
 	int8_t cmd = GETVER;
 
-	queue_infos(cmd, 0, MSG_OK, 0, FIRMWARE_VERSION);
-	queue_infos(cmd, 0, MSG_OK, 1, FIRMWARE_REVISION & 0xff);
-	queue_infos(cmd, 0, MSG_OK, 2, FIRMWARE_REVISION >> 8);
+	queue_infos4(cmd, 0, MSG_OK, 3,
+		FIRMWARE_VERSION,
+		FIRMWARE_REVISION & 0xff,
+		FIRMWARE_REVISION >> 8);
 	
 	return NO_RESULT;
 }

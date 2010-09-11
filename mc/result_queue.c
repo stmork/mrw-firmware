@@ -97,7 +97,7 @@ void queue_info(
 	bump_ring();
 }
 
-void queue_infos(
+void queue_infos2(
 	uint8_t  cmd,
 	uint16_t unit_no,
 	uint8_t  code,
@@ -109,6 +109,42 @@ void queue_infos(
 	fill_message(msg, cmd, unit_no, code);
 	msg->data[msg->length++] = info1;
 	msg->data[msg->length++] = info2;
+	bump_ring();
+}
+
+void queue_infos3(
+	uint8_t  cmd,
+	uint16_t unit_no,
+	uint8_t  code,
+	uint8_t  info1,
+	uint8_t  info2,
+	uint8_t  info3)
+{
+	CAN_message *msg = ring_get_pos(&tx_ring);
+
+	fill_message(msg, cmd, unit_no, code);
+	msg->data[msg->length++] = info1;
+	msg->data[msg->length++] = info2;
+	msg->data[msg->length++] = info3;
+	bump_ring();
+}
+
+void queue_infos4(
+	uint8_t  cmd,
+	uint16_t unit_no,
+	uint8_t  code,
+	uint8_t  info1,
+	uint8_t  info2,
+	uint8_t  info3,
+	uint8_t  info4)
+{
+	CAN_message *msg = ring_get_pos(&tx_ring);
+
+	fill_message(msg, cmd, unit_no, code);
+	msg->data[msg->length++] = info1;
+	msg->data[msg->length++] = info2;
+	msg->data[msg->length++] = info3;
+	msg->data[msg->length++] = info4;
 	bump_ring();
 }
 

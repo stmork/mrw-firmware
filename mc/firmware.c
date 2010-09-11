@@ -561,9 +561,9 @@ int main(int argc,char *argv[])
 		 */
 		if (last_state != status.eflg)
 		{
-			queue_infos(QRYERR, 0, MSG_OK, 0, status.eflg);
-			queue_infos(QRYERR, 0, MSG_OK, 1, status.rec); 
-			queue_infos(QRYERR, 0, MSG_OK, 2, status.tec); 
+			queue_infos2(QRYERR, 0, MSG_OK, 0, status.eflg);
+			queue_infos2(QRYERR, 0, MSG_OK, 1, status.rec); 
+			queue_infos2(QRYERR, 0, MSG_OK, 2, status.tec); 
 			last_state = status.eflg;
 		}
 
