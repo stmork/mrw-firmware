@@ -95,14 +95,14 @@ cached Set[String] callbacks(StateMachine sm) :
 cached Set[String] guards(StateMachine sm) :
 	sm.eAllContents.typeSelect(OpaqueExpression).body.method().toSet().sortBy(e|e);
 
-private List[Pseudostate] getPseaudoStates(StateMachine sm, PseudostateKind k) :
+private List[Pseudostate] getPseudoStates(StateMachine sm, PseudostateKind k) :
 	sm.region.subvertex.typeSelect(Pseudostate).select(e|e.kind == k);
 
 cached List[Pseudostate] getChoices(StateMachine sm) :
-	getPseaudoStates(sm, PseudostateKind::choice);
+	getPseudoStates(sm, PseudostateKind::choice);
 
 cached List[Pseudostate] getInitials(StateMachine sm) :
-	getPseaudoStates(sm, PseudostateKind::initial);
+	getPseudoStates(sm, PseudostateKind::initial);
 
 cached List[State] getStates(StateMachine sm) :
 	sm.region.subvertex.typeSelect(State).select(e|named(e));
@@ -113,7 +113,7 @@ cached List[Transition] getTransitions(StateMachine sm) :
 cached Set[String] getCommands(StateMachine sm) :
 	getTransitions(sm).name.toSet().sortBy(e|e);
 
-private cached Boolean isChoice(Pseudostate ps) :
+cached Boolean isChoice(Pseudostate ps) :
 	ps.kind == PseudostateKind::choice;
 
 cached Boolean isChoice(Vertex v) :

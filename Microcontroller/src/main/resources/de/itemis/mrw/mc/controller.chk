@@ -46,5 +46,8 @@ context Transition if isCommandTransition() && State.isInstance(target) ERROR "E
 context Transition if isChoice(source) ERROR "Ausgehende Transitionen von Entscheidungen müssen eine Bedingung haben!" :
 	guard != null;
 
+context Pseudostate if isChoice() ERROR "Eine Entscheidung muss benannt sein!" :
+	named();
+
 context Activity ERROR "Eine Aktivität muss benannt sein!" :
 	named();

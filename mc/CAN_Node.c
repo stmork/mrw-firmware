@@ -368,6 +368,8 @@ static int8_t checkIdButton(CAN_message *msg)
 				result = checkId(msg);
 	}
 
+	else
+
 	if (!idButtonPressed(msg))
 	{
 				result = idChangeDisabled(msg);
@@ -389,6 +391,8 @@ static int8_t checkId(CAN_message *msg)
 
 	}
 
+	else
+
 	if (idChanged(msg))
 	{
 				result = setId(msg);
@@ -408,6 +412,8 @@ static int8_t checkConfiguration(CAN_message *msg)
 				state = CAN_NODE__UNCONFIGURED;
 
 	}
+
+	else
 
 	if (isConfigured(msg))
 	{
@@ -429,6 +435,8 @@ static int8_t checkPendingCommand(CAN_message *msg)
 
 	}
 
+	else
+
 	if (isCommandPending(msg))
 	{
 				result = notConfiguring(msg);
@@ -447,6 +455,8 @@ static int8_t checkUConfIdButton(CAN_message *msg)
 	{
 				result = checkUConfId(msg);
 	}
+
+	else
 
 	if (!idButtonPressed(msg))
 	{
@@ -468,6 +478,8 @@ static int8_t checkUConfId(CAN_message *msg)
 				state = CAN_NODE__UNCONFIGURED;
 
 	}
+
+	else
 
 	if (idChanged(msg))
 	{

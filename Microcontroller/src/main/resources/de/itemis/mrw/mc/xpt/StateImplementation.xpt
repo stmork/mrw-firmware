@@ -110,14 +110,12 @@ void «method(name)»(CAN_message *msg)
 /* Pseudostates */
 /****************/
 «FOREACH getChoices() AS choice»
-«IF named(choice)»
 static int8_t «method(choice.name)»(CAN_message *msg)
 {
 	int8_t result = -1;
-«EXPAND Transition FOREACH choice.outgoing»
+«EXPAND Transition FOREACH choice.outgoing SEPARATOR "	else"»
 	return result;
 }
-«ENDIF»
 «ENDFOREACH»
 
 «ENDFILE»
