@@ -57,7 +57,10 @@
 #define SPI_X2064    (1 << SPI2X)
 #define SPI_X2128    (0)
 
+#define WAIT_SPI loop_until_bit_is_set(SPSR, SPIF)
+
 extern void    spi_init(void);
+extern uint8_t spi_readc(void);
 extern uint8_t spi_getc(void);
 extern void    spi_putc(uint8_t data);
 

@@ -33,8 +33,8 @@
 #include "bit.h"
 #include "tool.h"
 
-#define mcp2515_select()   CLR_PORT_BIT(PORT_CS, P_CS)
-#define mcp2515_deselect() SET_PORT_BIT(PORT_CS, P_CS)
+#define MCP2515_SELECT     CLR_PORT_BIT(PORT_CS, P_CS)
+#define MCP2515_DESELECT   SET_PORT_BIT(PORT_CS, P_CS)
 
 #ifdef FILTER_ENABLE
 #define MCP_FILTER_BITS (0)
@@ -61,6 +61,32 @@
 
 static uint8_t multi_tx_buffer = 0;
 
+#define mcp2515_select()  MCP2515_SELECT;
+
+static void mcp2515_deselect(void)
+{
+	WAIT_SPI;
+	MCP2515_DESELECT;
+}
+
+/* MCP2515 datasheet, figure 12-2, page 65 */
+static uint8_t mcp2515_read_register(uint8_t address)
+{
+	uint8_t data;
+
+	MCP2515_SELECT;
+
+	spi_putc(SPI_READ);
+	spi_putc(address);
+
+	data = spi_readc();
+
+	MCP2515_DESELECT;
+
+	return data;
+}
+
+/* MCP2515 datasheet, figure 12-4, page 65 */
 static void mcp2515_write_register( uint8_t address, uint8_t data )
 {
 	mcp2515_select();
@@ -72,22 +98,15 @@ static void mcp2515_write_register( uint8_t address, uint8_t data )
 	mcp2515_deselect();
 }
 
-static uint8_t mcp2515_read_register(uint8_t address)
+/* MCP2515 datasheet, figure 12-6, page 66 */
+static void mcp2515_request_to_send(uint8_t buffer)
 {
-	uint8_t data;
-
 	mcp2515_select();
-
-	spi_putc(SPI_READ);
-	spi_putc(address);
-
-	data = spi_getc();
-
+	spi_putc(SPI_RTS | (1 << buffer));
 	mcp2515_deselect();
-
-	return data;
 }
 
+/* MCP2515 datasheet, figure 12-7, page 66 */
 static void mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data)
 {
 	mcp2515_select();
@@ -100,6 +119,7 @@ static void mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data)
 	mcp2515_deselect();
 }
 
+/* MCP2515 datasheet, figure 12-8, page 67 */
 uint8_t mcp2515_read_status(void)
 {
 	uint8_t status;
@@ -107,13 +127,15 @@ uint8_t mcp2515_read_status(void)
 	mcp2515_select();
 
 	spi_putc(SPI_READ_STATUS);
-	status = spi_getc();
+	
+	status = spi_readc();
 	spi_putc(0xff);
 
 	mcp2515_deselect();
 	return status;
 }
 
+/* MCP2515 datasheet, figure 12-9, page 68 */
 static uint8_t mcp2515_read_rx_status(void)
 {
 	uint8_t data;
@@ -121,7 +143,7 @@ static uint8_t mcp2515_read_rx_status(void)
 	mcp2515_select();
 
 	spi_putc(SPI_RX_STATUS);
-	data = spi_getc();
+	data = spi_readc();
 	spi_putc(0xff);
 
 	mcp2515_deselect();
@@ -135,7 +157,7 @@ static uint8_t mcp2515_set_mode(uint8_t mode)
 
 	mcp2515_bit_modify( CANCTRL, MODE_MASK, mode);
 
-	// verify as advised in datasheet
+	/* verify as advised in datasheet */
 	canctrl = mcp2515_read_register( CANSTAT);
 	canctrl &= MODE_MASK;
 
@@ -144,15 +166,19 @@ static uint8_t mcp2515_set_mode(uint8_t mode)
 
 static void mcp2515_reset(void)
 {
-	// MCP2515 per Software Reset zuruecksetzten,
-	// danach ist der MCP2515 im Configuration Mode
+	/*
+	 * MCP2515 per Software Reset zuruecksetzten,
+	 * danach ist der MCP2515 im Configuration Mode
+	 */
 	mcp2515_select();
 	spi_putc( SPI_RESET );
 	mcp2515_deselect();
 
-	// Mindestens 128 MCP Zyklen warten! Da der ATmega
-	// nur langsamer aber nie schneller sein kann, reicht
-	// das aus.
+	/*
+	 * Mindestens 128 MCP Zyklen warten! Da der ATmega
+	 * nur langsamer aber nie schneller sein kann, reicht
+	 * das aus.
+	 */
 	for (uint8_t i = 0;i < 128;i++)
 	{
 		NOP;
@@ -187,13 +213,6 @@ static void mcp2515_write_eid(uint8_t address, uint16_t id)
 	mcp2515_deselect();
 }
 
-static void mcp2515_request_to_send(uint8_t buffer)
-{
-	mcp2515_select();
-	spi_putc(SPI_RTS | (1 << buffer));
-	mcp2515_deselect();
-}
-
 uint8_t mcp2515_read_error_status(MCP2515_error_status *status)
 {
 	register uint8_t sreg = SREG;
@@ -223,14 +242,16 @@ void mcp2515_dump_register(uint8_t *ptr)
 	register uint8_t sreg = SREG;
 
 	cli();
-	mcp2515_select();
+	MCP2515_SELECT;
 	spi_putc(SPI_READ);
 	spi_putc(0);
+	WAIT_SPI;
+
 	for (i = 0;i < 128;i++)
 	{
 		*ptr++ = spi_getc();
 	}
-	mcp2515_deselect();
+	MCP2515_DESELECT;
 	SREG = sreg;
 }
 
@@ -286,14 +307,14 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 	/* Buffer 1 : Filter an, kein Rollover */
 	mcp2515_write_register( RXB1CTRL, MCP_FILTER_BITS );
 
-	/* ID 0, Broadcast */
+	/* ID 2047, Broadcast */
 	if (id != GATEWAY_SID)
 	{
-		// Receive buffer 0
+		/* Receive buffer 0 */
 		mcp2515_write_sid( RXF0SIDH, BROADCAST_SID);
 		mcp2515_write_eid( RXF1SIDH, id);
 
-		// Receive buffer 1
+		/* Receive buffer 1 */
 		mcp2515_write_sid( RXF2SIDH, BROADCAST_SID);
 		mcp2515_write_eid( RXF3SIDH, id);
 		mcp2515_write_sid( RXF4SIDH, id);
@@ -307,11 +328,11 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 	}
 	else
 	{
-		// Receive buffer 0
+		/* Receive buffer 0 */
 		 mcp2515_write_sid( RXF0SIDH, GATEWAY_SID);
 		 mcp2515_write_eid( RXF1SIDH, GATEWAY_SID);
 
-		// Receive buffer 1
+		/* Receive buffer 1 */
 		 mcp2515_write_sid( RXF2SIDH, GATEWAY_SID);
 		 mcp2515_write_eid( RXF3SIDH, GATEWAY_SID);
 		 mcp2515_write_sid( RXF4SIDH, GATEWAY_SID);
@@ -324,43 +345,43 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 		 */
 	}
 
-	// Standard ID ist komplette Maske
+	/* Standard ID ist komplette Maske */
 	mcp2515_write_sid( RXM0SIDH, SID_MASK);
 	mcp2515_write_sid( RXM1SIDH, SID_MASK);
 
-	// Bit timings konfigurieren
+	/* Bit timings konfigurieren */
 	mcp2515_write_register( CNF1, R_CNF1 );
 	mcp2515_write_register( CNF2, R_CNF2 );
 	mcp2515_write_register( CNF3, R_CNF3 );
 
-	// Aktivieren der RXnBF pins als Output
+	/* Aktivieren der RXnBF pins als Output */
 	mcp2515_write_register( BFPCTRL, _BV(B1BFE) | _BV(B0BFE) );
 
-	// TXnRTS Bits als Inputs schalten
+	/* TXnRTS Bits als Inputs schalten */
 	mcp2515_write_register( TXRTSCTRL, 0 );
 
-	// CLKOUT aktivieren und Teiler einstellen
+	/* CLKOUT aktivieren und Teiler einstellen */
 	mcp2515_bit_modify( CANCTRL,
 		_BV(CLKEN) | MCP_CLKOUT_MASK,
 		_BV(CLKEN) | MCP_CLKOUT_Q1);
 
-	// So! Ab jetzt normal mode.
+	/* So! Ab jetzt normal mode. */
 	mcp2515_set_mode(MODE_NORMAL);
 
-	// Aktivieren der Rx Buffer Interrupts
+	/* Aktivieren der Rx Buffer Interrupts */
 	mcp2515_write_register( CANINTE, _BV(RX0IE) | _BV(RX1IE) );
 
-	// Reset des Error Registers.
+	/* Reset des Error Registers. */
 	mcp2515_write_register(EFLG, 0);
 
 	CLR_PORT_BIT(DDR_INT2,  P_INT2);
 	CLR_PORT_BIT(PORT_INT2, P_INT2);
 
-	// ...und INT2 aktivieren.
-	CLR_PORT_BIT(GICR,  INT2); // INT 2 disable
-	CLR_PORT_BIT(MCUCR, ISC2); // Interrupt on falling edge
-	SET_PORT_BIT(GIFR,  INT2); // Clear flag
-	SET_PORT_BIT(GICR,  INT2); // INT 2 enable
+	/* ...und INT2 aktivieren. */
+	CLR_PORT_BIT(GICR,  INT2); /* INT 2 disable */
+	CLR_PORT_BIT(MCUCR, ISC2); /* Interrupt on falling edge */
+	SET_PORT_BIT(GIFR,  INT2); /* Clear flag */
+	SET_PORT_BIT(GICR,  INT2); /* INT 2 enable */
 }
 
 static int8_t can_get_free_buffer(void)
@@ -394,6 +415,7 @@ static int8_t can_get_free_buffer(void)
 	return buffer;
 }
 
+/* MCP2515 datasheet, figure 12-5, page 66 */
 int8_t can_put_msg(CAN_message *msg)
 {
 	uint8_t sreg = SREG;
@@ -406,28 +428,28 @@ int8_t can_put_msg(CAN_message *msg)
 		mcp2515_select();
 		spi_putc(SPI_LOAD_TX | (0x2 * buffer));
 
-		// Standard ID einstellen
+		/* Standard ID einstellen */
 		spi_putc(msg->sid >> 3);
 		spi_putc((msg->sid << 5) | ((msg->status >> (FRAME_EXT - EXIDE)) & _BV(EXIDE)));
 
-		// Extended ID
+		/* Extended ID */
 		spi_putc(msg->eid >> 8);
 		spi_putc(msg->eid);
 
 		uint8_t length = msg->length;
 
-		// Nachrichten Laenge einstellen
+		/* Nachrichten Laenge einstellen */
 		spi_putc(length);
 
-		// Daten
-		for (uint8_t i=0;i<length;i++)
+		/* Daten */
+		for (uint8_t i = 0; i < length; i++)
 		{
 			spi_putc(msg->data[i]);
 		}
 		mcp2515_deselect();
 
 		/* CAN Nachricht verschicken
-		   die letzten drei Bit im RTS Kommando geben an welcher
+		   die letzten drei Bit im RTS Kommando geben an, welcher
 		   Puffer gesendet werden soll */
 		mcp2515_request_to_send(buffer);
 	}
@@ -455,13 +477,14 @@ int8_t can_send_msg(CAN_message *msg)
 	return -2;
 }
 
+/* MCP2515 datasheet, figure 12-3, page 65 */
 int8_t can_get_msg(CAN_message *msg)
 {
 	uint8_t sreg = SREG;
 	
 	cli();
 
-	// Status auslesen
+	/* Status auslesen */
 	msg->status = mcp2515_read_rx_status();
 	int8_t buffer;
 
@@ -480,29 +503,30 @@ int8_t can_get_msg(CAN_message *msg)
 
 	if (buffer >= 0)
 	{
-		mcp2515_select();
-		spi_putc(SPI_READ_RX | (buffer << 2));
-
-		// Standard ID auslesen
 		uint16_t id;
 
+		mcp2515_select();
+		spi_putc(SPI_READ_RX | (buffer << 2));
+		WAIT_SPI;
+
+		/* Standard ID auslesen */
 		id = spi_getc();
 		msg->sid = (id << 3) | (spi_getc() >> 5);
 		id = spi_getc();
 		msg->eid = (id << 8) | spi_getc();
 
-		// Laenge auslesen
+		/* Laenge auslesen */
 		uint8_t length = spi_getc() & 0x0f;
 		msg->length = length > 8 ? 8 : length;
 
-		// Daten auslesen
+		/* Daten auslesen */
 		for (uint8_t i=0; i<length; i++)
 		{
 			msg->data[i] = spi_getc();
 		}
-		mcp2515_deselect();
+		MCP2515_DESELECT;
 
-		// Interrupt Flag loeschen
+		/* Interrupt Flag loeschen */
 		if (buffer == 0)
 		{
 			mcp2515_bit_modify(CANINTF, _BV(RX0IF), 0);

@@ -22,12 +22,6 @@
 #include "spi.h"
 #include "bit.h"
 
-#ifndef _DEBUG
-#define WAIT_SPI loop_until_bit_is_set(SPSR, SPIF)
-#else
-#define WAIT_SPI
-#endif
-
 void spi_init(void)
 {
 	// Aktivieren der Pins für das SPI Interface
@@ -46,6 +40,18 @@ void spi_init(void)
 	SPSR = SPI_X2002;
 }
 
+uint8_t spi_readc(void)
+{
+	// Sendet ein Byte
+	spi_putc(0x65);
+
+	// Wartet bis Byte gesendet wurde, Ergebnis in SPDR
+	WAIT_SPI;
+
+	// Hier ist das Ergebnis
+	return SPDR;
+}
+
 uint8_t spi_getc(void)
 {
 	// Sendet ein Byte
@@ -60,9 +66,9 @@ uint8_t spi_getc(void)
 
 void spi_putc( uint8_t data )
 {
-	// Sendet ein Byte
-	SPDR = data;
-
 	// Wartet bis Byte gesendet wurde
 	WAIT_SPI;
+
+	// Sendet ein Byte
+	SPDR = data;
 }

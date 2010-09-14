@@ -110,7 +110,7 @@ static void can_reply_message_infos(
 }
 
 /**
- * Diese Methode bereitet einen kontrollierten Einstig in die
+ * Diese Methode bereitet einen kontrollierten Einstieg in die
  * eigentliche Applikation vor. Wenn es eine Applikation im
  * Flash ab Adresse $0000 liegt, sind da keine $ff drin.
  */
