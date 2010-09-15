@@ -71,9 +71,14 @@ Datenübertragung gewartet werden muss.
 #define MCP2515_SELECT     CLR_PORT_BIT(PORT_CS, P_CS)
 #define MCP2515_DESELECT   SET_PORT_BIT(PORT_CS, P_CS)
 
-#define mcp2515_select()  MCP2515_SELECT
 
 static uint8_t multi_tx_buffer = 0;
+
+static void mcp2515_select(uint8_t cmd)
+{
+	MCP2515_SELECT;
+	SPDR = cmd;
+}
 
 static void mcp2515_deselect(void)
 {
@@ -86,13 +91,9 @@ static uint8_t mcp2515_read_register(uint8_t address)
 {
 	uint8_t data;
 
-	MCP2515_SELECT;
-
-	spi_putc(SPI_READ);
+	mcp2515_select(SPI_READ);
 	spi_putc(address);
-
 	data = spi_readc();
-
 	MCP2515_DESELECT;
 
 	return data;
@@ -101,33 +102,26 @@ static uint8_t mcp2515_read_register(uint8_t address)
 /* MCP2515 datasheet, figure 12-4, page 65 */
 static void mcp2515_write_register( uint8_t address, uint8_t data )
 {
-	mcp2515_select();
-
-	spi_putc(SPI_WRITE);
+	mcp2515_select(SPI_WRITE);
 	spi_putc(address);
 	spi_putc(data);
-
 	mcp2515_deselect();
 }
 
 /* MCP2515 datasheet, figure 12-6, page 66 */
 static void mcp2515_request_to_send(uint8_t buffer)
 {
-	mcp2515_select();
-	spi_putc(SPI_RTS | (1 << buffer));
+	mcp2515_select(SPI_RTS | (1 << buffer));
 	mcp2515_deselect();
 }
 
 /* MCP2515 datasheet, figure 12-7, page 66 */
 static void mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data)
 {
-	mcp2515_select();
-
-	spi_putc(SPI_BIT_MODIFY);
+	mcp2515_select(SPI_BIT_MODIFY);
 	spi_putc(address);
 	spi_putc(mask);
 	spi_putc(data);
-
 	mcp2515_deselect();
 }
 
@@ -136,9 +130,7 @@ uint8_t mcp2515_read_status(void)
 {
 	uint8_t status;
 
-	MCP2515_SELECT;
-
-	spi_putc(SPI_READ_STATUS);
+	mcp2515_select(SPI_READ_STATUS);
 	status = spi_readc();
 
 	MCP2515_DESELECT;
@@ -150,9 +142,7 @@ static uint8_t mcp2515_read_rx_status(void)
 {
 	uint8_t rx_status;
 
-	MCP2515_SELECT;
-
-	spi_putc(SPI_RX_STATUS);
+	mcp2515_select(SPI_RX_STATUS);
 	rx_status = spi_readc();
 
 	MCP2515_DESELECT;
@@ -179,8 +169,7 @@ static void mcp2515_reset(void)
 	 * MCP2515 per Software Reset zuruecksetzten,
 	 * danach ist der MCP2515 im Configuration Mode
 	 */
-	mcp2515_select();
-	spi_putc( SPI_RESET );
+	mcp2515_select(SPI_RESET);
 	mcp2515_deselect();
 
 	/*
@@ -196,23 +185,18 @@ static void mcp2515_reset(void)
 
 static void mcp2515_write_sid(uint8_t address, uint16_t id)
 {
-	mcp2515_select();
-
-	spi_putc(SPI_WRITE);
+	mcp2515_select(SPI_WRITE);
 	spi_putc(address);
 	spi_putc(id >> 3);
 	spi_putc(id << 5);
 	spi_putc(0);
 	spi_putc(0);
-
 	mcp2515_deselect();
 }
 
 static void mcp2515_write_eid(uint8_t address, uint16_t id)
 {
-	mcp2515_select();
-
-	spi_putc(SPI_WRITE);
+	mcp2515_select(SPI_WRITE);
 	spi_putc(address);
 	spi_putc(id >> 3);
 	spi_putc((id << 5) | _BV(EXIDE));
@@ -251,8 +235,7 @@ void mcp2515_dump_register(uint8_t *ptr)
 	register uint8_t sreg = SREG;
 
 	cli();
-	MCP2515_SELECT;
-	spi_putc(SPI_READ);
+	mcp2515_select(SPI_READ);
 	spi_putc(0);    /* Startadresse */
 	spi_putc(0xff); /* Prefetch einleiten */
 
@@ -435,8 +418,7 @@ int8_t can_put_msg(CAN_message *msg)
 	
 	if (buffer >= 0)
 	{
-		mcp2515_select();
-		spi_putc(SPI_LOAD_TX | (0x2 * buffer));
+		mcp2515_select(SPI_LOAD_TX | (0x2 * buffer));
 
 		/* Standard ID einstellen */
 		spi_putc(msg->sid >> 3);
@@ -515,8 +497,7 @@ int8_t can_get_msg(CAN_message *msg)
 	{
 		uint16_t id;
 
-		mcp2515_select();
-		spi_putc(SPI_READ_RX | (buffer << 2));
+		mcp2515_select(SPI_READ_RX | (buffer << 2));
 
 		/* Prefetch einleiten. */
 		spi_putc(0x99); /* 10011001 */
