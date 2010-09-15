@@ -33,9 +33,6 @@
 #include "bit.h"
 #include "tool.h"
 
-#define MCP2515_SELECT     CLR_PORT_BIT(PORT_CS, P_CS)
-#define MCP2515_DESELECT   SET_PORT_BIT(PORT_CS, P_CS)
-
 #ifdef FILTER_ENABLE
 #define MCP_FILTER_BITS (0)
 #else
@@ -59,9 +56,24 @@
 #define R_CNF2  ((PROP_SEG - 1) | ((R_PS1 - 1) << 3) | (1 << SAM) | (1 << BTLMODE))
 #define R_CNF3  (R_PS2 - 1)
 
-static uint8_t multi_tx_buffer = 0;
+/**************************************************************************
 
-#define mcp2515_select()  MCP2515_SELECT;
+Die Datenübertragung über SPI zum MCP2515 darf nur während des Chip Selects
+durchgeführt werden. Wird CS deaktiviert, muss die Datenübertragung entweder
+sicher beendet sein (z.B. durch spi_getc() oder spi_readc()), oder es muss
+nach spi_putc() auf Beendigung mittels WAIT_SPI gewartet werden. Das stellt
+auch sicher, dass bei deaktiviertem CS keine Datenübertragung läuft. Daraus
+ergibt sich auch, dass bei einem Aktivieren des CS nicht auf ein Ende der
+Datenübertragung gewartet werden muss.
+
+***************************************************************************/
+
+#define MCP2515_SELECT     CLR_PORT_BIT(PORT_CS, P_CS)
+#define MCP2515_DESELECT   SET_PORT_BIT(PORT_CS, P_CS)
+
+#define mcp2515_select()  MCP2515_SELECT
+
+static uint8_t multi_tx_buffer = 0;
 
 static void mcp2515_deselect(void)
 {
@@ -124,31 +136,28 @@ uint8_t mcp2515_read_status(void)
 {
 	uint8_t status;
 
-	mcp2515_select();
+	MCP2515_SELECT;
 
 	spi_putc(SPI_READ_STATUS);
-	
 	status = spi_readc();
-	spi_putc(0xff);
 
-	mcp2515_deselect();
+	MCP2515_DESELECT;
 	return status;
 }
 
 /* MCP2515 datasheet, figure 12-9, page 68 */
 static uint8_t mcp2515_read_rx_status(void)
 {
-	uint8_t data;
+	uint8_t rx_status;
 
-	mcp2515_select();
+	MCP2515_SELECT;
 
 	spi_putc(SPI_RX_STATUS);
-	data = spi_readc();
-	spi_putc(0xff);
+	rx_status = spi_readc();
 
-	mcp2515_deselect();
-
-	return data;
+	MCP2515_DESELECT;
+	
+	return rx_status;
 }
 
 static uint8_t mcp2515_set_mode(uint8_t mode)
@@ -244,12 +253,12 @@ void mcp2515_dump_register(uint8_t *ptr)
 	cli();
 	MCP2515_SELECT;
 	spi_putc(SPI_READ);
-	spi_putc(0);
-	WAIT_SPI;
+	spi_putc(0);    /* Startadresse */
+	spi_putc(0xff); /* Prefetch einleiten */
 
 	for (i = 0;i < 128;i++)
 	{
-		*ptr++ = spi_getc();
+		*ptr++ = spi_prefetchc();
 	}
 	MCP2515_DESELECT;
 	SREG = sreg;
@@ -284,7 +293,8 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 		id = UNDEFINED_SID;
 	}
 
-	/* Chip select (= SS) auf Ausgang noch bevor SPI
+	/*
+	 * Chip select (= SS) auf Ausgang noch bevor SPI
 	 * initialisiert wird. Wichtig!
 	 */
 	SET_PORT_BIT(DDR_CS,  P_CS);
@@ -507,34 +517,31 @@ int8_t can_get_msg(CAN_message *msg)
 
 		mcp2515_select();
 		spi_putc(SPI_READ_RX | (buffer << 2));
-		WAIT_SPI;
+
+		/* Prefetch einleiten. */
+		spi_putc(0x99); /* 10011001 */
 
 		/* Standard ID auslesen */
-		id = spi_getc();
-		msg->sid = (id << 3) | (spi_getc() >> 5);
-		id = spi_getc();
-		msg->eid = (id << 8) | spi_getc();
+		id = spi_prefetchc();
+		msg->sid = (id << 3) | (spi_prefetchc() >> 5);
+		
+		/* Extended ID auslesen */
+		id = spi_prefetchc();
+		msg->eid = (id << 8) | spi_prefetchc();
 
 		/* Laenge auslesen */
-		uint8_t length = spi_getc() & 0x0f;
+		uint8_t length = spi_prefetchc() & 0x0f;
 		msg->length = length > 8 ? 8 : length;
 
 		/* Daten auslesen */
-		for (uint8_t i=0; i<length; i++)
+		for (uint8_t i = 0; i < length; i++)
 		{
-			msg->data[i] = spi_getc();
+			msg->data[i] = spi_prefetchc();
 		}
-		MCP2515_DESELECT;
+		mcp2515_deselect();
 
-		/* Interrupt Flag loeschen */
-		if (buffer == 0)
-		{
-			mcp2515_bit_modify(CANINTF, _BV(RX0IF), 0);
-		}
-		else
-		{
-			mcp2515_bit_modify(CANINTF, _BV(RX1IF), 0);
-		}
+		/* Interrupt Flag löschen */
+		mcp2515_bit_modify(CANINTF, buffer == 0 ? _BV(RX0IF) : _BV(RX1IF), 0);
 		
 		buffer = msg->status & 0x7;
 	}

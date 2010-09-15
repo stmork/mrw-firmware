@@ -62,6 +62,7 @@
 extern void    spi_init(void);
 extern uint8_t spi_readc(void);
 extern uint8_t spi_getc(void);
+extern uint8_t spi_prefetchc(void);
 extern void    spi_putc(uint8_t data);
 
 #endif

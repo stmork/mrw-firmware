@@ -43,7 +43,7 @@ void spi_init(void)
 uint8_t spi_readc(void)
 {
 	// Sendet ein Byte
-	spi_putc(0x65);
+	spi_putc(0xa9); /* 10101001 */
 
 	// Wartet bis Byte gesendet wurde, Ergebnis in SPDR
 	WAIT_SPI;
@@ -55,13 +55,29 @@ uint8_t spi_readc(void)
 uint8_t spi_getc(void)
 {
 	// Sendet ein Byte
-	SPDR = 0x65;
+	SPDR = 0xa3; /* 10100011*/
 
 	// Wartet bis Byte gesendet wurde, Ergebnis in SPDR
 	WAIT_SPI;
 
 	// Hier ist das Ergebnis
 	return SPDR;
+}
+
+uint8_t spi_prefetchc(void)
+{
+	uint8_t result;
+
+	// Wartet bis Byte gesendet wurde, Ergebnis in SPDR
+	WAIT_SPI;
+
+	// Hier ist das Ergebnis
+	result = SPDR;
+	
+	// Sendet ein Byte
+	SPDR = 0xa5; /* 10100101 */
+
+	return result;	
 }
 
 void spi_putc( uint8_t data )
