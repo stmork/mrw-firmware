@@ -71,7 +71,7 @@ bootloader.hex:	bootloader.out
 # Firmware for light test
 #########################
 
-light.out:	light.o sleep.o pwm.o timer.o bit.o
+light.out:	light.o sleep.o pwm.o timer.o
 	$(LINK.c) -Wl,-Map,light.map -o $@ $^
 
 light.hex:	light.out
@@ -94,7 +94,7 @@ install_bootloader_jtag:	bootloader.hex
 	$(AVRDUDE) -p m32 -e -B 4 -U flash:w:$^ -U hfuse:w:0x0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
 
 install_light:	light.hex
-	$(AVRDUDE) -p m32 -e -B 1 -U flash:w:$^ -U hfuse:w:0x09:m -U lfuse:w:0x1e:m
+	$(AVRDUDE) -p m32 -e -B 4 -U flash:w:$^
 
 verify_firmware:	firmware.hex
 	$(AVRDUDE) -p m32 -B 4 -U flash:v:$^

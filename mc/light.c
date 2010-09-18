@@ -20,11 +20,12 @@
 */
 
 #ifndef F_CPU
-#define F_CPU 14745600L
+#define F_CPU 16000000L
 #endif
 
 #include <stdlib.h>
-#include "bit.h"
+#include <avr/interrupt.h>
+
 #include "pwm.h"
 #include "sleep.h"
 #include "timer.h"
@@ -37,21 +38,46 @@ static uint16_t counter = 0;
 static void port_init(void)
 {
 	/* LED Pins auf Output setzen und Anzeige löschen. */
-	DDR_LIGHT  |=    LIGHT_LED0 | LIGHT_LED1;
-	PORT_LIGHT &= (~(LIGHT_LED0 | LIGHT_LED1));
+	DDR_LIGHT  |=  0xff;
+	PORT_LIGHT  =  0;
 }
 
+/*
+ * Hier wird das Soft-PWM durchgeführt.
+ */
 ISR(TIMER1_COMPA_vect)
 {
 	handle_pwm();
 }
 
+/*
+ * Hier wird die Helligkeit eines jeden Soft-PWM-Kanals einzeln eingestellt.
+ */
 ISR(TIMER2_OVF_vect)
 {
-	set_dimm(6, counter);
-	set_dimm(7, counter >> 2);
-		
+	set_dimm(0, counter << 2);
+	set_dimm(1, counter << 1);
+	set_dimm(2, counter);
+	set_dimm(3, counter >> 1);
+	set_dimm(4, counter >> 2);
+	set_dimm(5, counter >> 3);
+	set_dimm(6, counter >> 4);
+	set_dimm(7, counter >> 5);
+
 	counter++;
+}
+
+static void init_without_timer()
+{
+	/* Initialisierung, falls Timer nicht verwendet wird. */
+	set_dimm(7, 255);
+	set_dimm(6, 224);
+	set_dimm(5, 192);
+	set_dimm(4, 160);
+	set_dimm(3, 128);
+	set_dimm(2,  96);
+	set_dimm(1,  64);
+	set_dimm(0,  32);
 }
 
 int main(void)
@@ -64,8 +90,11 @@ int main(void)
 
 	do
 	{
+		/*
+		 * Ein bißchen was für die Umwelt tun. Es fängt halt
+		 * halt schon im Kleinen an ;-)
+		 */
 		sleep();
-		sei();
 	}
 	while(1);
 }
