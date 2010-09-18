@@ -29,6 +29,8 @@
 #include "sleep.h"
 #include "timer.h"
 
+static uint16_t counter = 0;
+
 /*
  * Hier werden die beiden LED Port Pins auf Ausgang geschaltet.
  */
@@ -39,19 +41,24 @@ static void port_init(void)
 	PORT_LIGHT &= (~(LIGHT_LED0 | LIGHT_LED1));
 }
 
-ISR(TIMER2_OVF_vect)
+ISR(TIMER1_COMPA_vect)
 {
 	handle_pwm();
 }
 
+ISR(TIMER2_OVF_vect)
+{
+	set_dimm(6, counter);
+	set_dimm(7, counter >> 2);
+		
+	counter++;
+}
+
 int main(void)
 {
-	uint16_t counter = 0;
-
 	port_init();
-//	timer2_init();
-	TCCR2  = _BV(CS01);
-	TIMSK |= _BV(TOIE2);
+	timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
+	timer2_init();
 
 	sei();
 
@@ -59,11 +66,6 @@ int main(void)
 	{
 		sleep();
 		sei();
-
-		set_dimm(6, counter >> 6);
-		set_dimm(7, counter >> 4);
-		
-		counter++;
 	}
 	while(1);
 }

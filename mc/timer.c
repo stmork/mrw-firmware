@@ -22,6 +22,7 @@
 #include "timer.h"
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 
 void timer0_init(void)
 {
@@ -32,10 +33,30 @@ void timer0_init(void)
 	TIMSK |= _BV(TOIE0);
 }
 
+void timer1_init(uint16_t clock)
+{
+	uint8_t sreg = SREG;
+
+	cli();
+	/* Takte zwischen Interrupts */
+	OCR1A  = clock;
+	
+	/* COMP1 Match einschalten */
+	TCCR1A = _BV(COM1A1);
+
+	/* CTC Timer bei Gleichheit zurücksetzen */
+	TCCR1B = _BV(WGM12) | _BV(CS10);
+
+	/* Interrupt einschalten */
+	TIMSK |= _BV(OCIE1A);
+
+	SREG = sreg;
+}
+
 void timer2_init(void)
 {
 	// prescaler 1024
-	TCCR2  = _BV(CS00) | _BV(CS01) | _BV(CS02);
+	TCCR2  = _BV(CS20) | _BV(CS21) | _BV(CS22);
 
 	// interrupt enable
 	TIMSK |= _BV(TOIE2);

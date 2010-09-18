@@ -32,6 +32,8 @@
 #define LIGHT_LED0   _BV(P_LIGHT_LED0)   // red
 #define LIGHT_LED1   _BV(P_LIGHT_LED1)  // green
 
+#define PWM_TABLE_SIZE 32
+
 extern void set_dimm(uint8_t idx, uint8_t value);
 extern void handle_pwm(void);
 

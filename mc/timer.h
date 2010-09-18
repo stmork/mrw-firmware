@@ -22,7 +22,13 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#define TIMER0_PRESCALER 1024
+#define TIMER2_PRESCALER 1024
+
+#include <inttypes.h>
+
 extern void timer0_init(void);
+extern void timer1_init(uint16_t clock);
 extern void timer2_init(void);
 
 #endif
