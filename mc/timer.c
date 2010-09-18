@@ -26,10 +26,10 @@
 
 void timer0_init(void)
 {
-	// prescaler 1024
+	/* Prescaler 1024 */
 	TCCR0  = _BV(CS00) | _BV(CS02);
 
-	// interrupt enable
+	/* Interrupt einschalten */
 	TIMSK |= _BV(TOIE0);
 }
 
@@ -44,7 +44,7 @@ void timer1_init(uint16_t clock)
 	/* COMP1 Match einschalten */
 	TCCR1A = _BV(COM1A1);
 
-	/* CTC Timer bei Gleichheit zurücksetzen */
+	/* CTC Timer bei Gleichheit zurücksetzen, kein Prescaler */
 	TCCR1B = _BV(WGM12) | _BV(CS10);
 
 	/* Interrupt einschalten */
@@ -55,9 +55,9 @@ void timer1_init(uint16_t clock)
 
 void timer2_init(void)
 {
-	// prescaler 1024
+	/* Prescaler 1024 */
 	TCCR2  = _BV(CS20) | _BV(CS21) | _BV(CS22);
 
-	// interrupt enable
+	/* Interrupt einschalten */
 	TIMSK |= _BV(TOIE2);
 }
