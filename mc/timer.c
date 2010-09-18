@@ -1,6 +1,6 @@
 /*
 **
-**	$Filename:	bit.c $
+**	$Filename:	timer.c $
 **	$Revision$
 **	$Date$
 **	$Author$
