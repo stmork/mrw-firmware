@@ -29,14 +29,14 @@ static uint8_t dimm[8];
 static uint8_t nom[8];
 static uint8_t denom[8];
 
-/* Nennertabelle*/
+/* Zählertabelle */
 static const uint8_t table_nom[PWM_TABLE_SIZE] PROGMEM =
 {
 	0x00, 0x01, 0x01, 0x03, 0x01, 0x05, 0x03, 0x07, 0x01, 0x09, 0x05, 0x0b, 0x03, 0x0d, 0x07, 0x0f,
 	0x01, 0x11, 0x09, 0x13, 0x05, 0x15, 0x0b, 0x17, 0x03, 0x19, 0x0d, 0x1b, 0x07, 0x1d, 0x0f, 0x1
 };
 
-/* Zählertabelle */
+/* Nennertabelle*/
 static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
 {
 	0x20, 0x20, 0x10, 0x20, 0x08, 0x20, 0x10, 0x20, 0x04, 0x20, 0x10, 0x20, 0x08, 0x20, 0x10, 0x20,
@@ -44,7 +44,7 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
 };
 
 /*
- * Hier wird aus einer Tabelle Nenner und Zähler für die Helligkeit ausgelesen. Wichtig hier
+ * Hier wird aus einer Tabelle Zähler und Nenner für die Helligkeit ausgelesen. Wichtig hier
  * ist, dass die Werte aus dem Flash geholt werden (const/PROGMEM), um RAM zu sparen.
  */
 void set_dimm(uint8_t idx, uint8_t value)
@@ -62,7 +62,7 @@ void set_dimm(uint8_t idx, uint8_t value)
  * dass so ähnlich wie beim Linienzeichnen (Gfx!!), die Steigung durch Annäherung
  * nachgehalten wird. Da die Steigung immer zwischen [0.0, 1.0] ist, ist die Steigung
  * immer flach, was den Algorithmus vereinfacht. Diese Routine dürfte nicht mehr
- * als 200 Takte brauchen.
+ * als 300 Takte brauchen.
  */
 void handle_pwm(void)
 {
