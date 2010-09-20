@@ -19,15 +19,13 @@
 **
 */
 
-#include "pwm.h"
-
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 
-static uint8_t quotient[8];
-static uint8_t dimm[8];
-static uint8_t nom[8];
-static uint8_t denom[8];
+#include "mrw.h"
+#include "pwm.h"
+
+static struct mrw_light lights[8];
 
 /* Zählertabelle */
 static const uint8_t table_nom[PWM_TABLE_SIZE] PROGMEM =
@@ -50,10 +48,10 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
 void set_dimm(uint8_t idx, uint8_t value)
 {
 	value >>= 3;
-	nom[idx]   = pgm_read_byte(&table_nom[value]);
-	denom[idx] = pgm_read_byte(&table_denom[value]);
-	dimm[idx] = value;
-	quotient[idx] = 0;
+	lights[idx].quotient = 0;
+	lights[idx].dimm     = value;
+	lights[idx].nom      = pgm_read_byte(&table_nom[value]);
+	lights[idx].denom    = pgm_read_byte(&table_denom[value]);
 }
 
 /*
@@ -72,12 +70,12 @@ void handle_pwm(void)
 	for (p = 7; p >= 0; p--)
 	{
 		pattern += pattern;
-		if (quotient[p] < nom[p])
+		if (lights[p].quotient < lights[p].nom)
 		{
 			pattern |= 1;
-			quotient[p] += denom[p];
+			lights[p].quotient += lights[p].denom;
 		}
-		quotient[p] -= nom[p];
+		lights[p].quotient -= lights[p].nom;
 	}
 	PORT_LIGHT = pattern;
 }

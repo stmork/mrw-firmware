@@ -177,6 +177,17 @@ struct mrw_signal
 	uint8_t        bit[5];
 };
 
+struct mrw_light
+{
+	uint8_t        quotient;
+	uint8_t        dimm;
+	uint8_t        nom;
+	uint8_t        denom;
+	uint8_t        pin;
+	uint8_t        threshold;
+	uint8_t        type;
+};
+
 
 typedef union
 {
@@ -185,6 +196,7 @@ typedef union
 	struct mrw_form3  u_form3;
 	struct mrw_rail   u_rail;
 	struct mrw_signal u_signal;
+	struct mrw_light  u_light;
 } mrw_unit;
 
 typedef struct
