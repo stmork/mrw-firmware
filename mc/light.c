@@ -245,7 +245,7 @@ ISR(TIMER2_OVF_vect)
 	counter++;
 }
 
-static void init_without_timer()
+static void init_without_timer(void)
 {
 	/* Initialisierung, falls Timer nicht verwendet wird. */
 	set_dimm(7, 255);
