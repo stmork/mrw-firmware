@@ -68,6 +68,7 @@
 #define CFGML2	(unsigned char)(CAT_CONFIG|0x0b)
 #define CFGML3	(unsigned char)(CAT_CONFIG|0x0c)
 #define CFGML4	(unsigned char)(CAT_CONFIG|0x0d)
+#define CFGLGT  (unsigned char)(CAT_CONFIG|0x0e)
 
 #define CFGBGN	    (unsigned char)(CAT_EXT|0x01)
 #define CFGEND	    (unsigned char)(CAT_EXT|0x02)
@@ -82,6 +83,7 @@
 #define QRYBUF      (unsigned char)(CAT_EXT|0x0b)
 #define QRYERR      (unsigned char)(CAT_EXT|0x0c)
 #define GETVER      (unsigned char)(CAT_EXT|0x0d)
+#define SENSOR      (unsigned char)(CAT_EXT|0x0e)
 
 // Signal types
 #define SIGNAL_OFF (unsigned char)0
@@ -98,6 +100,10 @@
 // Switch states
 #define SWITCH_STATE_LEFT  (unsigned char)1
 #define SWITCH_STATE_RIGHT (unsigned char)2
+
+// Sensor types
+#define SENSOR_LIGHT       (unsigned char)1
+#define SENSOR_TEMP        (unsigned char)2
 
 // result definitions
 #define NO_RESULT                -1 // not really sent
