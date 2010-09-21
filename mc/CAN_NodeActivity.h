@@ -58,6 +58,7 @@ extern int8_t railOff(CAN_message *msg);
 extern int8_t railOn(CAN_message *msg);
 extern int8_t reset(CAN_message *msg);
 extern int8_t right(CAN_message *msg);
+extern int8_t sensor(CAN_message *msg);
 extern int8_t setId(CAN_message *msg);
 extern int8_t setSignal(CAN_message *msg);
 /*********************/

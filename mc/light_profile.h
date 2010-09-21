@@ -29,7 +29,8 @@
 
 struct light_profile
 {
-	const uint8_t  *profile;
+	const uint8_t  *values;
+	uint8_t         repeat;
 };
 
 extern struct light_profile profiles[];

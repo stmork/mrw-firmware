@@ -2,9 +2,9 @@ CC		= gcc
 CPP		= gcc
 SRC		= canprog.c gwsim.c can_pc.c mrw_dump.c receive.c ping.c send.c\
 	qryerr.c qrybuf.c reset.c switch.c signal.c form.c config.c setid.c\
-	rail.c occupation.c
+	rail.c occupation.c light.c
 PROGS		= canprog gwsim receive ping send reset switch signal form config qrybuf\
-	qryerr setid rail occupation
+	qryerr setid rail occupation light
 LDFLAGS		= -lm
 CPPFLAGS	= -I ../mc
 
@@ -29,6 +29,8 @@ reset:	reset.o can_pc.o mrw_dump.o
 switch:	switch.o can_pc.o mrw_dump.o
 
 rail:	rail.o can_pc.o mrw_dump.o
+
+light:	light.o can_pc.o mrw_dump.o
 
 occupation:	occupation.o can_pc.o mrw_dump.o
 

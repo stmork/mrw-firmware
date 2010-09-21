@@ -182,6 +182,7 @@ struct mrw_signal
 struct mrw_light
 {
 	uint8_t               threshold;
+	uint8_t               lightness;
 	uint8_t               type;
 	uint8_t               counter;
 	uint8_t               quotient;

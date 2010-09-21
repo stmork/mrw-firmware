@@ -161,6 +161,11 @@ Steuerkommandos verarbeitet.
 				result = getVersion(msg);
 				break;
 
+			case SENSOR:
+
+				result = sensor(msg);
+				break;
+
 			default:
 				result = wrongOperatingTrigger(msg);
 				break;

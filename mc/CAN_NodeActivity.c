@@ -30,6 +30,7 @@
 #include "cmd_queue.h"
 #include "config.h"
 #include "switch.h"
+#include "light.h"
 #include "rail.h"
 #include "signal.h"
 #include "revision.h"
@@ -411,6 +412,43 @@ int8_t setSignal(CAN_message *msg)
 		return MSG_OK;
 	}
 	return MSG_UNITTYPE_WRONG;
+}
+
+int8_t sensor(CAN_message *msg)
+{
+	if (msg->data[1] == SENSOR_LIGHT)
+	{
+		if (msg->status & (1 << FRAME_EXT))
+		{
+			mrw_device *dvc = find_device(msg->eid);
+
+			if (dvc == null)
+			{
+				return MSG_UNIT_NOT_FOUND;
+			}
+			else if (dvc->unit_type != TYPE_LIGHT)
+			{
+				return MSG_UNITTYPE_WRONG;
+			}
+			else
+			{
+				light_set_lightness(&dvc->unit.u_light, msg->data[2]);
+			}
+		}
+		else
+		{
+			uint8_t i;
+
+			for (i = 0; i < config.count; i++)
+			{
+				if (config.dvc[i].unit_type == TYPE_LIGHT)
+				{
+					light_set_lightness(&config.dvc[i].unit.u_light, msg->data[2]);
+				}
+			}
+		}
+	}
+	return MSG_OK;
 }
 
 /*************************/
