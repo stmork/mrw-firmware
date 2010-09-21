@@ -40,7 +40,15 @@
  */
 ISR(TIMER1_COMPA_vect)
 {
-	handle_pwm();
+	uint8_t i;
+
+	for (i = 0;i < config.count; i++)
+	{
+		if (config.dvc[i].unit_type == TYPE_LIGHT)
+		{
+			handle_pwm(&config.dvc[i].unit.u_light);
+		}
+	}
 }
 
 /*
