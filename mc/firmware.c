@@ -31,6 +31,7 @@
 #include "rail.h"
 #include "switch.h"
 #include "signal.h"
+#include "light.h"
 #include "bit.h"
 #include "eeprom.h"
 #include "tool.h"
@@ -42,6 +43,7 @@
 #include "cmd_queue.h"
 #include "result_queue.h"
 #include "can_processing.h"
+#include "pwm.h"
 
 #define NODE_OFF       0
 #define NODE_READY     MCP_LED_GREEN
@@ -262,6 +264,10 @@ ISR(TIMER2_OVF_vect)
 				queue_info(GETRBS, dvc->unit_no, MSG_OK, rail_occupied(&dvc->unit.u_rail));
 			}
 			break;
+
+		case TYPE_LIGHT:
+			light_dimm(&dvc->unit.u_light);
+			break;
 		}
 	}
 
@@ -373,6 +379,14 @@ ISR(TIMER2_OVF_vect)
 	}
 }
 
+/*
+ * Hier wird das Soft-PWM durchgeführt.
+ */
+ISR(TIMER1_COMPA_vect)
+{
+	handle_pwm();
+}
+
 static void init_ports(void)
 {
 	int i;
@@ -442,6 +456,11 @@ static void init_ports(void)
 		case TYPE_SIGNAL_ML4:
 			dvc->unit.u_signal.img = SIGNAL_HP0;
 			break;
+
+		case TYPE_LIGHT:
+			light_init(&dvc->unit.u_light);
+			queue_infos2(GETDVC, 0 , MSG_INFO, dvc->unit.u_light.pin.pin, dvc->unit.u_light.pin.port);
+			break;
 		}
 	}
 }
@@ -459,6 +478,20 @@ static void can_wait_for_tx(void)
 		cnt++)
 	{
 		_delay_ms(1);
+	}
+}
+
+static void signal_init(void)
+{
+	serial_init();
+	if (isConfigured())
+	{
+		int i;
+
+		for (i = 0;i < config.count; i++)
+		{
+			compute_signal(&config.dvc[i]);
+		}
 	}
 }
 
@@ -488,15 +521,12 @@ int main(int argc,char *argv[])
 	init_ports();
 
 	// Initiale Signalbilder bereitstellen
-	serial_init();
-	if (isConfigured())
-	{
-		int i;
+	signal_init();
 
-		for (i = 0;i < config.count; i++)
-		{
-			compute_signal(&config.dvc[i]);
-		}
+	// Lampen einschalten
+	if (light_available())
+	{
+		timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
 	}
 
 	// Watch dog einschalten.

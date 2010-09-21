@@ -66,7 +66,7 @@ int main(int argc,char *argv[])
 		result = qrybuf(fd);
 		if (!flood)
 		{
-			usleep(800);
+			usleep(750);
 		}
 	}
 	while(++i < max);

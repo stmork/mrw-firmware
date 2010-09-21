@@ -7,7 +7,7 @@ SRC	= bootloader.c firmware.c gateway.c test.c\
 	CAN_NodeActivity.c\
 	bit.c rail.c signal.c switch.c\
 	mcp2515.c spi.c eeprom.c uart.c serial.c timer.c sleep.c can_ring.c cmd_queue.c result_queue.c config.c\
-	can_processing_new.c pwm.c
+	can_processing_new.c pwm.c test_light.c light_profile.c light.c
 
 OBJCOPY=avr-objcopy
 OBJDUMP=avr-objdump
@@ -22,7 +22,7 @@ revision.h:	.
 # New firmware for CAN node
 ###########################
 
-firmware.out:	firmware.o bit.o mcp2515.o rail.o signal.o spi.o switch.o eeprom.o serial.o timer.o sleep.o can_ring.o cmd_queue.o result_queue.o config.o can_processing_new.o CAN_Node.o CAN_NodeActivity.o
+firmware.out:	firmware.o bit.o mcp2515.o rail.o signal.o spi.o switch.o eeprom.o serial.o timer.o sleep.o can_ring.o cmd_queue.o result_queue.o config.o can_processing_new.o CAN_Node.o CAN_NodeActivity.o light.o light_profile.o pwm.o
 	$(LINK.c) -Wl,-Map,firmware.map -o $@ $^
 
 firmware.hex:	firmware.out
@@ -71,13 +71,13 @@ bootloader.hex:	bootloader.out
 # Firmware for light test
 #########################
 
-light.out:	light.o sleep.o pwm.o timer.o mcp2515.o spi.o
-	$(LINK.c) -Wl,-Map,light.map -o $@ $^
+test_light.out:	test_light.o sleep.o timer.o mcp2515.o spi.o bit.o config.o pwm.o light_profile.o light.o
+	$(LINK.c) -Wl,-Map,test_light.map -o $@ $^
 
-light.hex:	light.out
+test_light.hex:	test_light.out
 	$(OBJCOPY) -R .eeprom -O ihex $^ $@
 
-light.lst:	light.out
+test_light.lst:	test_light.out
 	$(OBJDUMP) -h -S -j .text -j .data $^ >$@
 
 ######################
@@ -93,7 +93,7 @@ install_bootloader:	bootloader.hex
 install_bootloader_jtag:	bootloader.hex
 	$(AVRDUDE) -p m32 -e -B 4 -U flash:w:$^ -U hfuse:w:0x0:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
 
-install_light:	light.hex
+install_light:	test_light.hex
 	$(AVRDUDE) -p m32 -e -B 4 -U flash:w:$^
 
 verify_firmware:	firmware.hex

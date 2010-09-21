@@ -22,10 +22,8 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 
-#include "mrw.h"
+#include "config.h"
 #include "pwm.h"
-
-static struct mrw_light lights[8];
 
 /* Zählertabelle */
 static const uint8_t table_nom[PWM_TABLE_SIZE] PROGMEM =
@@ -45,13 +43,13 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
  * Hier wird aus einer Tabelle Zähler und Nenner für die Helligkeit ausgelesen. Wichtig hier
  * ist, dass die Werte aus dem Flash geholt werden (const/PROGMEM), um RAM zu sparen.
  */
-void set_dimm(uint8_t idx, uint8_t value)
+void set_dimm(struct mrw_light *dvc, uint8_t value)
 {
 	value >>= 3;
-	lights[idx].quotient = 0;
-	lights[idx].dimm     = value;
-	lights[idx].nom      = pgm_read_byte(&table_nom[value]);
-	lights[idx].denom    = pgm_read_byte(&table_denom[value]);
+	dvc->quotient = 0;
+	dvc->dimm     = value;
+	dvc->nom      = pgm_read_byte(&table_nom[value]);
+	dvc->denom    = pgm_read_byte(&table_denom[value]);
 }
 
 /*
@@ -69,13 +67,15 @@ void handle_pwm(void)
 
 	for (p = 7; p >= 0; p--)
 	{
+		struct mrw_light *dvc = &config.dvc[p].unit.u_light;
+
 		pattern += pattern;
-		if (lights[p].quotient < lights[p].nom)
+		if (dvc->quotient < dvc->nom)
 		{
 			pattern |= 1;
-			lights[p].quotient += lights[p].denom;
+			dvc->quotient += dvc->denom;
 		}
-		lights[p].quotient -= lights[p].nom;
+		dvc->quotient -= dvc->nom;
 	}
 	PORT_LIGHT = pattern;
 }

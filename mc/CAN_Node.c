@@ -261,6 +261,11 @@ initialisiert.
 
 				break;
 
+			case CFGLGT:
+
+				result = configLight(msg);
+				break;
+
 			default:
 				result = wrongConfiguringTrigger(msg);
 				break;

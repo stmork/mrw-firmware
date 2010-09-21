@@ -63,6 +63,7 @@ struct string_map cmd_map[] =
 	{ CFGML2, "CFGML2"},
 	{ CFGML3, "CFGML3"},
 	{ CFGML4, "CFGML4"},
+	{ CFGLGT, "CFGLGT"},
 
 	{ CFGBGN,      "CFGBGN" },
 	{ CFGEND,      "CFGEND" },
@@ -76,7 +77,8 @@ struct string_map cmd_map[] =
 	{ FLASH_CHECK, "FLASH_CHECK" },
 	{ QRYBUF,      "QRYBUF" },
 	{ QRYERR,      "QRYERR" },
-	{ GETVER,      "GETVER" }
+	{ GETVER,      "GETVER" },
+	{ SENSOR,      "SENSOR" }
 };
 
 struct string_map result_map[] =

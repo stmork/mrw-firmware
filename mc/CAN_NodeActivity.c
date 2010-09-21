@@ -239,6 +239,20 @@ int8_t  configSwitchOld(CAN_message *msg)
 	return MSG_OK;
 }
 
+int8_t  configLight(CAN_message *msg)
+{
+	mrw_device *dvc = &config.dvc[config.count];
+
+	dvc->unit_type = TYPE_LIGHT;
+	dvc->unit_no   = msg->eid;
+	config_connection(&dvc->unit.u_light.pin, msg->data[1]);
+	dvc->unit.u_light.threshold = msg->data[2];
+	dvc->unit.u_light.type      = msg->data[3];
+	config.count++;
+
+	return MSG_OK;
+}
+
 int8_t  queryBufferState(CAN_message *msg)
 {
 	queue_infos2(msg->data[0], 0,

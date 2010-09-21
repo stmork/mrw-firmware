@@ -1,12 +1,12 @@
 /*
 **
-**	$Filename:	pwm.h $
+**	$Filename:	light_profile.h $
 **	$Revision$
 **	$Date$
 **	$Author$
 **	$Id$
 **
-**	PWM soft handler
+**	Light dimming profiles
 **
 **	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
 **
@@ -19,24 +19,19 @@
 **
 */
 
-#ifndef PWM_H
-#define PWM_H
+#ifndef LIGHT_PROFILE_H
+#define LIGHT_PROFILE_H
 
 #include <stdint.h>
 
-#include "mrw.h"
+#define LIGHT_PROFILE_SIZE 256
+#define LIGHT_PROFILE_MASK (LIGHT_PROFILE_SIZE - 1)
 
-#define PORT_LIGHT   PORTA
-#define DDR_LIGHT    DDRA
-#define PIN_LIGHT    PINA
-#define P_LIGHT_LED0 0
-#define P_LIGHT_LED1 1
-#define LIGHT_LED0   _BV(P_LIGHT_LED0)   // red
-#define LIGHT_LED1   _BV(P_LIGHT_LED1)  // green
+struct light_profile
+{
+	const uint8_t  *profile;
+};
 
-#define PWM_TABLE_SIZE 32
-
-extern void set_dimm(struct mrw_light *dvc, uint8_t value);
-extern void handle_pwm(void);
+extern struct light_profile profiles[];
 
 #endif

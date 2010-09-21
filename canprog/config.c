@@ -32,6 +32,8 @@
 #include "can_pc.h"
 #include "testdef.h"
 
+#define CONFIG_LIGHT
+
 static void config(int fd, int module)
 {
 	CAN_message msg;
@@ -60,7 +62,7 @@ static void config(int fd, int module)
 	uart_send_can_msg(fd, &msg);
 #endif
 
-#if 1
+#ifndef CONFIG_LIGHT
 	can_fill_message(&msg, CFGSWN, TEST_SID, TEST_SWITCH1);
 	can_add_data(&msg,  0);
 	can_add_data(&msg,  1);
@@ -133,6 +135,17 @@ static void config(int fd, int module)
 	can_add_data(&msg, module * 16 + 15);
 	can_add_data(&msg, module * 16 + 14);
 	uart_send_can_msg(fd, &msg);	
+#else
+	uint8_t i;
+
+	for (i = 0; i < 8; i++)
+	{
+		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_LIGHT + i);
+		can_add_data(&msg, i);
+		can_add_data(&msg, 0);
+		can_add_data(&msg, 1);
+		uart_send_can_msg(fd, &msg);	
+	}
 #endif
 
 	can_fill_message(&msg, CFGEND, TEST_SID, 0);

@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 #include "bit.h"
+#include "light_profile.h"
 
 #define FIRMWARE_TYPE_CAN_NODE    0
 #define FIRMWARE_TYPE_CAN_GATEWAY 1
@@ -142,6 +143,7 @@
 #define TYPE_SIGNAL_PL3   11
 #define TYPE_SIGNAL_ML3   12
 #define TYPE_SIGNAL_ML4   13
+#define TYPE_LIGHT        14
 
 #define SWITCH_DEPRELL 3
 
@@ -179,13 +181,15 @@ struct mrw_signal
 
 struct mrw_light
 {
-	uint8_t        quotient;
-	uint8_t        dimm;
-	uint8_t        nom;
-	uint8_t        denom;
-	uint8_t        pin;
-	uint8_t        threshold;
-	uint8_t        type;
+	uint8_t               threshold;
+	uint8_t               type;
+	uint8_t               counter;
+	uint8_t               quotient;
+	uint8_t               dimm;
+	uint8_t               nom;
+	uint8_t               denom;
+	mrw_connection        pin;
+	struct light_profile *profile;
 };
 
 

@@ -1,7 +1,7 @@
 CC		= gcc
 CPP		= gcc
-SRC		= ubbr.c uart.c mcp_config.c rate.c
-PROGS		= ubbr uart mcp_config rate
+SRC		= ubbr.c uart.c mcp_config.c rate.c table.c
+PROGS		= ubbr uart mcp_config rate table
 LDFLAGS		= -lm
 CPPFLAGS	= -I ../mc
 
