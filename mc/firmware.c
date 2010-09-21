@@ -384,7 +384,15 @@ ISR(TIMER2_OVF_vect)
  */
 ISR(TIMER1_COMPA_vect)
 {
-	handle_pwm();
+	uint8_t i;
+
+	for (i = 0;i < config.count; i++)
+	{
+		if (config.dvc[i].unit_type == TYPE_LIGHT)
+		{
+			handle_pwm(&config.dvc[i].unit.u_light);
+		}
+	}
 }
 
 static void init_ports(void)
@@ -459,7 +467,6 @@ static void init_ports(void)
 
 		case TYPE_LIGHT:
 			light_init(&dvc->unit.u_light);
-			queue_infos2(GETDVC, 0 , MSG_INFO, dvc->unit.u_light.pin.pin, dvc->unit.u_light.pin.port);
 			break;
 		}
 	}
@@ -524,7 +531,7 @@ int main(int argc,char *argv[])
 	signal_init();
 
 	// Lampen einschalten
-	if (light_available())
+	if (light_available() > 0)
 	{
 		timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
 	}

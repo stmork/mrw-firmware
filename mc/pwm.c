@@ -60,22 +60,16 @@ void set_dimm(struct mrw_light *dvc, uint8_t value)
  * immer flach, was den Algorithmus vereinfacht. Diese Routine dürfte nicht mehr
  * als 300 Takte brauchen.
  */
-void handle_pwm(void)
+void handle_pwm(struct mrw_light *dvc)
 {
-	uint8_t pattern = 0;
-	 int8_t p;
-
-	for (p = 7; p >= 0; p--)
+	if (dvc->quotient < dvc->nom)
 	{
-		struct mrw_light *dvc = &config.dvc[p].unit.u_light;
-
-		pattern += pattern;
-		if (dvc->quotient < dvc->nom)
-		{
-			pattern |= 1;
-			dvc->quotient += dvc->denom;
-		}
-		dvc->quotient -= dvc->nom;
+		dvc->quotient += dvc->denom;
+		set_pin(&dvc->pin);
 	}
-	PORT_LIGHT = pattern;
+	else
+	{
+		clr_pin(&dvc->pin);
+	}
+	dvc->quotient -= dvc->nom;
 }

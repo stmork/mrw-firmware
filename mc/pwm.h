@@ -37,6 +37,6 @@
 #define PWM_TABLE_SIZE 32
 
 extern void set_dimm(struct mrw_light *dvc, uint8_t value);
-extern void handle_pwm(void);
+extern void handle_pwm(struct mrw_light *dvc);
 
 #endif
