@@ -22,11 +22,6 @@
 		<path refid="log4j.lib"/>
 		<fileset dir="${eclipse.home.plugins}">
 			<include name="org.eclipse.emf*.jar"/>
-			<include name="org.eclipse.jface*.jar"/>
-			<include name="org.eclipse.text*.jar"/>
-			<include name="org.eclipse.equinox*.jar"/>
-			<include name="org.eclipse.jdt*.jar"/>
-			<exclude name="org.eclipse*junit*.jar"/>
 			<exclude name="**/*.source*.jar"/>
 			<exclude name="**/*.src*.jar"/>
 			<exclude name="**/*.editor*.jar"/>
@@ -63,11 +58,6 @@
 			<include name="**/*xerces*.jar"/>
 			<include name="**/*log4j*1.2.8*.jar"/>
 			<include name="org.apache.commons.*.jar"/>
-			<include name="org.eclipse.emf*.jar"/>
-			<include name="org.eclipse.jface*.jar"/>
-			<include name="org.eclipse.text*.jar"/>
-			<include name="org.eclipse.equinox*.jar"/>
-			<include name="org.eclipse.jdt*.jar"/>
 			<include name="org.eclipse.uml2*.jar"/>
 			<exclude name="org.eclipse*junit*.jar"/>
 			<exclude name="**/*.source*.jar"/>
