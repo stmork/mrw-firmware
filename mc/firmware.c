@@ -536,6 +536,9 @@ int main(int argc,char *argv[])
 		timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
 	}
 
+	// Gerätedaten sortieren
+	config_sort();
+
 	// Watch dog einschalten.
 	wdt_enable(WDTO_1S);
 

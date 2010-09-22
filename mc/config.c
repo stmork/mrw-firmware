@@ -19,6 +19,8 @@
 **
 */
 
+#include <stdlib.h>
+
 #include "config.h"
 #include "tool.h"
 
@@ -30,14 +32,44 @@ struct eeprom_area config;
  */
 mrw_device *find_device(uint16_t unit_no)
 {
-	for (uint8_t i = 0;i < config.count;i++)
+	mrw_device *dvc;
+	uint8_t     min = 0;
+	uint8_t     max = config.count;
+	uint8_t     mid;
+
+	while(min < max)
 	{
-		if (config.dvc[i].unit_no == unit_no)
+		mid = (min + max) >> 1;
+		dvc = &config.dvc[mid];
+		
+		if (dvc->unit_no < unit_no)
 		{
-			return &config.dvc[i];
+			min = mid;
+		}
+		else if (dvc->unit_no > unit_no)
+		{
+			max = mid;
+		}
+		else
+		{
+			return dvc;
 		}
 	}
+
 	return null;
+}
+
+static int compare_device(const void *A, const void *B)
+{
+	const mrw_device *a = A;
+	const mrw_device *b = B;
+
+	return a->unit_no - b->unit_no;
+}
+
+void config_sort(void)
+{
+	qsort(config.dvc, config.count, sizeof(mrw_device), compare_device);
 }
 
 /**

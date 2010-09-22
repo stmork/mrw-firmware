@@ -68,6 +68,8 @@ int8_t  configEnd(CAN_message *msg)
 {
 	uint8_t  cmd = msg->data[0];
 
+	config_sort();
+
 	cli();
 	save_eeprom_config(&config);
 	queue_info  (cmd, 0, MSG_OK, config.count);
