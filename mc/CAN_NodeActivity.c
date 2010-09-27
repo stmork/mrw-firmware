@@ -51,6 +51,7 @@ int8_t initFirmware(CAN_message *msg)
 /* Config commands */
 /*******************/
 
+/* CFGBGN */
 int8_t  configBegin(CAN_message *msg)
 {
 	config.count  = 0;
@@ -64,6 +65,7 @@ int8_t notConfiguring(CAN_message *msg)
 	return MSG_PENDING;
 }
 
+/* CFGEND */
 int8_t  configEnd(CAN_message *msg)
 {
 	uint8_t  cmd = msg->data[0];
@@ -81,6 +83,7 @@ int8_t  configEnd(CAN_message *msg)
 	return NO_RESULT;
 }
 
+/* CFGMF2 */
 int8_t  configMainForm2(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -94,6 +97,7 @@ int8_t  configMainForm2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGMF3 */
 int8_t  configMainForm3(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -108,6 +112,7 @@ int8_t  configMainForm3(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGML2 */
 int8_t  configMainLight2(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -119,6 +124,7 @@ int8_t  configMainLight2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGML3 */
 int8_t  configMainLight3(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -130,6 +136,7 @@ int8_t  configMainLight3(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGML4 */
 int8_t  configMainLight4(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -141,6 +148,7 @@ int8_t  configMainLight4(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGPF2 */
 int8_t  configPreForm2(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -154,6 +162,7 @@ int8_t  configPreForm2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGPF3 */
 int8_t  configPreForm3(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -168,6 +177,7 @@ int8_t  configPreForm3(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGPL2 */
 int8_t  configPreLight2(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -179,6 +189,7 @@ int8_t  configPreLight2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGPL3 */
 int8_t  configPreLight3(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -190,6 +201,7 @@ int8_t  configPreLight3(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGRAI */
 int8_t  configRail(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -203,6 +215,7 @@ int8_t  configRail(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGSL2 */
 int8_t  configRaillockLight2(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -214,6 +227,7 @@ int8_t  configRaillockLight2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGSWN */
 int8_t  configSwitchNew(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -229,6 +243,7 @@ int8_t  configSwitchNew(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGSWO */
 int8_t  configSwitchOld(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -242,6 +257,7 @@ int8_t  configSwitchOld(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGLGT */
 int8_t  configLight(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
@@ -256,6 +272,7 @@ int8_t  configLight(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* QRYBUF */
 int8_t  queryBufferState(CAN_message *msg)
 {
 	queue_infos2(msg->data[0], 0,
@@ -265,6 +282,7 @@ int8_t  queryBufferState(CAN_message *msg)
 	return NO_RESULT;
 }
 
+/* QRYERR */
 int8_t  queryErrorState(CAN_message *msg)
 {
 	MCP2515_error_status status;
@@ -282,6 +300,7 @@ int8_t  queryErrorState(CAN_message *msg)
 /* Query commands */
 /******************/
 
+/* GETDIR */
 int8_t  getDirection(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -302,6 +321,7 @@ int8_t  getDirection(CAN_message *msg)
 	}
 }
 
+/* GETRBS */
 int8_t  getRailOccupation(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -322,6 +342,7 @@ int8_t  getRailOccupation(CAN_message *msg)
 /* Switching commands */
 /**********************/
 
+/* SETLFT */
 int8_t  left(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -341,6 +362,7 @@ int8_t  left(CAN_message *msg)
 	}
 }
 
+/* SETRGT */
 int8_t  right(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -360,6 +382,7 @@ int8_t  right(CAN_message *msg)
 	}
 }
 
+/* SETROF */
 int8_t  railOff(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -372,6 +395,7 @@ int8_t  railOff(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* SETRON */
 int8_t  railOn(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -385,6 +409,7 @@ int8_t  railOn(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* SETSGN */
 int8_t setSignal(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
@@ -416,6 +441,7 @@ int8_t setSignal(CAN_message *msg)
 	return MSG_UNITTYPE_WRONG;
 }
 
+/* SENSOR */
 int8_t sensor(CAN_message *msg)
 {
 	if (msg->data[1] == SENSOR_LIGHT)
@@ -457,11 +483,13 @@ int8_t sensor(CAN_message *msg)
 /* Maintainance commands */
 /*************************/
 
+/* PING */
 int8_t  ping(CAN_message *msg)
 {
 	return MSG_OK;
 }
 
+/* RESET */
 int8_t  reset(CAN_message *msg)
 {
 	int8_t cmd = msg->data[0];
@@ -475,6 +503,7 @@ int8_t  reset(CAN_message *msg)
 	return NO_RESULT;
 }
 
+/* GETVER */
 int8_t getVersion(CAN_message *msg)
 {
 	int8_t cmd = GETVER;
@@ -487,16 +516,19 @@ int8_t getVersion(CAN_message *msg)
 	return NO_RESULT;
 }
 
+/* SET_ID */
 int8_t  idNotChanged(CAN_message *msg)
 {
 	return MSG_ID_NOT_CHANGED;
 }
 
+/* SET_ID */
 int8_t idChangeDisabled(CAN_message *msg)
 {
 	return MSG_ID_CHANGE_DISABLED;
 }
 
+/* SET_ID */
 int8_t  setId(CAN_message *msg)
 {
 	int8_t   cmd    = msg->data[0];
