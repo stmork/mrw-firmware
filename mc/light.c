@@ -32,9 +32,10 @@ void light_init(struct mrw_light *dvc)
 {
 	dvc->counter   =   0;
 	dvc->lightness = 255;
-	dvc->profile = &profiles[has_lights++];
+	dvc->profile   = get_light_profile(dvc->type);
 	out_pin(&dvc->pin);
 	set_dimm(dvc, 0);
+	has_lights++;
 }
 
 void light_dimm(struct mrw_light *dvc)

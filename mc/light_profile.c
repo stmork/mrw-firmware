@@ -20,10 +20,11 @@
 */
 
 #include "light_profile.h"
+#include "random.h"
 
 #include <avr/pgmspace.h>
 
-static const uint8_t profile01[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile00[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,38,51,63,73,82,90,96,101,105,107,
 	128,128,128,128,128,96,96,
@@ -44,7 +45,7 @@ static const uint8_t profile01[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile02[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile01[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 	128,128,128,128,128,96,96,
@@ -66,7 +67,7 @@ static const uint8_t profile02[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile03[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile02[LIGHT_PROFILE_SIZE] PROGMEM =
 { 0,16,24,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 	128,128,128,128,128,96,96,
 	128,160,255,255,255,255,255,255,255,255,
@@ -90,7 +91,7 @@ static const uint8_t profile03[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile04[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile03[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 	128,160,255,255,255,255,
@@ -116,7 +117,7 @@ static const uint8_t profile04[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile05[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile04[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 	255,255,255,255,32,32,
@@ -137,7 +138,7 @@ static const uint8_t profile05[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile06[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile05[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 	128,128,128,128,128,96,96,
@@ -160,7 +161,7 @@ static const uint8_t profile06[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile07[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile06[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,48,64,80,96,128,128,128,128,
 	255,255,255,255,32,32,
@@ -180,7 +181,7 @@ static const uint8_t profile07[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 };
 
-static const uint8_t profile08[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile07[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	0,16,24,32,32,32,160,160,32,32,160,160,32,32,160,160,32,32,
 	255,255,255,255,32,32,
@@ -208,7 +209,7 @@ static const uint8_t profile08[LIGHT_PROFILE_SIZE] PROGMEM =
 	255,255,255
 };
 
-static const uint8_t profile09[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile08[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	20,40,64,88,112,136,160,184,208,232,255,255,255,255,255,255,
 	255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
@@ -227,7 +228,7 @@ static const uint8_t profile09[LIGHT_PROFILE_SIZE] PROGMEM =
 	0,0,0,0,0,0,0,0,0,0,0
 };
 
-static const uint8_t profile10[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile09[LIGHT_PROFILE_SIZE] PROGMEM =
 {
 	  2,   4,   6,   8,  10,  12,  14,  16,  18,  20,  22,  24,  26,  28,  30,  32, 
 	 34,  36,  38,  40,  42,  44,  46,  48,  50,  52,  54,  56,  58,  60,  62,  64,
@@ -247,9 +248,9 @@ static const uint8_t profile10[LIGHT_PROFILE_SIZE] PROGMEM =
 	249, 249, 250, 250, 251, 251, 252, 252, 253, 253, 254, 254, 255, 255, 255, 255
 };
 
-static const uint8_t profile11[LIGHT_PROFILE_SIZE] PROGMEM =
+static const uint8_t profile10[LIGHT_PROFILE_SIZE] PROGMEM =
 {
-	  2,   4,   0,   0,  10,  12,   0,   0,  18,  20,   0,   0,  26,  28,   0,   0, 
+	  2,   4,   0,   0,  10,  12,   0,   0,  18,  20,   0,   0,  26,  28,   0,   0,
 	 34,  36,   0,   0,  42,  44,   0,   0,  50,  52,   0,   0,  58,  60,   0,   0,
 	 65,  66,   0,   0,  69,  70,   0,   0,  73,  74,   0,   0,  77,  78,   0,   0,
 	 81,  82,   0,   0,  85,  86,   0,   0,  89,  90,   0,   0,  93,  94,   0,   0,
@@ -267,17 +268,86 @@ static const uint8_t profile11[LIGHT_PROFILE_SIZE] PROGMEM =
 	249, 249, 250, 250, 251, 251, 252, 252, 253, 253, 254, 254, 255, 255, 255, 255
 };
 
-struct light_profile profiles[] =
+static const uint8_t profile11[LIGHT_PROFILE_SIZE] PROGMEM =
 {
-	{ profile08, 1 },
-	{ profile09, 1 },
-	{ profile10, 0 },
-	{ profile11, 0 },
+	  2,   0,   0,   8,  10,   0,   0,  16,  18,   0,   0,  24,  26,   0,   0,  32,
+	 34,   0,   0,  40,  42,   0,   0,  48,  50,   0,   0,  56,  58,   0,   0,  64,
+	 65,   0,   0,  68,  69,   0,   0,  72,  73,   0,   0,  76,  77,   0,   0,  80,
+	 81,   0,   0,  84,  85,   0,   0,  88,  89,   0,   0,  92,  93,   0,   0,  96,
+	 97,   0,   0, 100, 101,   0,   0, 104, 105,   0,   0, 108, 109,   0,   0, 112,
+	113,   0,   0, 116, 117,   0,   0, 120, 121,   0,   0, 124, 125,   0,   0, 128,
+	129,   0,   0, 132, 133,   0,   0, 136, 137,   0,   0, 140, 141,   0,   0, 144,
+	145,  32,  32, 148, 149,  32,  32, 152, 153,  32,  32, 156, 157,  32,  32, 160,
+	161,  64,  64, 164, 165,  64,  64, 168, 169,  64,  64, 172, 173,  64,  64, 176,
+	177,  96,  96, 180, 181,  96,  96, 184, 185,  96,  96, 188, 189,  96,  96, 192,
+	193, 128, 128, 196, 197, 128, 128, 200, 201, 128, 128, 204, 205, 128, 128, 208,
+	209, 160 ,160, 212, 213 ,160, 160, 216, 217, 160, 160, 220, 221, 160, 160, 224,
+	225, 192, 192, 226, 227, 192, 192, 228, 229, 192, 192, 230, 231, 192, 192, 232,
+	233, 224, 224, 234, 235, 224, 224, 236, 237, 224, 224, 238, 239, 224, 224, 240,
+	241, 240, 240, 242, 243, 240, 240, 244, 245, 240, 240, 246, 247, 240, 240, 248,
+	249, 249, 250, 250, 251, 251, 252, 252, 253, 253, 254, 254, 255, 255, 255, 255
+};
+
+static const uint8_t profile12[LIGHT_PROFILE_SIZE] PROGMEM =
+{
+	  0,   4,   6,   0,   0,  12,  14,   0,   0,  20,  22,   0,   0,  28,  30,   0,
+	  0,  36,  38,   0,   0,  44,  46,   0,   0,  52,  54,   0,   0,  60,  62,   0,
+	  0,  66,  67,   0,   0,  70,  71,   0,   0,  74,  75,   0,   0,  78,  79,   0,
+	  0,  82,  83,   0,   0,  86,  87,   0,   0,  90,  91,   0,   0,  94,  95,   0,
+	  0,  98,  99,   0,   0, 102, 103,   0,   0, 106, 107,   0,   0, 110, 111,   0,
+	  0, 114, 115,   0,   0, 118, 119,   0,   0, 122, 123,   0,   0, 126, 127,   0,
+	  0, 130, 131,   0,   0, 134, 135,   0,   0, 138, 139,   0,   0, 142, 143,   0,
+	 32, 146, 147,  32,  32, 150, 151,  32,  32, 154, 155,  32,  32, 158, 159,  32,
+	 64, 162, 163,  64,  64, 166, 167,  64,  64, 170, 171,  64,  64, 174, 175,  64,
+	 96, 178, 179,  96,  96, 182, 183,  96,  96, 186, 187,  96,  96, 190, 191,  96,
+	128, 194, 195, 128, 128, 198, 199, 128, 128, 202, 203, 128, 128, 206, 207, 128,
+	160, 210 ,211, 160, 160, 214, 215, 160, 160, 218, 219, 160, 160, 222, 223, 160,
+	192, 225, 226, 192, 192, 227, 228, 192, 192, 229, 230, 192, 192, 231, 232, 192,
+	224, 233, 234, 224, 224, 235, 236, 224, 224, 237, 238, 224, 224, 239, 240, 224,
+	240, 241, 242, 240, 240, 243, 244, 240, 240, 245, 246, 240, 240, 247, 248, 240,
+	249, 249, 250, 250, 251, 251, 252, 252, 253, 253, 254, 254, 255, 255, 255, 255
+};
+
+static struct light_profile profiles[] =
+{
+	{ profile00, 0 },
 	{ profile01, 0 },
 	{ profile02, 0 },
 	{ profile03, 0 },
 	{ profile04, 0 },
 	{ profile05, 0 },
 	{ profile06, 0 },
-	{ profile07, 0 }
+	{ profile07, 1 },
+	{ profile08, 1 },
+	{ profile09, 0 },
+	{ profile10, 0 },
+	{ profile11, 0 },
+	{ profile12, 0 }
 };
+
+#define LIGHT_PROFILE_COUNT (sizeof(profiles) / sizeof(struct light_profile))
+
+struct light_profile *get_light_profile(uint8_t type)
+{
+	struct light_profile *profile;
+
+	if (type < LIGHT_PROFILE_COUNT)
+	{
+		profile = &profiles[type];
+	}
+	else switch (type)
+	{
+	case  64:
+		profile = &profiles[random_timer() & 7];
+		break;
+
+	case  65:
+		profile = &profiles[(random_timer() % 3) + 10];
+		break;
+
+	default:
+		profile = &profiles[9];
+		break;
+	}
+	return profile;
+}

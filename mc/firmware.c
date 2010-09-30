@@ -37,6 +37,7 @@
 #include "tool.h"
 #include "serial.h"
 #include "timer.h"
+#include "random.h"
 #include "sleep.h"
 #include "config.h"
 #include "can_ring.h"
@@ -525,6 +526,7 @@ int main(int argc,char *argv[])
 
 	// Hardware initialisieren
 	timer2_init();
+	random_init();
 	init_ports();
 
 	// Initiale Signalbilder bereitstellen

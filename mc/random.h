@@ -1,12 +1,12 @@
 /*
 **
-**	$Filename:	light_profile.h $
+**	$Filename:	random.h $
 **	$Revision$
 **	$Date$
 **	$Author$
 **	$Id$
 **
-**	Light dimming profiles
+**	Compute random number
 **
 **	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
 **
@@ -19,20 +19,12 @@
 **
 */
 
-#ifndef LIGHT_PROFILE_H
-#define LIGHT_PROFILE_H
+#ifndef RANDOM_H
+#define RANDOM_H
 
 #include <stdint.h>
 
-#define LIGHT_PROFILE_SIZE 256
-#define LIGHT_PROFILE_MASK (LIGHT_PROFILE_SIZE - 1)
-
-struct light_profile
-{
-	const uint8_t  *values;
-	uint8_t         repeat;
-};
-
-extern struct light_profile *get_light_profile(uint8_t type);
+extern void    random_init(void);
+extern uint8_t random_timer(void);
 
 #endif

@@ -1,12 +1,12 @@
 /*
 **
-**	$Filename:	light_profile.h $
+**	$Filename:	random.c $
 **	$Revision$
 **	$Date$
 **	$Author$
 **	$Id$
 **
-**	Light dimming profiles
+**	Compute random number
 **
 **	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
 **
@@ -19,20 +19,28 @@
 **
 */
 
-#ifndef LIGHT_PROFILE_H
-#define LIGHT_PROFILE_H
+#include "random.h"
 
-#include <stdint.h>
+#include <avr/io.h>
 
-#define LIGHT_PROFILE_SIZE 256
-#define LIGHT_PROFILE_MASK (LIGHT_PROFILE_SIZE - 1)
-
-struct light_profile
+void random_init(void)
 {
-	const uint8_t  *values;
-	uint8_t         repeat;
-};
+	uint8_t *ptr = (uint8_t *)0x60;
 
-extern struct light_profile *get_light_profile(uint8_t type);
+	/* Kein Prescaling */
+	TCCR0 = _BV(CS00);
+	
+	/*
+	 * Initialisierung mit Zufallszahlen. Das RAM scheint hierfür
+	 * am Besten geeignet zu sein.
+	 */
+	for (uint16_t i = 0;i < 2048;i++)
+	{
+		TCNT0 += *ptr++;
+	}
+}
 
-#endif
+uint8_t random_timer(void)
+{
+	return TCNT0 >> 1;
+}

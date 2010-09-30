@@ -6,7 +6,7 @@
 **	$Author$
 **	$Id$
 **
-**	Modellrailway micro controller
+**	Bit handling
 **
 **	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
 **
