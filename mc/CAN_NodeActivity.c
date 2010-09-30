@@ -325,7 +325,6 @@ int8_t  getDirection(CAN_message *msg)
 int8_t  getRailOccupation(CAN_message *msg)
 {
 	mrw_device *dvc = find_device(msg->eid);
-	int8_t      cmd = msg->data[0];
 
 	if (dvc == null)
 	{
@@ -333,7 +332,7 @@ int8_t  getRailOccupation(CAN_message *msg)
 	}
 	else
 	{
-		queue_info(cmd, msg->eid, MSG_OK, rail_occupied(&dvc->unit.u_rail));
+		queue_info(msg->data[0], msg->eid, MSG_OK, rail_occupied(&dvc->unit.u_rail));
 	}
 	return NO_RESULT;
 }
@@ -461,22 +460,25 @@ int8_t sensor(CAN_message *msg)
 			else
 			{
 				light_set_lightness(&dvc->unit.u_light, msg->data[2]);
+				queue_infos2(msg->data[0], msg->eid, MSG_OK, msg->data[2], 1);
 			}
 		}
 		else
 		{
-			uint8_t i;
+			uint8_t i, lights = 0;
 
 			for (i = 0; i < config.count; i++)
 			{
 				if (config.dvc[i].unit_type == TYPE_LIGHT)
 				{
 					light_set_lightness(&config.dvc[i].unit.u_light, msg->data[2]);
+					lights++;
 				}
 			}
+			queue_infos2(msg->data[0], 0, MSG_OK, msg->data[2], lights);
 		}
 	}
-	return MSG_OK;
+	return NO_RESULT;
 }
 
 /*************************/

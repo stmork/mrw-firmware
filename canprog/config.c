@@ -141,9 +141,9 @@ static void config(int fd, int module)
 	for (i = 0; i < 8; i++)
 	{
 		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_LIGHT + i);
-		can_add_data(&msg, i);
+		can_add_data(&msg,   i);
 		can_add_data(&msg, 128);
-		can_add_data(&msg, 1);
+		can_add_data(&msg,   i+8);
 		uart_send_can_msg(fd, &msg);	
 	}
 #endif
