@@ -50,6 +50,12 @@
 
 #define UART_OVL_WARNING_LEVEL 192
 
+#define PORT_BUSY  PORTB
+#define DDR_BUSY   DDRB
+#define P_BUSY     0
+#define BUSY      PORT_BUSY |=  _BV(P_BUSY)
+#define IDLE      PORT_BUSY &= ~_BV(P_BUSY)
+
 /*
  * CAN receive Ring Buffer
  */
@@ -165,6 +171,7 @@ static int8_t uart_send_msg(CAN_message *msg)
  */
 ISR(INT2_vect)
 {
+	BUSY;
 	process_can_messages();
 }
 
@@ -180,6 +187,7 @@ ISR(INT2_vect)
  */
 ISR(USART_RXC_vect)
 {
+	BUSY;
 	volatile uint8_t udr = UDR;
 
 	uart_received++;
@@ -202,6 +210,7 @@ ISR(USART_RXC_vect)
 
 ISR(USART_UDRE_vect)
 {
+	BUSY;
 	if (uart_tx_count > 0)
 	{
 		uint8_t udr = uart_tx_buffer[uart_tx_start];
@@ -291,6 +300,9 @@ static void port_init(void)
 	/* LED Pins auf Output setzen und Anzeige löschen. */
 	DDR_OVL  |=    OVL_CAN | OVL_UART;
 	PORT_OVL &= (~(OVL_CAN | OVL_UART));
+
+	DDR_BUSY  |= _BV(P_BUSY);
+	BUSY;
 }
 
 int main(void)
@@ -420,6 +432,7 @@ int main(void)
 		{
 			// Sleep aktiviert den Interrupt wieder, sonst würde er
 			// ewig schlafen :-(
+			IDLE;
 			sleep();
 		}
 		sei();
