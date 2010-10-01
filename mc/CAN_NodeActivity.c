@@ -475,7 +475,10 @@ int8_t sensor(CAN_message *msg)
 					lights++;
 				}
 			}
-			queue_infos2(msg->data[0], 0, MSG_OK, msg->data[2], lights);
+			if (lights > 0)
+			{
+				queue_infos2(msg->data[0], 0, MSG_OK, msg->data[2], lights);
+			}
 		}
 	}
 	return NO_RESULT;

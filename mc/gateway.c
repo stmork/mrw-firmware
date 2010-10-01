@@ -20,7 +20,7 @@
 */
 
 #ifndef F_CPU
-#define F_CPU 14745600L
+#define F_CPU 14745600UL
 #endif
 
 #include <stdlib.h>
@@ -29,7 +29,6 @@
 #include <util/delay.h>
 
 #include "mcp2515.h"
-#include "mrw.h"
 #include "uart.h"
 #include "sleep.h"
 #include "bit.h"
@@ -51,17 +50,12 @@
 
 #define UART_OVL_WARNING_LEVEL 192
 
-#define PORT_BUSY  PORTB
-#define DDR_BUSY   DDRB
+#define PORT_BUSY  PORTA
+#define DDR_BUSY   DDRA
 #define P_BUSY     0
 
-#if 0
-#define _BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
-#define _IDLE      CLR_PORT_BIT(PORT_BUSY, P_BUSY)
-#else
-#define BUSY
-#define IDLE
-#endif
+#define BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
+#define IDLE      CLR_PORT_BIT(PORT_BUSY, P_BUSY)
 
 /*
  * CAN receive Ring Buffer
@@ -237,24 +231,6 @@ ISR(USART_UDRE_vect)
 	}
 }
 
-ISR(ADC_vect)
-{
-	BUSY;
-	volatile uint16_t value = ADCW;
-
-	CAN_message *msg = ring_get_pos(&tx_ring);
-
-	msg->sid     = BROADCAST_SID;
-	msg->eid     = 0;
-	msg->status  = 0;
-	msg->length  = 3;
-	msg->data[0] = SENSOR;
-	msg->data[1] = TYPE_LIGHT;
-	msg->data[2] = ((value + 0x08) >> 8) & 0xf0;
-
-	ring_increase(&tx_ring);
-}
-
 /**
  * Diese Methode verarbeitet ein einzelnes Byte, das über
  * RS232 empfangen wurde. Es müssen dabei folgende Bedingungen
@@ -330,24 +306,61 @@ static void port_init(void)
 	BUSY;
 }
 
+#include "timer.h"
+
 static void adc_init(void)
 {
 	/* ADC 7, Aref, ADC left adjust */
 	ADMUX = _BV(REFS0) | _BV(ADLAR) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
 
-	/* Timer 0, Prescaler 1024 */
-	TCCR0  = _BV(CS00) | _BV(CS02);
-
-	/* Timer 0 als Trigger-Quelle */
-	SFIOR |= _BV(ADTS2);
-
 	/* ADC and interrupt enable, Prescaler 128, Auto Trigger */
-	ADCSRA = _BV(ADEN) | _BV(ADATE) | _BV(ADIE) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
+	ADCSRA = _BV(ADEN);
 }
 
 static void adc_start(void)
 {
 	ADCSRA |= _BV(ADSC);
+}
+
+static void adc_wait(void)
+{
+	while(bit_is_set(ADCSRA, ADSC));
+}
+
+static uint8_t adc_read(void)
+{
+	adc_start();
+	adc_wait();
+
+	uint8_t value = ADCW >> 8;	
+	return (value + 0x04) & 0xf8;
+}
+
+static uint8_t  sensor_old     = 0xff;
+static uint16_t sensor_counter = 1;
+
+ISR(TIMER2_OVF_vect)
+{
+	BUSY;
+	uint8_t sensor_new = adc_read();
+
+	if ((sensor_old != sensor_new) || (sensor_counter == 0))
+	{
+		CAN_message *msg = ring_get_pos(&tx_ring);
+
+		msg->sid     = BROADCAST_SID;
+		msg->eid     = 0;
+		msg->status  = 0;
+		msg->length  = 3;
+		msg->data[0] = 0x4e;
+		msg->data[1] = 0x01;
+		msg->data[2] = sensor_new;
+
+		ring_increase(&tx_ring);
+		sensor_old = sensor_new;
+		sensor_counter = (F_CPU * 10) >> 18;
+	}
+	sensor_counter--;
 }
 
 int main(void)
@@ -359,9 +372,8 @@ int main(void)
 	port_init();
 	mcp2515_init(GATEWAY_SID, 1, MCP2515_SINGLE_TX_BUFFER);
 	uart_init();
-
 	adc_init();
-	adc_start();
+	timer2_init();
 
 	MCUCSR = 0;
 

@@ -38,7 +38,7 @@ firmware.lst:	firmware.out
 # Firmware for CAN/RS232 gateway node
 #####################################
 
-gateway.out:	gateway.o mcp2515.o spi.o uart.o sleep.o can_ring.o
+gateway.out:	gateway.o mcp2515.o spi.o uart.o sleep.o can_ring.o timer.o
 	$(LINK.c) -Wl,-Map,gateway.map -o $@ $^
 
 gateway.hex:	gateway.out
