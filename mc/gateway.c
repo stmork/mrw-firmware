@@ -29,6 +29,7 @@
 #include <util/delay.h>
 
 #include "mcp2515.h"
+#include "mrw.h"
 #include "uart.h"
 #include "sleep.h"
 #include "bit.h"
@@ -53,8 +54,14 @@
 #define PORT_BUSY  PORTB
 #define DDR_BUSY   DDRB
 #define P_BUSY     0
-#define BUSY      PORT_BUSY |=  _BV(P_BUSY)
-#define IDLE      PORT_BUSY &= ~_BV(P_BUSY)
+
+#if 0
+#define _BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
+#define _IDLE      CLR_PORT_BIT(PORT_BUSY, P_BUSY)
+#else
+#define BUSY
+#define IDLE
+#endif
 
 /*
  * CAN receive Ring Buffer
@@ -230,6 +237,24 @@ ISR(USART_UDRE_vect)
 	}
 }
 
+ISR(ADC_vect)
+{
+	BUSY;
+	volatile uint16_t value = ADCW;
+
+	CAN_message *msg = ring_get_pos(&tx_ring);
+
+	msg->sid     = BROADCAST_SID;
+	msg->eid     = 0;
+	msg->status  = 0;
+	msg->length  = 3;
+	msg->data[0] = SENSOR;
+	msg->data[1] = TYPE_LIGHT;
+	msg->data[2] = ((value + 0x08) >> 8) & 0xf0;
+
+	ring_increase(&tx_ring);
+}
+
 /**
  * Diese Methode verarbeitet ein einzelnes Byte, das über
  * RS232 empfangen wurde. Es müssen dabei folgende Bedingungen
@@ -305,6 +330,26 @@ static void port_init(void)
 	BUSY;
 }
 
+static void adc_init(void)
+{
+	/* ADC 7, Aref, ADC left adjust */
+	ADMUX = _BV(REFS0) | _BV(ADLAR) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
+
+	/* Timer 0, Prescaler 1024 */
+	TCCR0  = _BV(CS00) | _BV(CS02);
+
+	/* Timer 0 als Trigger-Quelle */
+	SFIOR |= _BV(ADTS2);
+
+	/* ADC and interrupt enable, Prescaler 128, Auto Trigger */
+	ADCSRA = _BV(ADEN) | _BV(ADATE) | _BV(ADIE) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
+}
+
+static void adc_start(void)
+{
+	ADCSRA |= _BV(ADSC);
+}
+
 int main(void)
 {
 	MCP2515_error_status status;
@@ -314,6 +359,10 @@ int main(void)
 	port_init();
 	mcp2515_init(GATEWAY_SID, 1, MCP2515_SINGLE_TX_BUFFER);
 	uart_init();
+
+	adc_init();
+	adc_start();
+
 	MCUCSR = 0;
 
 	SET_PORT_BIT(PORT_OVL, P_OVL_CAN);
