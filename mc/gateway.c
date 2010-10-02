@@ -32,6 +32,7 @@
 #include "uart.h"
 #include "sleep.h"
 #include "bit.h"
+#include "timer.h"
 #include "tool.h"
 #include "can_ring.h"
 
@@ -50,8 +51,8 @@
 
 #define UART_OVL_WARNING_LEVEL 192
 
-#define PORT_BUSY  PORTA
-#define DDR_BUSY   DDRA
+#define PORT_BUSY  PORTB
+#define DDR_BUSY   DDRB
 #define P_BUSY     0
 
 #define BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
@@ -306,16 +307,6 @@ static void port_init(void)
 	BUSY;
 }
 
-#include "timer.h"
-
-static void adc_init(void)
-{
-	/* ADC 7, Aref, ADC left adjust */
-	ADMUX = _BV(REFS0) | _BV(ADLAR) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
-
-	/* ADC and interrupt enable, Prescaler 128, Auto Trigger */
-	ADCSRA = _BV(ADEN);
-}
 
 static void adc_start(void)
 {
@@ -327,13 +318,41 @@ static void adc_wait(void)
 	while(bit_is_set(ADCSRA, ADSC));
 }
 
+static uint8_t adc_buffer[16];
+static uint16_t adc_value;
+static uint8_t adc_index;
+
 static uint8_t adc_read(void)
 {
 	adc_start();
 	adc_wait();
 
 	uint8_t value = ADCW >> 8;	
-	return (value + 0x04) & 0xf8;
+
+	adc_value -= adc_buffer[adc_index];
+	adc_buffer[adc_index] = value;
+	adc_value += value;
+	adc_index++;
+	adc_index &= 0x0f;
+	
+	return ((adc_value + 0x20) >> 4) & 0xfc;
+}
+
+static void adc_init(void)
+{
+	uint8_t i;
+
+	/* ADC 7, Aref, ADC left adjust */
+	ADMUX = _BV(REFS0) | _BV(ADLAR) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
+
+	/* ADC and interrupt enable, Prescaler 128, Auto Trigger */
+	ADCSRA = _BV(ADEN);
+
+	/* Durchschnitt initialisieren */	
+	for (i = 0; i < sizeof(adc_buffer); i++)
+	{
+		adc_read();
+	}
 }
 
 static uint8_t  sensor_old     = 0xff;
@@ -358,7 +377,7 @@ ISR(TIMER2_OVF_vect)
 
 		ring_increase(&tx_ring);
 		sensor_old = sensor_new;
-		sensor_counter = (F_CPU * 10) >> 18;
+		sensor_counter = (F_CPU * 60) >> 18;
 	}
 	sensor_counter--;
 }
@@ -367,9 +386,9 @@ int main(void)
 {
 	MCP2515_error_status status;
 
+	port_init();
 	ring_init(&rx_ring);
 	ring_init(&tx_ring);
-	port_init();
 	mcp2515_init(GATEWAY_SID, 1, MCP2515_SINGLE_TX_BUFFER);
 	uart_init();
 	adc_init();

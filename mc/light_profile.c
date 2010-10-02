@@ -391,7 +391,7 @@ static const struct light_profile profiles[] =
 
 #define LIGHT_PROFILE_COUNT (sizeof(profiles) / sizeof(struct light_profile))
 
-struct light_profile *get_light_profile(uint8_t type)
+const struct light_profile *get_light_profile(uint8_t type)
 {
 	uint8_t idx;
 

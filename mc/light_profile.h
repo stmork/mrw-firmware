@@ -33,6 +33,6 @@ struct light_profile
 	uint8_t         repeat;
 };
 
-extern struct light_profile *get_light_profile(uint8_t type);
+extern const struct light_profile *get_light_profile(uint8_t type);
 
 #endif
