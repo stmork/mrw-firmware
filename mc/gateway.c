@@ -299,12 +299,13 @@ static void uart_process_byte(uint8_t udr)
  */
 static void port_init(void)
 {
+	/* Busy indicator */
+	DDR_BUSY  |= _BV(P_BUSY);
+	BUSY;
+
 	/* LED Pins auf Output setzen und Anzeige löschen. */
 	DDR_OVL  |=    OVL_CAN | OVL_UART;
 	PORT_OVL &= (~(OVL_CAN | OVL_UART));
-
-	DDR_BUSY  |= _BV(P_BUSY);
-	BUSY;
 }
 
 
@@ -318,7 +319,11 @@ static void adc_wait(void)
 	while(bit_is_set(ADCSRA, ADSC));
 }
 
-static uint8_t adc_buffer[16];
+#define ADC_BUFFER_SHIFT  5
+#define ADC_BUFFER_SIZE  (1 << ADC_BUFFER_SHIFT)
+#define ADC_BUFFER_MASK  (ADC_BUFFER_SIZE - 1)
+
+static uint8_t adc_buffer[ADC_BUFFER_SIZE];
 static uint16_t adc_value;
 static uint8_t adc_index;
 
@@ -333,9 +338,9 @@ static uint8_t adc_read(void)
 	adc_buffer[adc_index] = value;
 	adc_value += value;
 	adc_index++;
-	adc_index &= 0x0f;
+	adc_index &= ADC_BUFFER_MASK;
 	
-	return ((adc_value + 0x20) >> 4) & 0xfc;
+	return ((adc_value >> ADC_BUFFER_SHIFT) + 0x02) & 0xfc;
 }
 
 static void adc_init(void)
@@ -363,21 +368,24 @@ ISR(TIMER2_OVF_vect)
 	BUSY;
 	uint8_t sensor_new = adc_read();
 
-	if ((sensor_old != sensor_new) || (sensor_counter == 0))
+	if ((sensor_counter & 0xf) == 0)
 	{
-		CAN_message *msg = ring_get_pos(&tx_ring);
+		if ((sensor_old != sensor_new) || (sensor_counter == 0))
+		{
+			CAN_message *msg = ring_get_pos(&tx_ring);
 
-		msg->sid     = BROADCAST_SID;
-		msg->eid     = 0;
-		msg->status  = 0;
-		msg->length  = 3;
-		msg->data[0] = 0x4e;
-		msg->data[1] = 0x01;
-		msg->data[2] = sensor_new;
+			msg->sid     = BROADCAST_SID;
+			msg->eid     = 0;
+			msg->status  = 0;
+			msg->length  = 3;
+			msg->data[0] = 0x4e;
+			msg->data[1] = 0x01;
+			msg->data[2] = sensor_new;
 
-		ring_increase(&tx_ring);
-		sensor_old = sensor_new;
-		sensor_counter = (F_CPU * 60) >> 18;
+			ring_increase(&tx_ring);
+			sensor_old = sensor_new;
+			sensor_counter = (F_CPU * 60) >> 18;
+		}
 	}
 	sensor_counter--;
 }
