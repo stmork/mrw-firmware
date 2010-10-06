@@ -1,12 +1,12 @@
 /*
 **
-**	$Filename:	signal.h $
+**	$Filename:	busy.h $
 **	$Revision$
 **	$Date$
 **	$Author$
 **	$Id$
 **
-**	Modellrailway micro controller
+**	Busy indicator
 **
 **	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
 **
@@ -19,11 +19,16 @@
 **
 */
 
-#ifndef SIGNAL_H
-#define SIGNAL_H
+#ifndef BUSY_H
+#define BUSY_H
 
-#include "mrw.h"
+#include "bit.h"
 
-extern void compute_signal(mrw_device *dvc);
+#define PORT_BUSY  PORTB
+#define DDR_BUSY   DDRB
+#define P_BUSY     0
+
+#define BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
+#define IDLE      CLR_PORT_BIT(PORT_BUSY, P_BUSY)
 
 #endif

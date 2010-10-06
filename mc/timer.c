@@ -38,6 +38,7 @@ void timer1_init(uint16_t clock)
 	uint8_t sreg = SREG;
 
 	cli();
+
 	/* Takte zwischen Interrupts */
 	OCR1A  = clock;
 	

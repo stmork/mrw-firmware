@@ -28,13 +28,14 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include "mcp2515.h"
-#include "uart.h"
-#include "sleep.h"
 #include "bit.h"
+#include "busy.h"
+#include "can_ring.h"
+#include "mcp2515.h"
+#include "sleep.h"
 #include "timer.h"
 #include "tool.h"
-#include "can_ring.h"
+#include "uart.h"
 
 #define MAX_MSG        32
 #define MAX_MSG_MASK ((MAX_MSG)-1)
@@ -50,13 +51,6 @@
 #define OVL_UART   _BV(P_OVL_UART)  // green
 
 #define UART_OVL_WARNING_LEVEL 192
-
-#define PORT_BUSY  PORTB
-#define DDR_BUSY   DDRB
-#define P_BUSY     0
-
-#define BUSY      SET_PORT_BIT(PORT_BUSY, P_BUSY)
-#define IDLE      CLR_PORT_BIT(PORT_BUSY, P_BUSY)
 
 /*
  * CAN receive Ring Buffer
@@ -361,7 +355,7 @@ static void adc_init(void)
 }
 
 static uint8_t  sensor_old     = 0xff;
-static uint16_t sensor_counter = 1;
+static uint16_t sensor_counter = TIMER2_DELAY(5);
 
 ISR(TIMER2_OVF_vect)
 {
@@ -384,7 +378,7 @@ ISR(TIMER2_OVF_vect)
 
 			ring_increase(&tx_ring);
 			sensor_old = sensor_new;
-			sensor_counter = (F_CPU * 60) >> 18;
+			sensor_counter = TIMER2_DELAY(60);
 		}
 	}
 	sensor_counter--;
@@ -523,6 +517,7 @@ int main(void)
 			IDLE;
 			sleep();
 		}
+		BUSY;
 		sei();
 	}
 	while(1);

@@ -61,13 +61,16 @@ uint8_t light_available(void)
 
 void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 {
+	uint8_t turn_on  = dvc->threshold;
+	uint8_t turn_off = dvc->threshold + 4;
+
 	/* Zustandübergang: Ausschalten */
-	if ((dvc->lightness < dvc->threshold) && (dvc->threshold <= lightness))
+	if ((dvc->lightness < turn_off) && (turn_off <= lightness))
 	{
 		set_dimm(dvc, 0);
 	}
 	/* Zustandsübergang: Einschalten */
-	else if ((lightness < dvc->threshold) && (dvc->threshold <= dvc->lightness))
+	else if ((lightness < turn_on) && (turn_on <= dvc->lightness))
 	{
 		dvc->counter = 0;
 	}

@@ -134,7 +134,7 @@ static int8_t get_timeout(uint8_t dvc_type)
 	 * Wir müssen also den MCU Takt durch 2^18 teilen um die Überläufe
 	 * pro Sekunde zu bekommen. Das wird unser Schaltzähler.
 	 */
-	int8_t to = F_CPU >> 18;
+	int8_t to = F_CPU >> TIMER2_SHIFT;
 
 	switch (dvc_type)
 	{
@@ -143,14 +143,14 @@ static int8_t get_timeout(uint8_t dvc_type)
 		break;
 
 	case TYPE_SWITCH_NEW:
-		to = (F_CPU >> 18) * 2 / 4;
+		to = (F_CPU >> TIMER2_SHIFT) * 2 / 4;
 		break;
 
 	case TYPE_SIGNAL_PF2:
 	case TYPE_SIGNAL_MF2:
 	case TYPE_SIGNAL_PF3:
 	case TYPE_SIGNAL_MF3:
-		to = (F_CPU >> 18) * 3 / 4;
+		to = (F_CPU >> TIMER2_SHIFT) * 3 / 4;
 		break;
 
 	case TYPE_SIGNAL_SL2:

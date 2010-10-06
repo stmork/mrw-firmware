@@ -27,6 +27,7 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+#include "busy.h"
 #include "config.h"
 #include "light.h"
 #include "light_profile.h"
@@ -40,6 +41,7 @@
  */
 ISR(TIMER1_COMPA_vect)
 {
+	BUSY;
 	uint8_t i;
 
 	for (i = 0;i < config.count; i++)
@@ -56,6 +58,7 @@ ISR(TIMER1_COMPA_vect)
  */
 ISR(TIMER2_OVF_vect)
 {
+	BUSY;
 	mrw_device *dvc = config.dvc;
 	uint8_t     i;
 
@@ -106,7 +109,9 @@ int main(void)
 		 * Ein bißchen was für die Umwelt tun. Es fängt halt
 		 * halt schon im Kleinen an ;-)
 		 */
+		IDLE;
 		sleep();
+		BUSY;
 	}
 	while(1);
 }

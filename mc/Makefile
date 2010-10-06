@@ -74,7 +74,7 @@ bootloader.hex:	bootloader.out
 # Firmware for light test
 #########################
 
-test_light.out:	test_light.o sleep.o timer.o mcp2515.o spi.o bit.o config.o pwm.o light_profile.o light.o
+test_light.out:	test_light.o sleep.o timer.o mcp2515.o spi.o bit.o config.o pwm.o light_profile.o light.o random.o
 	$(LINK.c) -Wl,-Map,test_light.map -o $@ $^
 
 test_light.hex:	test_light.out
