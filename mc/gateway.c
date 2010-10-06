@@ -313,20 +313,35 @@ static void adc_wait(void)
 	while(bit_is_set(ADCSRA, ADSC));
 }
 
-#define ADC_BUFFER_SHIFT  5
+#define ADC_BUFFER_SHIFT  6
 #define ADC_BUFFER_SIZE  (1 << ADC_BUFFER_SHIFT)
 #define ADC_BUFFER_MASK  (ADC_BUFFER_SIZE - 1)
 
-static uint8_t adc_buffer[ADC_BUFFER_SIZE];
+static uint16_t adc_buffer[ADC_BUFFER_SIZE];
 static uint16_t adc_value;
-static uint8_t adc_index;
+static uint8_t  adc_index;
 
-static uint8_t adc_read(void)
+static uint8_t  sensor_old;
+static uint16_t sensor_counter = TIMER2_DELAY(5);
+
+static void send_sensor_value(uint8_t value)
 {
-	adc_start();
-	adc_wait();
+	CAN_message *msg = ring_get_pos(&tx_ring);
 
-	uint8_t value = ADCW >> 8;	
+	msg->sid     = BROADCAST_SID;
+	msg->eid     = 0;
+	msg->status  = 0;
+	msg->length  = 3;
+	msg->data[0] = 0x4e;
+	msg->data[1] = 0x01;
+	msg->data[2] = value;
+
+	ring_increase(&tx_ring);
+}
+
+static uint8_t adc_get(void)
+{
+	uint16_t value = ADCW;
 
 	adc_value -= adc_buffer[adc_index];
 	adc_buffer[adc_index] = value;
@@ -334,15 +349,22 @@ static uint8_t adc_read(void)
 	adc_index++;
 	adc_index &= ADC_BUFFER_MASK;
 	
-	return ((adc_value >> ADC_BUFFER_SHIFT) + 0x02) & 0xfc;
+	return (((adc_value >> ADC_BUFFER_SHIFT) + 0x04) >> 2) & 0xfe;
+}
+
+static uint8_t adc_read(void)
+{
+	adc_start();
+	adc_wait();
+	return adc_get();
 }
 
 static void adc_init(void)
 {
 	uint8_t i;
 
-	/* ADC 7, Aref, ADC left adjust */
-	ADMUX = _BV(REFS0) | _BV(ADLAR) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
+	/* ADC 7, Aref, ADC right adjust */
+	ADMUX = _BV(REFS0) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);
 
 	/* ADC and interrupt enable, Prescaler 128, Auto Trigger */
 	ADCSRA = _BV(ADEN);
@@ -350,12 +372,10 @@ static void adc_init(void)
 	/* Durchschnitt initialisieren */	
 	for (i = 0; i < sizeof(adc_buffer); i++)
 	{
-		adc_read();
+		sensor_old = adc_read();
 	}
+	send_sensor_value(sensor_old);
 }
-
-static uint8_t  sensor_old     = 0xff;
-static uint16_t sensor_counter = TIMER2_DELAY(5);
 
 ISR(TIMER2_OVF_vect)
 {
@@ -366,17 +386,7 @@ ISR(TIMER2_OVF_vect)
 	{
 		if ((sensor_old != sensor_new) || (sensor_counter == 0))
 		{
-			CAN_message *msg = ring_get_pos(&tx_ring);
-
-			msg->sid     = BROADCAST_SID;
-			msg->eid     = 0;
-			msg->status  = 0;
-			msg->length  = 3;
-			msg->data[0] = 0x4e;
-			msg->data[1] = 0x01;
-			msg->data[2] = sensor_new;
-
-			ring_increase(&tx_ring);
+			send_sensor_value(sensor_new);
 			sensor_old = sensor_new;
 			sensor_counter = TIMER2_DELAY(60);
 		}
