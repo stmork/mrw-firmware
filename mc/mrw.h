@@ -181,16 +181,16 @@ struct mrw_signal
 
 struct mrw_light
 {
-	uint8_t               threshold;
-	uint8_t               lightness;
-	uint8_t               type;
-	uint8_t               counter;
-	uint8_t               quotient;
-	uint8_t               dimm;
-	uint8_t               nom;
-	uint8_t               denom;
-	mrw_connection        pin;
-	struct light_profile *profile;
+	uint8_t                     threshold;
+	uint8_t                     lightness;
+	uint8_t                     type;
+	uint8_t                     counter;
+	uint8_t                     quotient;
+	uint8_t                     dimm;
+	uint8_t                     nom;
+	uint8_t                     denom;
+	mrw_connection              pin;
+	const struct light_profile *profile;
 };
 
 
