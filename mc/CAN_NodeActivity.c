@@ -460,7 +460,7 @@ int8_t sensor(CAN_message *msg)
 			else
 			{
 				light_set_lightness(&dvc->unit.u_light, msg->data[2]);
-				queue_infos2(msg->data[0], msg->eid, MSG_OK, msg->data[2], 1);
+				queue_infos3(msg->data[0], msg->eid, MSG_OK, msg->data[1], msg->data[2], 1);
 			}
 		}
 		else
@@ -477,7 +477,7 @@ int8_t sensor(CAN_message *msg)
 			}
 			if (lights > 0)
 			{
-				queue_infos2(msg->data[0], 0, MSG_OK, msg->data[2], lights);
+				queue_infos3(msg->data[0], 0, MSG_OK, msg->data[1], msg->data[2], lights);
 			}
 		}
 	}
