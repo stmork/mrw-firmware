@@ -179,6 +179,10 @@ struct mrw_signal
 	uint8_t        bit[5];
 };
 
+#define PWM_BITS        5
+#define PWM_TABLE_SIZE (1 << PWM_BITS)
+#define PWM_SHIFT      (8 - PWM_BITS)
+
 struct mrw_light
 {
 	uint8_t                     threshold;
@@ -186,7 +190,8 @@ struct mrw_light
 	uint8_t                     type;
 	uint8_t                     counter;
 	uint8_t                     quotient;
-	uint8_t                     dimm;
+	uint8_t                     dimm:PWM_BITS;
+	uint8_t                     on:1;
 	uint8_t                     nom;
 	uint8_t                     denom;
 	mrw_connection              pin;

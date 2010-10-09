@@ -45,11 +45,22 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
  */
 void set_dimm(struct mrw_light *dvc, uint8_t value)
 {
-	value >>= 3;
-	dvc->quotient = 0;
-	dvc->dimm     = value;
-	dvc->nom      = pgm_read_byte(&table_nom[value]);
-	dvc->denom    = pgm_read_byte(&table_denom[value]);
+	value         >>= PWM_SHIFT;
+
+	if (value == 0)
+	{
+		/* Einmal ausschalten und gar nicht erst rumdimmen! */
+		dvc->dimm = 0;
+		clr_pin(&dvc->pin);
+	}
+	else if (dvc->dimm != value)
+	{
+		/* Werte neu initialisieren */
+		dvc->dimm     = value;
+		dvc->quotient = 0;
+		dvc->nom      = pgm_read_byte(&table_nom[value]);
+		dvc->denom    = pgm_read_byte(&table_denom[value]);
+	}
 }
 
 /*
@@ -62,14 +73,18 @@ void set_dimm(struct mrw_light *dvc, uint8_t value)
  */
 void handle_pwm(struct mrw_light *dvc)
 {
-	if (dvc->quotient < dvc->nom)
+	if (dvc->dimm > 0)
 	{
-		dvc->quotient += dvc->denom;
-		set_pin(&dvc->pin);
+		/* Dimmen */
+		if (dvc->quotient < dvc->nom)
+		{
+			dvc->quotient += dvc->denom;
+			set_pin(&dvc->pin);
+		}
+		else
+		{
+			clr_pin(&dvc->pin);
+		}
+		dvc->quotient -= dvc->nom;
 	}
-	else
-	{
-		clr_pin(&dvc->pin);
-	}
-	dvc->quotient -= dvc->nom;
 }

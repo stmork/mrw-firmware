@@ -30,6 +30,7 @@ static uint8_t has_lights = 0;
 
 void light_init(struct mrw_light *dvc)
 {
+	dvc->on        =   0;
 	dvc->counter   =   0;
 	dvc->lightness = 255;
 	dvc->profile   = get_light_profile(dvc->type);
@@ -38,9 +39,19 @@ void light_init(struct mrw_light *dvc)
 	has_lights++;
 }
 
+uint8_t light_available(void)
+{
+	return has_lights;
+}
+
+static uint8_t light_is_on(struct mrw_light *dvc)
+{
+	return dvc->on;
+}
+
 void light_dimm(struct mrw_light *dvc)
 {
-	if (dvc->lightness < dvc->threshold)
+	if (light_is_on(dvc))
 	{
 		if (dvc->profile->repeat)
 		{
@@ -54,25 +65,26 @@ void light_dimm(struct mrw_light *dvc)
 	}
 }
 
-uint8_t light_available(void)
-{
-	return has_lights;
-}
-
 void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 {
-	uint8_t turn_on  = dvc->threshold;
-	uint8_t turn_off = dvc->threshold + 4;
+	if (lightness != dvc->lightness)
+	{
+		uint8_t turn_on  = dvc->threshold;
+		uint8_t turn_off = dvc->threshold + 4;
 
-	/* Zustandübergang: Ausschalten */
-	if ((dvc->lightness < turn_off) && (turn_off <= lightness))
-	{
-		set_dimm(dvc, 0);
+		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && light_is_on(dvc))
+		{
+			/* Zustandsübergang: Ausschalten */
+			set_dimm(dvc, 0);
+			dvc->counter = 0;
+			dvc->on      = 0;
+		}
+		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !light_is_on(dvc))
+		{
+			/* Zustandsübergang: Einschalten */
+			dvc->counter = 0;
+			dvc->on      = 1;
+		}
+		dvc->lightness = lightness;
 	}
-	/* Zustandsübergang: Einschalten */
-	else if ((lightness < turn_on) && (turn_on <= dvc->lightness))
-	{
-		dvc->counter = 0;
-	}
-	dvc->lightness = lightness;
 }
