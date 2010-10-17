@@ -143,10 +143,10 @@ static int8_t uart_send_msg(CAN_message *msg)
 		uart_tx_buffer[uart_tx_pos++] = buffer[i];
 		sum -= buffer[i];
 	}
-	uart_tx_count += len;
-
 	uart_tx_buffer[uart_tx_pos++] = sum;
-	uart_tx_count++;
+	uart_tx_buffer[uart_tx_pos++] = 0;
+
+	uart_tx_count += (len + 2);
 	sei();
 
 	/*
@@ -259,6 +259,15 @@ static void uart_process_byte(uint8_t udr)
 	{
 		uart_idx = 0;
 		uart_sum = 0;
+		
+		if (uart_tx_count < UART_OVL_WARNING_LEVEL)
+		{
+			cli();
+			uart_tx_buffer[uart_tx_pos++] = 0;
+			uart_tx_count++;
+			sei();
+			uart_enable_tx_interrupt(1);
+		}
 	}
 #ifdef MRW_H
 	else if ((uart_idx >= offsetof(CAN_message, data)) && (uart_input.can.data[0] == CMD_ILLEGAL))
