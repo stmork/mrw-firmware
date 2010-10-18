@@ -63,6 +63,9 @@ static void config(int fd, int module)
 #endif
 
 #ifndef CONFIG_LIGHT
+	/*
+	 * Konfiguration Port 1 und 2: Weichen
+	 */
 	can_fill_message(&msg, CFGSWN, TEST_SID, TEST_SWITCH1);
 	can_add_data(&msg,  0);
 	can_add_data(&msg,  1);
@@ -90,7 +93,25 @@ static void config(int fd, int module)
 	can_add_data(&msg, 14);
 	can_add_data(&msg, 15);
 	uart_send_can_msg(fd, &msg);
+#else
+	/*
+	 * Konfiguration Port 2: dimmfähige Lampen
+	 */
+	uint8_t i;
 
+	for (i = 0; i < 8; i++)
+	{
+		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_LIGHT + i);
+		can_add_data(&msg,   i);         // Anschlusspin
+		can_add_data(&msg, 26 * i + 12); // Schwellwert
+		can_add_data(&msg,  66);         // Profil
+		uart_send_can_msg(fd, &msg);	
+	}
+#endif
+
+	/*
+	 * Konfiguration Port 3: Gleismodul
+	 */
 	can_fill_message(&msg, CFGRAI, TEST_SID,  TEST_RAIL1);
 	can_add_data(&msg, 16);
 	can_add_data(&msg, 23);
@@ -111,6 +132,9 @@ static void config(int fd, int module)
 	can_add_data(&msg, 20);
 	uart_send_can_msg(fd, &msg);	
 
+	/*
+	 * Konfiguration serieller Port: Lichtsignale
+	 */
 	can_fill_message(&msg, CFGML3, TEST_SID,  TEST_MAIN_SIGNAL);
 	can_add_data(&msg, module * 16 + 23);
 	can_add_data(&msg, module * 16 + 22);
@@ -135,18 +159,6 @@ static void config(int fd, int module)
 	can_add_data(&msg, module * 16 + 15);
 	can_add_data(&msg, module * 16 + 14);
 	uart_send_can_msg(fd, &msg);	
-#else
-	uint8_t i;
-
-	for (i = 0; i < 8; i++)
-	{
-		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_LIGHT + i);
-		can_add_data(&msg,   i);
-		can_add_data(&msg, 26 * i + 12);
-		can_add_data(&msg,   i);
-		uart_send_can_msg(fd, &msg);	
-	}
-#endif
 
 	can_fill_message(&msg, CFGEND, TEST_SID, 0);
 	uart_send_can_msg(fd, &msg);
