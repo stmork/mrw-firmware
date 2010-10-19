@@ -26,6 +26,7 @@ public class Beacon19 extends LightProfile
 {
 	private final static int array[] =
 	{
+		 16,  16,  18,  20,  30, 128, 255,
 		255, 128,  30,  20,  18,  16,  16,  16,  18,  20,  18,  16,  14,  16,  18,  20,
 		 22,  24,  26,  24,  22,
 		 20,
@@ -52,12 +53,18 @@ public class Beacon19 extends LightProfile
 		255, 128,  30,  20,  18,  16,  16,  16,  18,  20,  18,  16,  14,  16,  18,  20,
 		 22,  24,  26,  24,  22,
 		                                                        22,  24,  26,  24,  22,
-		 20,  18,  16,  14,  16,  18,  20,  18,  16,  16,  16,  18,  20,  30, 128, 255
+		 20,  18,  16,  14,  16,  18,  20,  18,  16,  16
 	};
 
 	@Override
 	public int [] getArray()
 	{
 		return array;
+	}
+	
+	@Override
+	final protected boolean isRepeatable()
+	{
+		return true;
 	}
 }

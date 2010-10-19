@@ -54,4 +54,10 @@ public class Beacon17 extends LightProfile
 	{
 		return array;
 	}
+	
+	@Override
+	final protected boolean isRepeatable()
+	{
+		return true;
+	}
 }

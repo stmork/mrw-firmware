@@ -57,4 +57,10 @@ public class Neon07 extends LightProfile
 	{
 		return array;
 	}
+	
+	@Override
+	final protected boolean isRepeatable()
+	{
+		return true;
+	}
 }

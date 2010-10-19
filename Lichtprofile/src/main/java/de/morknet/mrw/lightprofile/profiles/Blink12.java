@@ -48,4 +48,10 @@ public class Blink12 extends LightProfile
 	{
 		return array;
 	}
+	
+	@Override
+	final protected boolean isRepeatable()
+	{
+		return true;
+	}
 }

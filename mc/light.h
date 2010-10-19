@@ -29,4 +29,6 @@ extern void    light_dimm(struct mrw_light *dvc);
 extern uint8_t light_available(void);
 extern void    light_set_lightness(struct mrw_light *dvc, uint8_t lightness);
 
+extern const struct light_profile *get_light_profile(uint8_t type);
+
 #endif

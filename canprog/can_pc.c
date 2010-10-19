@@ -38,6 +38,7 @@ int uart_open(char *name)
 {
 	struct termios oldtio,newtio;	
 	int fd = open(name, O_RDWR|O_NOCTTY);
+
 	if (fd >= 0)
 	{
 		tcgetattr(fd,&oldtio);
@@ -148,6 +149,11 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 
 	if ((buffer->input.can.length == 0) || (buffer->input.can.length > 8))
 	{
+#ifdef _DEBUG
+		time_t now = time(&now);
+
+		printf("%ld # Invalid CAN length: %02x\n", now, buffer->input.can.length);
+#endif
 		uart_init(buffer);
 		complete = -1;
 	}
@@ -159,6 +165,16 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 		}
 		else
 		{
+			time_t now = time(&now);
+			int i;
+
+			printf("%ld # Checksum error [%02x]: ", now, buffer->checksum);
+			for (i = 0;i < buffer->index;i++)
+			{
+				printf(" %02x", buffer->input.buffer[i]);
+			}
+			printf("\n");
+			fflush(stdout);
 			uart_init(buffer);
 			complete = -1;
 		}

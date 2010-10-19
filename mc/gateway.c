@@ -144,7 +144,13 @@ static int8_t uart_send_msg(CAN_message *msg)
 		sum -= buffer[i];
 	}
 	uart_tx_buffer[uart_tx_pos++] = sum;
-	uart_tx_buffer[uart_tx_pos++] = 0;
+	
+	/*
+	 * Das hier wäre eine neue CAN-Länge. Sie ist ungültig und kann
+	 * den Remote-Zustandsautomaten wieder In-Sync bringen, falls bei
+	 * der Übertragung ein Byte verloren gegangen ist.
+	 */
+	uart_tx_buffer[uart_tx_pos++] = 0x68;
 
 	uart_tx_count += (len + 2);
 	sei();
@@ -259,11 +265,16 @@ static void uart_process_byte(uint8_t udr)
 	{
 		uart_idx = 0;
 		uart_sum = 0;
-		
+
+		/*
+		 * Das kann passieren, wenn die Kommunikation Out-Of-Sync ist.
+		 * Daher senden wir einfach mal ein Byte zurück, um den Remote
+		 * Empfänger auch wieder In-Sync zu bringen.
+		 */
 		if (uart_tx_count < UART_OVL_WARNING_LEVEL)
 		{
 			cli();
-			uart_tx_buffer[uart_tx_pos++] = 0;
+			uart_tx_buffer[uart_tx_pos++] = 0x19;
 			uart_tx_count++;
 			sei();
 			uart_enable_tx_interrupt(1);

@@ -48,6 +48,7 @@ public class Beacon18 extends LightProfile
 	   	 20,  18,  16,  14,  16,  18,  20,  18,  16,  16,  16,  18,  20,  30, 128, 255,
 	   	255, 128,  30,  20,  18,  16,  16,  16,  18,  20,  18,  16,  14,  16,  18,  20,
 	   	 22,  24,  26,  24,  22,
+	   	 20,
 	   	                                                        22,  24,  26,  24,  22,
 	   	 20,  18,  16,  14,  16,  18,  20,  18,  16,  16,  16,  18,  20,  30, 128, 255,
 	   	255, 128,  30,  20,  18,  16,  16,  16,  18,  20,  18,  16,  14,  16,  18,  20,
@@ -59,5 +60,11 @@ public class Beacon18 extends LightProfile
 	public int [] getArray()
 	{
 		return array;
+	}
+	
+	@Override
+	final protected boolean isRepeatable()
+	{
+		return true;
 	}
 }
