@@ -148,6 +148,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			do
 			{
 				x = s * 16000000 / (256 * 1024);
+				gfx.drawString("" + s + "s", X_OFFSET + 2 + (int)(x * X_SCALE), Y_OFFSET + yMax / 2);
 				gfx.drawLine(
 						X_OFFSET + (int)(x * X_SCALE), Y_OFFSET,
 						X_OFFSET + (int)(x * X_SCALE), Y_OFFSET + yMax);
