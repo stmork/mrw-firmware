@@ -338,6 +338,9 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 		 */
 	}
 
+	/* Error Flags löschen */
+	mcp2515_reset_overflow(_BV(RX1OVR) | _BV(RX0OVR));
+
 	/* Standard ID ist komplette Maske */
 	mcp2515_write_sid( RXM0SIDH, SID_MASK);
 	mcp2515_write_sid( RXM1SIDH, SID_MASK);

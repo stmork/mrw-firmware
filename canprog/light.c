@@ -47,10 +47,10 @@ int main(int argc,char *argv[])
 {
 	int lightness;
 
-	if (argc <= 1)
+	if (argc <= 2)
 	{
 		printf("USAGE:\n");
-		printf("%s tty [relais]\n", argv[0]);
+		printf("%s tty lightness\n", argv[0]);
 		return EXIT_SUCCESS;
 	}
 
