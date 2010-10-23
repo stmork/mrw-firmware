@@ -1,0 +1,76 @@
+<project name="Lichtprofile" basedir="." default="run">
+	<property file="${user.home}/.xtext.properties" />
+	<property file="./build.properties.default" />
+
+	<property name="src-path"        value="./src/main/java"/>
+	<property name="bin-path"        value="./bin"/>
+	<property name="image-path"      value="../Bilder/Trac/LichtProfile"/>
+	<property name="mc-path"         value="../mc"/>
+	<property name="findbugs.home"   value="../findbugs"/>
+
+	<!-- ==================================================== -->
+	<!--              Setting up libraries                    --> 
+	<!-- ==================================================== -->
+
+	<path id="run.classpath">
+		<pathelement path="${bin-path}" />
+	</path>
+		
+	<path id="findbugs.lib">
+		<fileset dir="${findbugs.home}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- ==================================================== -->
+	<!--            Setting up target definitions             --> 
+	<!-- ==================================================== -->
+
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="findbugs.lib"/>
+
+	<!-- ==================================================== -->
+	<!--              Setting up build targets                --> 
+	<!-- ==================================================== -->
+
+	<target name="compile">
+		<mkdir dir="${bin-path}"/>
+		<javac srcdir="${src-path}" destdir="${bin-path}"
+				encoding="ISO-8859-15" debug="true">
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin-path}"/>
+		<delete file="findbugs-results.xml"/>
+		<delete>
+			<fileset dir="." includes="*.gif"/>
+			<fileset dir="." includes="*.c"/>
+		</delete>
+	</target>
+
+	<!-- ==================================================== -->
+	<!--              Setting up runtime targets              --> 
+	<!-- ==================================================== -->
+
+	<target name="run" depends="compile">
+		<java classname="de.morknet.mrw.lightprofile.LightProfile" classpathref="run.classpath">
+			<arg value="${image-path}"/>
+			<arg value="${mc-path}"/>
+		</java>
+	</target>
+
+	<target name="findbugs" depends="compile">
+		<echo message="Checking ${ant.project.name}..."/>
+		<findbugs jvmargs="-Xmx128m" home="${findbugs.home}"
+				output="xml:withMessages"
+				outputFile="findbugs-results.xml"
+				classpathref="run.classpath"
+				effort="max"
+				reportlevel="low"
+				failonerror="true">
+			<sourcePath path="${src-path}"/>
+			<class location="${bin-path}"/>
+			<auxclasspath refid="run.classpath"/>
+		</findbugs>
+	</target>
+</project>

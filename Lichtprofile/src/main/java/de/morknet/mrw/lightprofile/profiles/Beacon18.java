@@ -57,7 +57,7 @@ public class Beacon18 extends LightProfile
 	};
 
 	@Override
-	public int [] getArray()
+	protected int [] getArray()
 	{
 		return array;
 	}

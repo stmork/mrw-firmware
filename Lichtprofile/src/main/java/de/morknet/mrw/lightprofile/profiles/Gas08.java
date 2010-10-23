@@ -45,7 +45,7 @@ public class Gas08 extends LightProfile
 	};
 
 	@Override
-	public int [] getArray()
+	protected int [] getArray()
 	{
 		return array;
 	}

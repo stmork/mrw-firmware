@@ -24,9 +24,11 @@ package de.morknet.mrw.lightprofile;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -56,11 +58,12 @@ import de.morknet.mrw.lightprofile.profiles.Slow13;
 public abstract class LightProfile implements Comparable<LightProfile>
 {
 	protected final static Set<LightProfile> profiles = new TreeSet<LightProfile>();
+	private final static Locale locale = Locale.GERMAN;
 	private final BufferedImage image;
-	private final float X_SCALE = 2.0f;
-	private final float Y_SCALE = 0.5f;
-	private final int   X_OFFSET = 8;
-	private final int   Y_OFFSET = 8;
+	private final static float X_SCALE = 2.0f;
+	private final static float Y_SCALE = 0.5f;
+	private final static int   X_OFFSET = 8;
+	private final static int   Y_OFFSET = 8;
 
 	static 
 	{
@@ -130,13 +133,13 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		return false;
 	}
 	
-	final void save() throws IOException
+	final void save(String imageDir) throws IOException
 	{
 		Graphics gfx = image.getGraphics();
 		FileOutputStream os = null;
 		try
 		{
-			os = new FileOutputStream(getName() + ".gif");
+			os = new FileOutputStream(imageDir + File.separator + getName() + ".gif");
 			int [] array = getArray();
 			int yMax = getHeight();
 			int x, s=0;
@@ -178,16 +181,16 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		}
 	}
 	
-	private final int LENGTH_BITS = 4;
-	private final int LENGTH_MAX = (1 << LENGTH_BITS);
-	private final int LENGTH_MASK = LENGTH_MAX - 1;
+	private final static int LENGTH_BITS = 4;
+	private final static int LENGTH_MAX = (1 << LENGTH_BITS);
+	private final static int LENGTH_MASK = LENGTH_MAX - 1;
 
 	protected void printArray(PrintWriter writer)
 	{
 		int [] array = getArray();
 
 		System.out.printf("Writing array of %s (%d bytes)\n", getName(), array.length);
-		writer.printf("static const uint8_t %s[LIGHT_PROFILE_SIZE] PROGMEM =\n", getName().toLowerCase());
+		writer.printf("static const uint8_t %s[LIGHT_PROFILE_SIZE] PROGMEM =\n", getName().toLowerCase(locale));
 		writer.println("{");
 		for (int i = 0;i < array.length;i++)
 		{
@@ -209,16 +212,16 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		writer.println("");
 	}
 
-	public abstract int[] getArray();
+	protected abstract int[] getArray();
 
-	private static void printMC() throws IOException
+	private static void printMC(String filename) throws IOException
 	{
 		FileOutputStream fos = null;
 		PrintWriter pw;
 
 		try
 		{
-			fos = new FileOutputStream("light_profile.c");
+			fos = new FileOutputStream(filename);
 			pw  = new PrintWriter(fos);
 			pw.println("/*");
 			pw.println("**");
@@ -260,7 +263,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 					pw.print(",");
 				}
 				pw.println("");
-				pw.printf("\t{ %10s, %d }", profile.getName().toLowerCase(), profile.isRepeatable() ? 1 : 0);
+				pw.printf("\t{ %10s, %d }", profile.getName().toLowerCase(locale), profile.isRepeatable() ? 1 : 0);
 			}
 			pw.println("\n};");
 			pw.println("");
@@ -283,12 +286,15 @@ public abstract class LightProfile implements Comparable<LightProfile>
 
 	public static void main(String [] args)
 	{
+		final String imageDir = args.length >= 1 ? args[0] : ".";
+		final String mcDir    = args.length >= 2 ? args[1] : ".";
+
 		for (LightProfile profile : profiles)
 		{
 			try
 			{
 				System.out.printf("%2d: %s\n", profile.getIndex(), profile.getName());
-				profile.save();
+				profile.save(imageDir);
 			}
 			catch (IOException e)
 			{
@@ -297,7 +303,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		}
 		try
 		{
-			printMC();
+			printMC(mcDir + File.separator + "light_profile.c");
 		}
 		catch (IOException e)
 		{
@@ -306,8 +312,20 @@ public abstract class LightProfile implements Comparable<LightProfile>
 	}
 
 	@Override
-	public int compareTo(LightProfile o)
+	public int compareTo(LightProfile lp)
 	{
-		return getIndex() - o.getIndex();
+		return getIndex() - lp.getIndex();
+	}
+
+	@Override
+	public boolean equals(Object object)
+	{
+		return super.equals(object);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
 	}
 }

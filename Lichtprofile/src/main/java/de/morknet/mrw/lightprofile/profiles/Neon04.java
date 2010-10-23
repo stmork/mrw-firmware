@@ -46,7 +46,7 @@ public class Neon04 extends LightProfile
 	};
 
 	@Override
-	public int [] getArray()
+	protected int [] getArray()
 	{
 		return array;
 	}
