@@ -2,10 +2,11 @@ CC		= gcc
 CPP		= gcc
 SRC		= canprog.c gwsim.c can_pc.c mrw_dump.c receive.c ping.c send.c\
 	qryerr.c qrybuf.c reset.c switch.c signal.c form.c config.c setid.c\
-	rail.c occupation.c light.c busy.c
+	rail.c occupation.c light.c busy.c mrw_daemon.c
 PROGS		= canprog gwsim receive ping send reset switch signal form config qrybuf\
-	qryerr setid rail occupation light busy
-LDFLAGS		= -lm
+	qryerr setid rail occupation light busy mrw_daemon
+
+LDFLAGS		= -lm -lpthread
 CPPFLAGS	= -I ../mc
 
 all:	$(PROGS)
@@ -43,6 +44,8 @@ config:	config.o can_pc.o mrw_dump.o
 setid:	setid.o can_pc.o mrw_dump.o
 
 busy:	busy.o can_pc.o mrw_dump.o
+
+mrw_daemon:	mrw_daemon.o mrw_dump.o can_pc.o
 
 test:
 	splint $(CPPFLAGS) $(SRC)
