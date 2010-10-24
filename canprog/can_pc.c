@@ -28,6 +28,11 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef __linux__
+#	include <asm/ioctls.h>
+#	include <linux/serial.h>
+#endif
+
 //#define BAUD 230400
 #define BAUD B115200
 //#define BAUD B57600
@@ -41,6 +46,8 @@ int uart_open(char *name)
 
 	if (fd >= 0)
 	{
+		struct serial_struct serinfo;
+
 		tcgetattr(fd,&oldtio);
 		bzero(&newtio, sizeof(newtio));
 		newtio.c_cflag = BAUD | CS8 | CLOCAL | CREAD;
@@ -51,6 +58,21 @@ int uart_open(char *name)
 		newtio.c_cc[VMIN]     = 0;
 		tcflush(fd, TCIFLUSH);
 		tcsetattr(fd,TCSANOW,&newtio);
+
+#ifdef TIOCGSERIAL
+		if (ioctl (fd, TIOCGSERIAL, &serinfo) == 0)
+		{
+			serinfo.flags |= ASYNC_LOW_LATENCY;
+			if (ioctl (fd, TIOCSSERIAL, &serinfo) != 0)
+			{
+				perror("Setting serial flags");
+			}
+		}
+		else
+		{
+			perror("Getting serial flags");
+		}
+#endif
 	}
 	return fd;
 }
