@@ -46,8 +46,6 @@ int uart_open(char *name)
 
 	if (fd >= 0)
 	{
-		struct serial_struct serinfo;
-
 		tcgetattr(fd,&oldtio);
 		bzero(&newtio, sizeof(newtio));
 		newtio.c_cflag = BAUD | CS8 | CLOCAL | CREAD;
@@ -60,6 +58,8 @@ int uart_open(char *name)
 		tcsetattr(fd,TCSANOW,&newtio);
 
 #ifdef TIOCGSERIAL
+		struct serial_struct serinfo;
+
 		if (ioctl (fd, TIOCGSERIAL, &serinfo) == 0)
 		{
 			serinfo.flags |= ASYNC_LOW_LATENCY;
