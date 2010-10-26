@@ -240,6 +240,18 @@ static void set_signal4(struct mrw_signal *signal)
 	}
 }
 
+static void set_simple_light(struct mrw_simple_light *light)
+{
+	if (light->on)
+	{
+		SET_SER_BIT(light->byte, light->bit);
+	}
+	else
+	{
+		CLR_SER_BIT(light->byte, light->bit);
+	}
+}
+
 void compute_signal(mrw_device *dvc)
 {
 	switch(dvc->unit_type)
@@ -257,6 +269,10 @@ void compute_signal(mrw_device *dvc)
 		
 	case TYPE_SIGNAL_ML4:
 		set_signal4(&dvc->unit.u_signal);
+		break;
+
+	case TYPE_SIMPLE_LIGHT:
+		set_simple_light(&dvc->unit.u_simple_light);
 		break;
 	}
 }

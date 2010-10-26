@@ -144,6 +144,7 @@
 #define TYPE_SIGNAL_ML3   12
 #define TYPE_SIGNAL_ML4   13
 #define TYPE_LIGHT        14
+#define TYPE_SIMPLE_LIGHT 15
 
 #define SWITCH_DEPRELL 3
 
@@ -198,15 +199,24 @@ struct mrw_light
 	const struct light_profile *profile;
 };
 
+struct mrw_simple_light
+{
+	uint8_t                     threshold;
+	uint8_t                     lightness;
+	uint8_t                     byte;
+	uint8_t                     bit;
+	uint8_t                     on:1;
+};
 
 typedef union
 {
-	struct mrw_switch u_switch;
-	struct mrw_form2  u_form2;
-	struct mrw_form3  u_form3;
-	struct mrw_rail   u_rail;
-	struct mrw_signal u_signal;
-	struct mrw_light  u_light;
+	struct mrw_switch        u_switch;
+	struct mrw_form2         u_form2;
+	struct mrw_form3         u_form3;
+	struct mrw_rail          u_rail;
+	struct mrw_signal        u_signal;
+	struct mrw_light         u_light;
+	struct mrw_simple_light  u_simple_light;
 } mrw_unit;
 
 typedef struct
