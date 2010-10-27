@@ -469,6 +469,10 @@ static void init_ports(void)
 		case TYPE_LIGHT:
 			light_init(&dvc->unit.u_light);
 			break;
+
+		case TYPE_SIMPLE_LIGHT:
+			simple_light_init(&dvc->unit.u_simple_light);
+			break;
 		}
 	}
 }

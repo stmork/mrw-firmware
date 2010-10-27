@@ -89,4 +89,3 @@ void init_light_signal(
 		dvc->unit.u_signal.bit[i]  = buffer[i] & 0x7;
 	}
 }
-

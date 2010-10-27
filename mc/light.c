@@ -29,6 +29,41 @@
 
 static uint8_t has_lights = 0;
 
+/*********************/
+/* Lampen ohne Profil */
+/*********************/
+
+void simple_light_init(struct mrw_simple_light *dvc)
+{
+	dvc->on        =   0;
+	dvc->lightness = 255;
+}
+
+void simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness)
+{
+	if (lightness != dvc->lightness)
+	{
+		uint8_t turn_on  = dvc->threshold;
+		uint8_t turn_off = dvc->threshold + 4;
+
+		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
+		{
+			/* Zustandsübergang: Ausschalten */
+			dvc->on      = 0;
+		}
+		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
+		{
+			/* Zustandsübergang: Einschalten */
+			dvc->on      = 1;
+		}
+		dvc->lightness = lightness;
+	}
+}
+
+/*********************/
+/* Lampen mit Profil */
+/*********************/
+
 void light_init(struct mrw_light *dvc)
 {
 	dvc->on        =   0;
@@ -45,14 +80,9 @@ uint8_t light_available(void)
 	return has_lights;
 }
 
-static uint8_t light_is_on(struct mrw_light *dvc)
-{
-	return dvc->on;
-}
-
 void light_dimm(struct mrw_light *dvc)
 {
-	if (light_is_on(dvc))
+	if (dvc->on)
 	{
 		if (dvc->profile->repeat)
 		{
@@ -73,14 +103,14 @@ void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 		uint8_t turn_on  = dvc->threshold;
 		uint8_t turn_off = dvc->threshold + 4;
 
-		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && light_is_on(dvc))
+		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
 		{
 			/* Zustandsübergang: Ausschalten */
 			set_dimm(dvc, 0);
 			dvc->counter = 0;
 			dvc->on      = 0;
 		}
-		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !light_is_on(dvc))
+		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
 		{
 			/* Zustandsübergang: Einschalten */
 			dvc->counter = 0;
@@ -111,6 +141,10 @@ const struct light_profile *get_light_profile(uint8_t type)
 	case  66:
 		idx = (random_timer() & 3) + 16;
 		break;
+
+	case 0xff:
+		/* Profillose Konfiguration! */
+		return 0;
 
 	default:
 		idx = 14;

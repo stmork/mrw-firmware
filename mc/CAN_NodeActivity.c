@@ -262,11 +262,22 @@ int8_t  configLight(CAN_message *msg)
 {
 	mrw_device *dvc = &config.dvc[config.count];
 
-	dvc->unit_type = TYPE_LIGHT;
-	dvc->unit_no   = msg->eid;
-	config_connection(&dvc->unit.u_light.pin, msg->data[1]);
-	dvc->unit.u_light.threshold = msg->data[2];
-	dvc->unit.u_light.type      = msg->data[3];
+	if (msg->length >= 4)
+	{
+		dvc->unit_type = TYPE_LIGHT;
+		dvc->unit_no   = msg->eid;
+		config_connection(&dvc->unit.u_light.pin, msg->data[1]);
+		dvc->unit.u_light.threshold = msg->data[2];
+		dvc->unit.u_light.type      = msg->data[3];
+	}
+	else
+	{
+		dvc->unit_type = TYPE_SIMPLE_LIGHT;
+		dvc->unit_no   = msg->eid;
+		dvc->unit.u_simple_light.threshold = msg->data[2];
+		dvc->unit.u_simple_light.byte = msg->data[1] >> 3;
+		dvc->unit.u_simple_light.bit  = msg->data[1] & 0x7;
+	}
 	config.count++;
 
 	return MSG_OK;
@@ -453,14 +464,19 @@ int8_t sensor(CAN_message *msg)
 			{
 				return MSG_UNIT_NOT_FOUND;
 			}
-			else if (dvc->unit_type != TYPE_LIGHT)
-			{
-				return MSG_UNITTYPE_WRONG;
-			}
-			else
+			else if (dvc->unit_type == TYPE_LIGHT)
 			{
 				light_set_lightness(&dvc->unit.u_light, msg->data[2]);
 				queue_infos3(msg->data[0], msg->eid, MSG_OK, msg->data[1], msg->data[2], 1);
+			}
+			else if (dvc->unit_type == TYPE_SIMPLE_LIGHT)
+			{
+				simple_light_set_lightness(&dvc->unit.u_simple_light, msg->data[2]);
+				queue_infos3(msg->data[0], msg->eid, MSG_OK, msg->data[1], msg->data[2], 1);
+			}
+			else
+			{
+				return MSG_UNITTYPE_WRONG;
 			}
 		}
 		else
@@ -472,6 +488,11 @@ int8_t sensor(CAN_message *msg)
 				if (config.dvc[i].unit_type == TYPE_LIGHT)
 				{
 					light_set_lightness(&config.dvc[i].unit.u_light, msg->data[2]);
+					lights++;
+				}
+				else if (config.dvc[i].unit_type == TYPE_SIMPLE_LIGHT)
+				{
+					simple_light_set_lightness(&config.dvc[i].unit.u_simple_light, msg->data[2]);
 					lights++;
 				}
 			}
