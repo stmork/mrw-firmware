@@ -25,7 +25,7 @@
 #include "mrw.h"
 
 extern void    simple_light_init(struct mrw_simple_light *dvc);
-extern void    simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness);
+extern uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness);
 
 extern void    light_init(struct mrw_light *dvc);
 extern void    light_dimm(struct mrw_light *dvc);

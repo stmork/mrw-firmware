@@ -39,8 +39,10 @@ void simple_light_init(struct mrw_simple_light *dvc)
 	dvc->lightness = 255;
 }
 
-void simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness)
+uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness)
 {
+	uint8_t changed = 0;
+
 	if (lightness != dvc->lightness)
 	{
 		uint8_t turn_on  = dvc->threshold;
@@ -49,15 +51,18 @@ void simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness)
 		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
 		{
 			/* Zustandsübergang: Ausschalten */
-			dvc->on      = 0;
+			dvc->on = 0;
+			changed = 1;
 		}
 		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
 		{
 			/* Zustandsübergang: Einschalten */
-			dvc->on      = 1;
+			dvc->on = 1;
+			changed = 1;
 		}
 		dvc->lightness = lightness;
 	}
+	return changed;
 }
 
 /*********************/

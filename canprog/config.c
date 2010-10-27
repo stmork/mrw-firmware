@@ -33,8 +33,9 @@
 #include "testdef.h"
 
 #define CONFIG_LIGHT
+#define nCONFIG_SER_SIGNALS
 
-static void config(int fd, int module)
+static void config_ports(int fd)
 {
 	CAN_message msg;
 
@@ -131,7 +132,13 @@ static void config(int fd, int module)
 	can_add_data(&msg, 19);
 	can_add_data(&msg, 20);
 	uart_send_can_msg(fd, &msg);	
+}
 
+static void config_serial(int fd, int module)
+{
+	CAN_message msg;
+
+#ifdef CONFIG_SER_SIGNALS
 	/*
 	 * Konfiguration serieller Port: Lichtsignale
 	 */
@@ -159,6 +166,20 @@ static void config(int fd, int module)
 	can_add_data(&msg, module * 16 + 15);
 	can_add_data(&msg, module * 16 + 14);
 	uart_send_can_msg(fd, &msg);	
+#else
+	uint8_t i;
+
+	/*
+	 * Konfiguration serieller Port: Lichtsignale
+	 */
+	for (i = 0; i < 16; i++)
+	{
+		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_SIMPLE_LIGHT + i);
+		can_add_data(&msg,   48 + i);    // Anschlusspin
+		can_add_data(&msg,   12 * i + 4);    // Schwellwert
+		uart_send_can_msg(fd, &msg);	
+	}
+#endif
 
 	can_fill_message(&msg, CFGEND, TEST_SID, 0);
 	uart_send_can_msg(fd, &msg);
@@ -182,7 +203,8 @@ int main(int argc,char *argv[])
 
 	uart_sync(fd);
 
-	config(fd, 1);
+	config_ports(fd);
+	config_serial(fd, 2);
 
 	close(fd);
 	return EXIT_SUCCESS;

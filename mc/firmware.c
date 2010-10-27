@@ -159,6 +159,7 @@ static int8_t get_timeout(uint8_t dvc_type)
 	case TYPE_SIGNAL_ML2:
 	case TYPE_SIGNAL_ML3:
 	case TYPE_SIGNAL_ML4:
+	case TYPE_SIMPLE_LIGHT:
 		to = 1;
 		break;
 
@@ -323,6 +324,7 @@ ISR(TIMER2_OVF_vect)
 		case TYPE_SIGNAL_ML2:
 		case TYPE_SIGNAL_ML3:
 		case TYPE_SIGNAL_ML4:
+		case TYPE_SIMPLE_LIGHT:
 			compute_signal(dvc);
 			break;
 		}

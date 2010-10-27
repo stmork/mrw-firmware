@@ -39,6 +39,8 @@
 #define TEST_RAIL3        203
 #define TEST_RAIL4        204
 
-#define TEST_LIGHT        256
+#define TEST_LIGHT        300
+
+#define TEST_SIMPLE_LIGHT 400
 
 #endif
