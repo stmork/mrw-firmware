@@ -46,6 +46,8 @@
 #include "can_processing.h"
 #include "pwm.h"
 
+#include "CAN_Node.h"
+
 #define NODE_OFF       0
 #define NODE_READY     MCP_LED_GREEN
 #define NODE_ERROR    (MCP_LED_GREEN|MCP_LED_YELLOW)
@@ -62,7 +64,7 @@ static void can_process_messages(void)
 		CAN_message *msg = ring_get_start(&rx_ring);
 		ring_decrease(&rx_ring);
 
-		process_can_message(msg);
+		CAN_Node(msg);
 		if (ring_has_messages(&tx_ring))
 		{
 			CAN_message *msg = ring_get_start(&tx_ring);
@@ -201,7 +203,7 @@ ISR(TIMER2_OVF_vect)
 	/**
 	 * Wenn nix konfiguriert wurde, gibt's auch nix zu tun.
 	 */
-	if (!isConfigured())
+	if (!IS_CONFIGURED)
 	{
 		return;
 	}
@@ -406,7 +408,7 @@ static void init_ports(void)
 	 * Wenn nichts konfiguriert wurde, werden alle Ports auf Eingang geschaltet.
 	 * und die Pullups eingeschaltet.
 	 */
-	if (!isConfigured())
+	if (!IS_CONFIGURED)
 	{
  		/* Alle Ports auf Eingang. */
 		DDRA = 0;
@@ -498,7 +500,7 @@ static void can_wait_for_tx(void)
 static void signal_init(void)
 {
 	serial_init();
-	if (isConfigured())
+	if (IS_CONFIGURED)
 	{
 		int i;
 
@@ -525,10 +527,10 @@ int main(int argc,char *argv[])
 	}
 
 	// Zustandsautomaten initialisieren
-	init_firmware();
+	init_CAN_Node();
 	
 	// CAN-Bus initialisieren
-	mcp2515_init(config.id, isConfigured(), MCP2515_MULTI_TX_BUFFER);
+	mcp2515_init(config.id, IS_CONFIGURED, MCP2515_MULTI_TX_BUFFER);
 
 	// Hardware initialisieren
 	timer2_init();

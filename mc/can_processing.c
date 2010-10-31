@@ -31,16 +31,3 @@ int8_t isResetting(void)
 {
 	return get_state_CAN_Node() == CAN_NODE__RESETTING;
 }
-
-void init_firmware(void)
-{
-	init_CAN_Node();
-}
-
-/**
- * Diese Routine verarbeitet eine einzelne CAN-Message.
- */
-void process_can_message(CAN_message *msg)
-{
-	CAN_Node(msg);
-}

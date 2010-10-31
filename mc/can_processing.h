@@ -24,11 +24,7 @@
 
 #include "mcp2515.h"
 
-extern void init_firmware(void);
-extern void process_can_message(CAN_message *msg);
-
 extern int8_t isConfiguring(void);
 extern int8_t isResetting(void);
-extern int8_t isConfigured(void);
 
 #endif

@@ -597,7 +597,7 @@ int8_t idChanged(CAN_message *msg)
 
 int8_t isConfigured(CAN_message *msg)
 {
-	return config.magic == CONFIG_MAGIC;
+	return IS_CONFIGURED;
 }
 
 int8_t isCommandPending(CAN_message *msg)
