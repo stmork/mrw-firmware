@@ -19,6 +19,7 @@
 **
 */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
@@ -34,39 +35,57 @@
 
 #include "can_pc.h"
 #include "mrw_dump.h"
-
-struct transport_info
-{
-	int src;
-	int dst;
-};
+#include "mrw_thread.h"
 
 #define BUFFER_MAX 256
 #define BUFFER_MASK (BUFFER_MAX-1)
 
-typedef struct
+static Mutex log_mutex;
+
+class SendBuffer : public Thread, public Event
 {
 	int wpos;
 	int rpos;
 	int dst;
-	pthread_mutex_t mutex;
-	pthread_cond_t  event;
+	const char *marker;
 
 	receive_buffer buffer[BUFFER_MAX];
-} send_buffer;
 
-static pthread_mutex_t log_mutex;
+	static unsigned int Sender(void *ptr);
 
-static void *sender(void *ptr)
+public:
+	SendBuffer(int dst, const char *marker) : marker(marker)
+	{
+		wpos = 0;
+		rpos = 0;
+		this->dst = dst;
+		Start(Sender, this, -5);
+	}
+
+	int Receive(unsigned char c)
+	{
+		return uart_receive(&buffer[wpos], c);
+	}
+
+	void Increment()
+	{
+		wpos = (wpos + 1) & BUFFER_MASK;
+	}
+
+	void Init()
+	{
+		uart_init(&buffer[wpos]);
+	}
+};
+
+unsigned int SendBuffer::Sender(void *ptr)
 {
-	send_buffer *buffer = (send_buffer *)ptr;
+	SendBuffer *buffer = (SendBuffer *)ptr;
 	int dst = buffer->dst;
 	
 	do
 	{
-		pthread_mutex_lock(&buffer->mutex);
-		pthread_cond_wait(&buffer->event,&buffer->mutex);
-		pthread_mutex_unlock(&buffer->mutex);
+		buffer->Event::Wait();
 
 		while(buffer->rpos != buffer->wpos)
 		{
@@ -76,9 +95,11 @@ static void *sender(void *ptr)
 			receive_buffer *send = &buffer->buffer[buffer->rpos];
 			write(dst, send->input.buffer, send->index);
 
-			pthread_mutex_lock(&log_mutex);
-			dump_mrw_msg(&send->input.can, send->checksum, "<");
-			pthread_mutex_unlock(&log_mutex);
+			{
+				Lock lock(log_mutex);
+
+				dump_mrw_msg(&send->input.can, send->checksum, buffer->marker);
+			}
 
 			buffer->rpos = (buffer->rpos + 1) & BUFFER_MASK;
 		}
@@ -86,22 +107,30 @@ static void *sender(void *ptr)
 	while(1);
 }
 
-static void *transport(void *ptr)
+class TransportInfo : public Thread
 {
-	struct transport_info *info = (struct transport_info *)ptr;
+	int src;
+	int dst;
+	const char *marker;
+	
+	static unsigned int Transporter(void *);
+
+public:
+	TransportInfo(int src, int dst, const char *marker) : marker(marker)
+	{
+		this->src = src;
+		this->dst = dst;
+		Start(Transporter, this, 5);
+	}
+};
+
+unsigned int TransportInfo::Transporter(void *ptr)
+{
+	TransportInfo *info = (TransportInfo *)ptr;
 
 	unsigned char c[16];
 	size_t read_bytes;
-	send_buffer buffer;
-	pthread_t sender_thread;
-
-	buffer.rpos  = 0;
-	buffer.wpos  = 0;
-	buffer.dst   = info->dst;
-	pthread_mutex_init(&buffer.mutex, NULL);
-	pthread_cond_init(&buffer.event, NULL);
-
-	pthread_create(&sender_thread, NULL, sender, &buffer);
+	SendBuffer buffer(info->dst, info->marker);
 
 	while(1)
 	{
@@ -112,20 +141,18 @@ static void *transport(void *ptr)
 
 			for (i = 0; i < read_bytes;i++)
 			{
-				int result = uart_receive(&buffer.buffer[buffer.wpos], c[i]);
+				int result = buffer.Receive(c[i]);
+
 				switch (result)
 				{
 				case 1:
 #ifdef _DEBUG
 					printf("Retriever %d -> %d [%d,%d]\n", info->src, info->dst, buffer.rpos, buffer.wpos);
 #endif
-					pthread_mutex_lock(&buffer.mutex);
-					pthread_cond_broadcast(&buffer.event);
-					pthread_mutex_unlock(&buffer.mutex);
-
-					buffer.wpos = (buffer.wpos + 1) & BUFFER_MASK;
+					buffer.Increment();
+					buffer.Pulse();
 				case -1:
-					uart_init(&buffer.buffer[buffer.wpos]);
+					buffer.Init();
 					break;
 				}
 			}
@@ -133,30 +160,25 @@ static void *transport(void *ptr)
 		else if (read_bytes < 0)
 		{
 			perror(0);
-			return;
+			return -1;
+		}
+		else
+		{
+			return 1;
 		}
 	}
+	return 0;
 }
 
 static void child(int uart, int s)
 {
-	struct transport_info tcp_to_uart_info;
-	struct transport_info uart_to_tcp_info;
-	
-	pthread_t tcp_to_uart;
-	pthread_t uart_to_tcp;
+	TransportInfo tcp_to_uart(s, uart, "<");
+	TransportInfo uart_to_tcp(uart, s, ">");
 
-	printf("Starting TCP<->UART communication...\n");
-	uart_to_tcp_info.src = uart;
-	uart_to_tcp_info.dst = s;
-	pthread_create(&uart_to_tcp, NULL, transport, &uart_to_tcp_info);
+	printf("Starting TCP (%d) <-> UART (%d) communication...\n", s, uart);
 
-	tcp_to_uart_info.src = s;
-	tcp_to_uart_info.dst = uart;
-	pthread_create(&tcp_to_uart, NULL, transport, &tcp_to_uart_info);
-
-//	pthread_join(uart_to_tcp, NULL);
-	pthread_join(tcp_to_uart, NULL);
+	tcp_to_uart.Wait();
+	uart_to_tcp.Stop();
 	
 	close(s);
 	printf("TCP<->UART communication stopped.\n");
@@ -201,8 +223,6 @@ int main(int argc, char *argv[])
 	printf("Waiting for connection...\n");
 	listen(s, 5);
 
-	pthread_mutex_init(&log_mutex, NULL);
-
 	do
 	{
 		int client = accept(s, (struct sockaddr *)&client_addr, &clientlen);
@@ -219,6 +239,7 @@ int main(int argc, char *argv[])
 			else if (reader == 0)
 			{
 				child(fd, client);
+				return EXIT_SUCCESS;
 			}
 		}
 	}

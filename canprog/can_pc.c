@@ -42,8 +42,8 @@
 int uart_open(char *name)
 {
 	struct termios oldtio,newtio;	
-	int fd = open(name, O_RDWR|O_NOCTTY);
 
+	int fd = open(name, O_RDWR|O_NOCTTY);
 	if (fd >= 0)
 	{
 		tcgetattr(fd,&oldtio);
@@ -52,8 +52,8 @@ int uart_open(char *name)
 		newtio.c_iflag = IGNPAR;
 		newtio.c_oflag = 0;
 		newtio.c_lflag = 0;
-		newtio.c_cc[VTIME]    = 9;
-		newtio.c_cc[VMIN]     = 0;
+		newtio.c_cc[VTIME]    = 0;
+		newtio.c_cc[VMIN]     = 1;
 		tcflush(fd, TCIFLUSH);
 		tcsetattr(fd,TCSANOW,&newtio);
 

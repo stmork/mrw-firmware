@@ -22,6 +22,11 @@
 #ifndef UART_PC_H
 #define UART_PC_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 
@@ -52,5 +57,9 @@ extern int   uart_receive(receive_buffer *buffer,uint8_t byte);
 
 extern void  can_fill_message(CAN_message *msg, uint8_t cmd, uint16_t id, uint16_t no);
 extern void  can_add_data(CAN_message *msg, uint8_t data);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif

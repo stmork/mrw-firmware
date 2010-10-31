@@ -166,7 +166,7 @@ static char* find_signal_text(uint8_t code)
 	return NULL;
 }
 
-void dump_can_msg(CAN_message *msg, unsigned char sum, char *comment)
+void dump_can_msg(CAN_message *msg, unsigned char sum, const char *comment)
 {
 	int    i;
 	time_t now = time(&now);
@@ -182,7 +182,7 @@ void dump_can_msg(CAN_message *msg, unsigned char sum, char *comment)
 	fflush(stdout);
 }
 
-void dump_mrw_msg(CAN_message *msg, uint8_t checksum, char *comment)
+void dump_mrw_msg(CAN_message *msg, uint8_t checksum, const char *comment)
 {
 	uint8_t  cmd = msg->data[0];
 	char    *cmd_text = find_cmd_text(cmd & CMD_MASK);
