@@ -128,25 +128,26 @@
 #define MSG_ID_CHANGE_DISABLED   17
 #define MSG_HARDWARE_MISMATCH    18
 #define MSG_SWITCH_FAILED        19
+#define MSG_CONFIG_BUFFER_FULL   20
 
-#define TYPE_SWITCH_OLD    0
-#define TYPE_SWITCH_NEW    1
-#define TYPE_SIGNAL_PF2    2
-#define TYPE_SIGNAL_MF2    3
-#define TYPE_SIGNAL_SF2    4
-#define TYPE_SIGNAL_PF3    5
-#define TYPE_SIGNAL_MF3    6
-#define TYPE_RAIL          7
-#define TYPE_SIGNAL_PL2    8
-#define TYPE_SIGNAL_ML2    9
-#define TYPE_SIGNAL_SL2   10
-#define TYPE_SIGNAL_PL3   11
-#define TYPE_SIGNAL_ML3   12
-#define TYPE_SIGNAL_ML4   13
-#define TYPE_LIGHT        14
-#define TYPE_SIMPLE_LIGHT 15
+#define TYPE_SWITCH_OLD           0
+#define TYPE_SWITCH_NEW           1
+#define TYPE_SIGNAL_PF2           2
+#define TYPE_SIGNAL_MF2           3
+#define TYPE_SIGNAL_SF2           4
+#define TYPE_SIGNAL_PF3           5
+#define TYPE_SIGNAL_MF3           6
+#define TYPE_RAIL                 7
+#define TYPE_SIGNAL_PL2           8
+#define TYPE_SIGNAL_ML2           9
+#define TYPE_SIGNAL_SL2          10
+#define TYPE_SIGNAL_PL3          11
+#define TYPE_SIGNAL_ML3          12
+#define TYPE_SIGNAL_ML4          13
+#define TYPE_LIGHT               14
+#define TYPE_SIMPLE_LIGHT        15
 
-#define SWITCH_DEPRELL 3
+#define SWITCH_DEPRELL            3
 
 struct mrw_switch
 {

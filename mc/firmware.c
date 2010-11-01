@@ -182,7 +182,7 @@ ISR(TIMER2_OVF_vect)
 	uint8_t     cmd;
 	uint8_t     code;
 	uint8_t     dir;
-	int         i;
+	uint8_t     i;
 
 	/*
 	 * Hier wird der Watch dog reset durchgeführt. Da das die einzige
@@ -215,10 +215,9 @@ ISR(TIMER2_OVF_vect)
 	 * verschickt werden.
 	 */
 	switch_elapsed++;
+	dvc = config.dvc;
 	for (i = 0;i < config.count; i++)
 	{
-		dvc = &config.dvc[i];
-
 		switch (dvc->unit_type)
 		{
 		case TYPE_SWITCH_NEW:
@@ -273,6 +272,7 @@ ISR(TIMER2_OVF_vect)
 			light_dimm(&dvc->unit.u_light);
 			break;
 		}
+		dvc++;
 	}
 
 	/* Test, ob es überhaupt was zu tun gibt. */
@@ -402,7 +402,7 @@ ISR(TIMER1_COMPA_vect)
 
 static void init_ports(void)
 {
-	int i;
+	uint8_t i;
 
 	/*
 	 * Wenn nichts konfiguriert wurde, werden alle Ports auf Eingang geschaltet.
@@ -426,10 +426,9 @@ static void init_ports(void)
 	/*
 	 * Hier wird pro konfiguriertem Gerät die Portansteuerung programmiert.
 	 */
+	mrw_device *dvc = config.dvc;
 	for (i = 0;i < config.count; i++)
 	{
-		mrw_device *dvc = &config.dvc[i];
-
 		switch (config.dvc[i].unit_type)
 		{
 		case TYPE_SWITCH_OLD:
@@ -478,6 +477,7 @@ static void init_ports(void)
 			simple_light_init(&dvc->unit.u_simple_light);
 			break;
 		}
+		dvc++;
 	}
 }
 
@@ -502,11 +502,12 @@ static void signal_init(void)
 	serial_init();
 	if (IS_CONFIGURED)
 	{
-		int i;
+		mrw_device *dvc = config.dvc;
+		uint8_t     i;
 
 		for (i = 0;i < config.count; i++)
 		{
-			compute_signal(&config.dvc[i]);
+			compute_signal(dvc++);
 		}
 	}
 }

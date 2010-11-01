@@ -20,6 +20,7 @@
 */
 
 #include <avr/interrupt.h>
+#include <string.h>
 
 #include "CAN_NodeActivity.h"
 
@@ -32,6 +33,7 @@
 #include "switch.h"
 #include "light.h"
 #include "rail.h"
+#include "serial.h"
 #include "signal.h"
 #include "revision.h"
 
@@ -56,6 +58,7 @@ int8_t  configBegin(CAN_message *msg)
 {
 	config.count  = 0;
 	config.magic  = 0;
+	memset(&config.dvc, 0, sizeof(config.dvc));
 
 	return MSG_OK;
 }
@@ -86,6 +89,11 @@ int8_t  configEnd(CAN_message *msg)
 /* CFGMF2 */
 int8_t  configMainForm2(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SIGNAL_MF2;
@@ -100,6 +108,11 @@ int8_t  configMainForm2(CAN_message *msg)
 /* CFGMF3 */
 int8_t  configMainForm3(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SIGNAL_MF3;
@@ -115,6 +128,11 @@ int8_t  configMainForm3(CAN_message *msg)
 /* CFGML2 */
 int8_t  configMainLight2(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -127,6 +145,11 @@ int8_t  configMainLight2(CAN_message *msg)
 /* CFGML3 */
 int8_t  configMainLight3(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -139,6 +162,11 @@ int8_t  configMainLight3(CAN_message *msg)
 /* CFGML4 */
 int8_t  configMainLight4(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -151,6 +179,11 @@ int8_t  configMainLight4(CAN_message *msg)
 /* CFGPF2 */
 int8_t  configPreForm2(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SIGNAL_PF2;
@@ -165,6 +198,11 @@ int8_t  configPreForm2(CAN_message *msg)
 /* CFGPF3 */
 int8_t  configPreForm3(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SIGNAL_PF3;
@@ -180,6 +218,11 @@ int8_t  configPreForm3(CAN_message *msg)
 /* CFGPL2 */
 int8_t  configPreLight2(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -192,6 +235,11 @@ int8_t  configPreLight2(CAN_message *msg)
 /* CFGPL3 */
 int8_t  configPreLight3(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -204,6 +252,11 @@ int8_t  configPreLight3(CAN_message *msg)
 /* CFGRAI */
 int8_t  configRail(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_RAIL;
@@ -218,6 +271,11 @@ int8_t  configRail(CAN_message *msg)
 /* CFGSL2 */
 int8_t  configRaillockLight2(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_no   = msg->eid;
@@ -230,6 +288,11 @@ int8_t  configRaillockLight2(CAN_message *msg)
 /* CFGSWN */
 int8_t  configSwitchNew(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SWITCH_NEW;
@@ -246,6 +309,11 @@ int8_t  configSwitchNew(CAN_message *msg)
 /* CFGSWO */
 int8_t  configSwitchOld(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	dvc->unit_type = TYPE_SWITCH_OLD;
@@ -260,6 +328,11 @@ int8_t  configSwitchOld(CAN_message *msg)
 /* CFGLGT */
 int8_t  configLight(CAN_message *msg)
 {
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
 	mrw_device *dvc = &config.dvc[config.count];
 
 	if (msg->length >= 4)
@@ -470,10 +543,7 @@ int8_t sensor(CAN_message *msg)
 			}
 			else if (dvc->unit_type == TYPE_SIMPLE_LIGHT)
 			{
-				if(simple_light_set_lightness(&dvc->unit.u_simple_light, msg->data[2]) != 0)
-				{
-					compute_signal(dvc);
-				}
+				simple_light_set_lightness(&dvc->unit.u_simple_light, msg->data[2]);
 			}
 			else
 			{
@@ -496,16 +566,14 @@ int8_t sensor(CAN_message *msg)
 				}
 				else if (dvc->unit_type == TYPE_SIMPLE_LIGHT)
 				{
-					if(simple_light_set_lightness(&dvc->unit.u_simple_light, msg->data[2]) != 0)
-					{
-						compute_signal(dvc);
-					}
+					simple_light_set_lightness(&dvc->unit.u_simple_light, msg->data[2]);
 					lights++;
 				}
 			}
 			if (lights > 0)
 			{
 				queue_infos3(msg->data[0], 0, MSG_OK, msg->data[1], msg->data[2], lights);
+//				queue_infos2(msg->data[0], 0, MSG_OK, serial_buffer[7], serial_buffer[6]);
 			}
 		}
 	}

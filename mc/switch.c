@@ -93,7 +93,7 @@ uint8_t switch_dir(struct mrw_switch *device)
 
 void form2_init(struct mrw_form2 *signal)
 {
-	for (int i = 0;i < 2;i++)
+	for (uint8_t i = 0;i < 2;i++)
 	{
 		out_pin(&signal->inductor[i]);
 	}
@@ -126,7 +126,7 @@ uint8_t form2_turn(struct mrw_form2 *signal, uint8_t cmd)
 
 void form2_off(struct mrw_form2 *signal)
 {
-	for (int i = 0;i < 2;i++)
+	for (uint8_t i = 0;i < 2;i++)
 	{
 		clr_pin(&signal->inductor[i]);
 	}
@@ -138,7 +138,7 @@ void form2_off(struct mrw_form2 *signal)
 
 void form3_init(struct mrw_form3 *signal)
 {
-	for (int i = 0;i < 3;i++)
+	for (uint8_t i = 0;i < 3;i++)
 	{
 		out_pin(&signal->inductor[i]);
 	}
@@ -180,7 +180,7 @@ uint8_t form3_turn(struct mrw_form3 *signal, uint8_t cmd)
 
 void form3_off(struct mrw_form3 *signal)
 {
-	for (int i = 0;i < 3;i++)
+	for (uint8_t i = 0;i < 3;i++)
 	{
 		clr_pin(&signal->inductor[i]);
 	}

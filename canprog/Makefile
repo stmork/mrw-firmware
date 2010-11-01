@@ -4,7 +4,7 @@ SRC		= canprog.c gwsim.c can_pc.c mrw_dump.c receive.c ping.c send.c\
 	qryerr.c qrybuf.c reset.c switch.c signal.c form.c config.c setid.c\
 	rail.c occupation.c light.c busy.c mrw_daemon.cc
 PROGS		= canprog gwsim receive ping send reset switch signal form config qrybuf\
-	qryerr setid rail occupation light busy mrw_daemon
+	qryerr setid rail occupation light busy mrw_daemon controller11
 
 LDFLAGS		= -lm -lpthread
 CPPFLAGS	= -I ../mc
@@ -40,6 +40,8 @@ signal:	signal.o can_pc.o mrw_dump.o
 form:	form.o can_pc.o mrw_dump.o
 
 config:	config.o can_pc.o mrw_dump.o
+
+controller11:	controller11.o can_pc.o mrw_dump.o
 
 setid:	setid.o can_pc.o mrw_dump.o
 

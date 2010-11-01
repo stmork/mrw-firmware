@@ -83,7 +83,8 @@ void init_light_signal(
 {
 	dvc->unit_type = type;
 	dvc->unit.u_signal.count = count;
-	for (int i = 0;i < count;i++)
+
+	for (uint8_t i = 0;i < count;i++)
 	{
 		dvc->unit.u_signal.byte[i] = buffer[i] >> 3;
 		dvc->unit.u_signal.bit[i]  = buffer[i] & 0x7;

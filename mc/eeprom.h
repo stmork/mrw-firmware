@@ -44,6 +44,9 @@ struct eeprom_area
 
 #define CONFIG_MAGIC 0xa5
 
+#define IS_CONFIGURED  (config.magic == CONFIG_MAGIC)
+#define IS_CONFIG_FULL (config.count >= MAX_DEVICES)
+
 extern uint16_t read_eeprom_module_uid(void);
 extern uint8_t  is_eeprom_configured(void);
 extern uint8_t  read_eeprom_config(struct eeprom_area *config);

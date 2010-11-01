@@ -23,9 +23,9 @@ revision.h:	.
 ###########################
 
 firmware.out:	firmware.o bit.o mcp2515.o rail.o signal.o spi.o switch.o eeprom.o\
-	serial.o timer.o sleep.o can_ring.o cmd_queue.o result_queue.o config.o\
+	timer.o sleep.o can_ring.o cmd_queue.o result_queue.o\
 	can_processing.o CAN_Node.o CAN_NodeActivity.o light.o light_profile.o\
-	pwm.o random.o
+	pwm.o random.o config.o serial.o
 	$(LINK.c) -Wl,-Map,firmware.map -o $@ $^
 
 firmware.hex:	firmware.out

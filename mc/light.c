@@ -26,6 +26,7 @@
 #include "light_profile.h"
 #include "pwm.h"
 #include "random.h"
+#include "serial.h"
 
 static uint8_t has_lights = 0;
 
@@ -53,12 +54,14 @@ uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightne
 			/* Zustandsübergang: Ausschalten */
 			dvc->on = 0;
 			changed = 1;
+			CLR_SER_BIT(dvc->byte, dvc->bit);
 		}
 		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
 		{
 			/* Zustandsübergang: Einschalten */
 			dvc->on = 1;
 			changed = 1;
+			SET_SER_BIT(dvc->byte, dvc->bit);
 		}
 		dvc->lightness = lightness;
 	}

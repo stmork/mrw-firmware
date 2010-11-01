@@ -45,7 +45,7 @@
  */
 void uart_init(void)
 {
-	int i;
+	uint8_t i;
 
 	// set baud rate
 	UBRRH = UBRR_VAL >> 8;
