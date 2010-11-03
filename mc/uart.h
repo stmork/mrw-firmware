@@ -24,9 +24,11 @@
 
 #include <avr/io.h>
 
+#define UART_ENABLE_TX_IRQ()  SET_PORT_BIT(UCSRB, UDRIE)
+#define UART_DISABLE_TX_IRQ() CLR_PORT_BIT(UCSRB, UDRIE)
+
 extern void    uart_init(void);
 extern void    uart_tx_byte(uint8_t val);
 extern uint8_t uart_rx_byte(void);
-extern void    uart_enable_tx_interrupt(uint8_t enable);
 
 #endif

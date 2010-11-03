@@ -162,7 +162,7 @@ static int8_t uart_send_msg(CAN_message *msg)
 	 * nächsten Methode der ISR beim Aktivieren von UDRIE der ISR
 	 * ausgelöst.
 	 */
-	uart_enable_tx_interrupt(1);
+	UART_ENABLE_TX_IRQ();
 
 	return 1;
 }
@@ -228,7 +228,7 @@ ISR(USART_UDRE_vect)
 		 * Wenn alles übertragen ist, Interrupt wieder ausschalten. Das ist
 		 * wichtig, weil sonst nur noch "leere" Interrupts ausgeführt werden.
 		 */
-		uart_enable_tx_interrupt(0);
+		UART_DISABLE_TX_IRQ();
 
 		/*
 		 * Puffer wird mit Synchronisationssequenz aufgefüllt, wenn er leer
@@ -289,7 +289,7 @@ static void uart_process_byte(uint8_t udr)
 			uart_tx_buffer[uart_tx_pos++] = 0x19;
 			uart_tx_count++;
 			sei();
-			uart_enable_tx_interrupt(1);
+			UART_ENABLE_TX_IRQ();
 		}
 	}
 #ifdef MRW_H

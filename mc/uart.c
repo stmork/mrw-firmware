@@ -67,18 +67,6 @@ void uart_init(void)
 	}
 }
 
-void uart_enable_tx_interrupt(uint8_t enable)
-{
-	if (enable)
-	{
-		SET_PORT_BIT(UCSRB, UDRIE);
-	}
-	else
-	{
-		CLR_PORT_BIT(UCSRB, UDRIE);
-	}
-}
-
 /**
  * Diese Routine versendet ein Byte.
  */
