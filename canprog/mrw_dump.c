@@ -102,7 +102,8 @@ struct string_map result_map[] =
 	{ MSG_INFO,               "MSG_INFO" },
 	{ MSG_ID_CHANGE_DISABLED, "MSG_ID_CHANGE_DISABLED" },
 	{ MSG_HARDWARE_MISMATCH,  "MSG_HARDWARE_MISMATCH" },
-	{ MSG_SWITCH_FAILED,      "MSG_SWITCH_FAILED" }
+	{ MSG_SWITCH_FAILED,      "MSG_SWITCH_FAILED" },
+	{ MSG_CONFIG_BUFFER_FULL, "MSG_CONFIG_BUFFER_FULL" }
 };
 
 struct string_map signal_map[] =

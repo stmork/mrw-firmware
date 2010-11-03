@@ -229,6 +229,18 @@ ISR(USART_UDRE_vect)
 		 * wichtig, weil sonst nur noch "leere" Interrupts ausgeführt werden.
 		 */
 		uart_enable_tx_interrupt(0);
+
+		/*
+		 * Puffer wird mit Synchronisationssequenz aufgefüllt, wenn er leer
+		 * gelaufen ist. Beim nächsten Senden wird diese vorausgeschickt.
+		 */		
+		uart_tx_start = 0;
+		uart_tx_count =
+		uart_tx_pos   = 8;
+		for (uint8_t i = 0;i < uart_tx_pos;i++)
+		{
+			uart_tx_buffer[i] = 0;
+		}
 	}
 }
 
