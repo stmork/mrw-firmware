@@ -389,14 +389,16 @@ ISR(TIMER2_OVF_vect)
  */
 ISR(TIMER1_COMPA_vect)
 {
-	uint8_t i;
+	mrw_device *dvc = config.dvc;
+	uint8_t     i;
 
 	for (i = 0;i < config.count; i++)
 	{
-		if (config.dvc[i].unit_type == TYPE_LIGHT)
+		if (dvc->unit_type == TYPE_LIGHT)
 		{
-			handle_pwm(&config.dvc[i].unit.u_light);
+			handle_pwm(&dvc->unit.u_light);
 		}
+		dvc++;
 	}
 }
 
@@ -429,7 +431,7 @@ static void init_ports(void)
 	mrw_device *dvc = config.dvc;
 	for (i = 0;i < config.count; i++)
 	{
-		switch (config.dvc[i].unit_type)
+		switch (dvc->unit_type)
 		{
 		case TYPE_SWITCH_OLD:
 			switch_init_old(&dvc->unit.u_switch);

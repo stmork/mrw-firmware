@@ -333,7 +333,6 @@ static void flash(uint16_t cid)
 				{
 					// return to App
 					can_reply_message(&msg, cid, MSG_IGNORED);
-					return;
 				}
 			}
 		}

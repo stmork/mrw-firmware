@@ -28,11 +28,11 @@
 
 #define SPM_PAGESIZE 128
 
-// delay after reset (1500 ms)
-#define DELAY_RESET 1500000
+// delay after reset (1200 ms)
+#define DELAY_RESET 1200000
 
-// delay after flash request (10 ms)
-#define DELAY_FLASH_REQUEST 100000
+// delay after flash request (20 ms)
+#define DELAY_FLASH_REQUEST 200000
 
 // delay for flashing a page (60 ms)
 #define DELAY_FLASH_PAGE 60000
