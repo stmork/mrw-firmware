@@ -37,17 +37,19 @@ uint8_t clr_bits[8] =
 
 void set_pin(mrw_connection *con)
 {
-	uint8_t value = set_bits[con->pin];
+	register uint8_t bit   = CONNECTION_BITS(con->bit);
+	register uint8_t port  = CONNECTION_PORT(con->bit);
+	register uint8_t value = set_bits[bit];
 
-	switch(con->port)
+	switch(port)
 	{
-	case 0:
+	case  0:
 		PORTA |= value;
 		break;
-	case 1:
+	case  8:
 		PORTC |= value;
 		break;
-	case 2:
+	case 16:
 		PORTD |= value;
 		break;
 	}
@@ -55,17 +57,19 @@ void set_pin(mrw_connection *con)
 
 void clr_pin(mrw_connection *con)
 {
-	uint8_t mask = clr_bits[con->pin];
+	register uint8_t bit  = CONNECTION_BITS(con->bit);
+	register uint8_t port = CONNECTION_PORT(con->bit);
+	register uint8_t mask = clr_bits[bit];
 
-	switch(con->port)
+	switch(port)
 	{
-	case 0:
+	case  0:
 		PORTA &= mask;
 		break;
-	case 1:
+	case  8:
 		PORTC &= mask;
 		break;
-	case 2:
+	case 16:
 		PORTD &= mask;
 		break;
 	}
@@ -73,17 +77,19 @@ void clr_pin(mrw_connection *con)
 
 void out_pin(mrw_connection *con)
 {
-	uint8_t value = set_bits[con->pin];
+	register uint8_t port  = CONNECTION_PORT(con->bit);
+	register uint8_t bit   = CONNECTION_BITS(con->bit);
+	register uint8_t value = set_bits[bit];
 
-	switch(con->port)
+	switch(port)
 	{
-	case 0:
+	case  0:
 		DDRA |= value;
 		break;
-	case 1:
+	case  8:
 		DDRC |= value;
 		break;
-	case 2:
+	case 16:
 		DDRD |= value;
 		break;
 	}
@@ -91,49 +97,51 @@ void out_pin(mrw_connection *con)
 
 void in_pin(mrw_connection *con, uint8_t pullup)
 {
-	uint8_t mask  = clr_bits[con->pin];
+	register uint8_t port  = CONNECTION_PORT(con->bit);
+	register uint8_t bit   = CONNECTION_BITS(con->bit);
+	register uint8_t mask  = clr_bits[bit];
 
-	switch(con->port)
+	switch(port)
 	{
-	case 0:
+	case  0:
 		DDRA  &= mask;
 		break;
-	case 1:
+	case  8:
 		DDRC  &= mask;
 		break;
-	case 2:
+	case 16:
 		DDRD  &= mask;
 		break;
 	}
 	
 	if (pullup)
 	{
-		uint8_t value = set_bits[con->pin];
+		uint8_t value = set_bits[bit];
 
-		switch(con->port)
+		switch(port)
 		{
-		case 0:
+		case  0:
 			PORTA |= value;
 			break;
-		case 1:
+		case  8:
 			PORTC |= value;
 			break;
-		case 2:
+		case 16:
 			PORTD |= value;
 			break;
 		}
 	}
 	else
 	{
-		switch(con->port)
+		switch(port)
 		{
-		case 0:
+		case  0:
 			PORTA &= mask;
 			break;
-		case 1:
+		case  8:
 			PORTC &= mask;
 			break;
-		case 2:
+		case 16:
 			PORTD &= mask;
 			break;
 		}
@@ -142,15 +150,17 @@ void in_pin(mrw_connection *con, uint8_t pullup)
 
 uint8_t tst_pin(mrw_connection *con)
 {
-	uint8_t mask  = set_bits[con->pin];
+	register uint8_t port  = CONNECTION_PORT(con->bit);
+	register uint8_t bit   = CONNECTION_BITS(con->bit);
+	register uint8_t mask  = set_bits[bit];
 
-	switch(con->port)
+	switch(port)
 	{
-	case 0:
+	case  0:
 		return PINA & mask;
-	case 1:
+	case  8:
 		return PINC & mask;
-	case 2:
+	case 16:
 		return PIND & mask;
 	}
 	return 0;
@@ -158,15 +168,7 @@ uint8_t tst_pin(mrw_connection *con)
 
 void config_connection(mrw_connection *con, uint8_t con_no)
 {
-	if (con_no < 8)
-	{
-		con->pin = 7 - (con_no & 0x7);
-	}
-	else
-	{
-		con->pin = con_no & 0x7;
-	}
-	con->port = con_no >> 3;
+	con->bit = con_no < 8 ? 7 - con_no : con_no;
 }
 
 void init_input(mrw_input *input, uint8_t pullup)

@@ -45,7 +45,7 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
  */
 void set_dimm(struct mrw_light *dvc, uint8_t value)
 {
-	value         >>= PWM_SHIFT;
+	value >>= PWM_SHIFT;
 
 	if (value == 0)
 	{

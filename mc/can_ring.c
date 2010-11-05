@@ -79,17 +79,6 @@ void ring_decrease(struct can_ring *ring)
 	SREG = sreg;
 }
 
-uint8_t ring_has_messages(struct can_ring *ring)
-{
-	uint8_t sreg = SREG;
-
-	cli();
-	uint8_t result = ring->size > 0;
-	SREG = sreg;
-
-	return result;
-}
-
 uint8_t ring_has_overflow(struct can_ring *ring)
 {
 	uint8_t sreg = SREG;

@@ -132,27 +132,30 @@ static void process_can_messages(void)
  */
 static int8_t uart_send_msg(CAN_message *msg)
 {
-	uint8_t *buffer = (uint8_t *)msg;
-	uint8_t  sum    = 0;
-	int      i;
-	int      len    = offsetof(CAN_message, data[msg->length]);
-
 	cli();
+
+	register uint8_t *buffer = (uint8_t *)msg;
+	register uint8_t  pos    = uart_tx_pos;
+	register uint8_t  sum    = 0;
+	register uint8_t  i;
+	register uint8_t  len    = offsetof(CAN_message, data[msg->length]);
+
 	for(i = 0;i < len;i++)
 	{
-		uart_tx_buffer[uart_tx_pos++] = buffer[i];
+		uart_tx_buffer[pos++] = buffer[i];
 		sum -= buffer[i];
 	}
-	uart_tx_buffer[uart_tx_pos++] = sum;
+	uart_tx_buffer[pos++] = sum;
 	
 	/*
 	 * Das hier wäre eine neue CAN-Länge. Sie ist ungültig und kann
 	 * den Remote-Zustandsautomaten wieder In-Sync bringen, falls bei
 	 * der Übertragung ein Byte verloren gegangen ist.
 	 */
-	uart_tx_buffer[uart_tx_pos++] = 0x68;
+	uart_tx_buffer[pos++] = 0x68;
 
 	uart_tx_count += (len + 2);
+	uart_tx_pos = pos;
 	sei();
 
 	/*
@@ -190,7 +193,7 @@ ISR(INT2_vect)
 ISR(USART_RXC_vect)
 {
 	BUSY;
-	volatile uint8_t udr = UDR;
+	volatile uint8_t  udr = UDR;
 
 	uart_received++;
 
@@ -205,19 +208,21 @@ ISR(USART_RXC_vect)
 		while(1);
 	}
 
-	uart_rx_buffer[uart_rx_pos] = udr;
-	uart_rx_pos++;
+	uart_rx_buffer[uart_rx_pos++] = udr;
 	uart_rx_count++;
 }
 
 ISR(USART_UDRE_vect)
 {
 	BUSY;
-	if (uart_tx_count > 0)
+	register uint8_t start = uart_tx_start;
+	register uint8_t pos   = uart_tx_pos;
+	register uint16_t count = uart_tx_count;
+
+	if (count > 0)
 	{
-		uint8_t udr = uart_tx_buffer[uart_tx_start];
-		uart_tx_start++;
-		uart_tx_count--;
+		uint8_t udr = uart_tx_buffer[start++];
+		count--;
 
 		UDR = udr;
 		uart_transmitted++;
@@ -234,14 +239,17 @@ ISR(USART_UDRE_vect)
 		 * Puffer wird mit Synchronisationssequenz aufgefüllt, wenn er leer
 		 * gelaufen ist. Beim nächsten Senden wird diese vorausgeschickt.
 		 */		
-		uart_tx_start = 0;
-		uart_tx_count =
-		uart_tx_pos   = 8;
-		for (uint8_t i = 0;i < uart_tx_pos;i++)
+		start = 0;
+		count =
+		pos   = 8;
+		for (uint8_t i = 0;i < pos;i++)
 		{
 			uart_tx_buffer[i] = 0;
 		}
 	}
+	uart_tx_start = start;
+	uart_tx_count = count;
+	uart_tx_pos   = pos;
 }
 
 /**

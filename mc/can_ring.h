@@ -36,12 +36,13 @@ struct can_ring
 	volatile uint16_t    count;
 };
 
+#define ring_has_messages(ring) ((ring)->size)
+
 extern void         ring_init(struct can_ring *ring);
 extern CAN_message *ring_get_pos(struct can_ring *ring);
 extern CAN_message *ring_get_start(struct can_ring *ring);
 extern uint8_t      ring_increase(struct can_ring *ring);
 extern void         ring_decrease(struct can_ring *ring);
-extern uint8_t      ring_has_messages(struct can_ring *ring);
 extern uint8_t      ring_has_overflow(struct can_ring *ring);
 
 #endif
