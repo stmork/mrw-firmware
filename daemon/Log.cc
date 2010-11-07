@@ -1,6 +1,5 @@
 /*
 **
-**  $Filename:  mrw_daemon.c $
 **  $Revision$
 **  $Date$
 **  $Author$
