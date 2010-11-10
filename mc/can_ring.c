@@ -56,16 +56,19 @@ CAN_message *ring_get_start(struct can_ring *ring)
 
 uint8_t ring_increase(struct can_ring *ring)
 {
-	uint8_t sreg = SREG;
+	register uint8_t sreg = SREG;
 
 	cli();
-	ring->pos = (ring->pos + 1) & CAN_RING_MASK;
-	ring->size++;
+	register uint8_t pos  = ring->pos;
+	register uint8_t size = ring->size;
+	pos = (pos + 1) & CAN_RING_MASK;
+	size++;
 
-	uint8_t result = ring->size >= CAN_RING_SIZE;
+	ring->pos  = pos;
+	ring->size = size;
 	SREG = sreg;
 
-	return result;
+	return size >= CAN_RING_SIZE;
 }
 
 void ring_decrease(struct can_ring *ring)
@@ -77,15 +80,4 @@ void ring_decrease(struct can_ring *ring)
 	ring->size--;
 	ring->count++;
 	SREG = sreg;
-}
-
-uint8_t ring_has_overflow(struct can_ring *ring)
-{
-	uint8_t sreg = SREG;
-
-	cli();
-	uint8_t result = ring->size >= CAN_RING_SIZE;
-	SREG = sreg;
-
-	return result;
 }

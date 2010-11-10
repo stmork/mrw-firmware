@@ -37,12 +37,12 @@ struct can_ring
 };
 
 #define ring_has_messages(ring) ((ring)->size)
+#define ring_has_overflow(ring) ((uint8_t)((ring)->size >= CAN_RING_SIZE))
 
 extern void         ring_init(struct can_ring *ring);
 extern CAN_message *ring_get_pos(struct can_ring *ring);
 extern CAN_message *ring_get_start(struct can_ring *ring);
 extern uint8_t      ring_increase(struct can_ring *ring);
 extern void         ring_decrease(struct can_ring *ring);
-extern uint8_t      ring_has_overflow(struct can_ring *ring);
 
 #endif

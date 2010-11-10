@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/timeb.h>
 
 #ifdef USE_SID_IN_RESULT
 #define IDX_INFO_START 6
@@ -169,11 +169,12 @@ static char* find_signal_text(uint8_t code)
 
 void dump_can_msg(CAN_message *msg, unsigned char sum, const char *comment)
 {
-	int    i;
-	time_t now = time(&now);
+	struct timeb now;
+	int          i;
 
-	printf("%ld # ID=%04x:%04x len=%d stat=%02x",
-		now,
+	ftime(&now);
+	printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x",
+		now.time, now.millitm,
 		msg->sid, msg->eid, msg->length, msg->status);
 	for (i = 0;i < msg->length; i++)
 	{
@@ -190,14 +191,16 @@ void dump_mrw_msg(CAN_message *msg, uint8_t checksum, const char *comment)
 
 	if (cmd_text != NULL)
 	{
-		time_t  now = time(&now);
-		int     i;
+		struct timeb now;
+		int          i;
 
+		ftime(&now);
 		if (cmd & MSG_RESULT)
 		{
 			char   *res_text = find_result_text(msg->data[1]);
 
-			printf("%ld # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x", now,
+			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
+				now.time, now.millitm,
 				msg->sid, msg->eid, msg->length, msg->status,
 				cmd_text,
 				res_text != NULL ? res_text : "<unknown>",
@@ -211,7 +214,8 @@ void dump_mrw_msg(CAN_message *msg, uint8_t checksum, const char *comment)
 		}
 		else
 		{
-			printf("%ld # ID=%04x:%04x len=%d stat=%02x # %s", now,
+			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %s",
+				now.time, now.millitm,
 				msg->sid, msg->eid, msg->length, msg->status, cmd_text);
 			if (cmd == SETSGN)
 			{

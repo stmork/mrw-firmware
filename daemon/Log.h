@@ -42,7 +42,6 @@ private:
 	const char* find_cmd_text(uint8_t code);
 	const char* find_result_text(uint8_t code);
 	const char* find_signal_text(uint8_t code);
-	      void  dump_can_msg(const CAN_message *msg, unsigned char sum, const char *comment);
 };
 
 extern Log logger;

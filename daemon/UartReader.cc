@@ -25,6 +25,8 @@
 
 #include <errno.h>
 
+#define not_VERBOSE
+
 UartReader::UartReader(SerialLine &uart) : uart(uart), Thread("uart reader")
 {
 }
@@ -76,19 +78,37 @@ unsigned int UartReader::Reader(void *ptr)
 		{
 			int i;
 
+#ifdef _VERBOSE
+			printf("%d:", read_bytes);
+#endif
 			for (i = 0; i < read_bytes;i++)
 			{
 				int result = buffer.Receive(c[i]);
 
+#ifdef _VERBOSE
+				printf(" %02x(%d)", c[i], result);
+#endif
 				switch (result)
 				{
 				case 1:
-					buffer.Dump(">");
+#ifdef _VERBOSE
+					printf("\n");
+#endif
+					buffer.Dump("<");
 					reader->Add(buffer);
 					buffer.Init();
 					break;
+
+#ifdef _VERBOSE
+				case -1:
+					printf("\n");
+					break;
+#endif
 				}
 			}
+#ifdef _VERBOSE
+			printf("\n");
+#endif
 		}
 		else if (read_bytes < 0)
 		{

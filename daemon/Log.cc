@@ -18,6 +18,7 @@
 **
 */
 
+#include <sys/timeb.h>
 #include "Log.h"
 #include <algorithm>
 
@@ -158,39 +159,24 @@ Log::Log()
 	}
 }
 
-void Log::dump_can_msg(const CAN_message *msg, unsigned char sum, const char *comment)
-{
-	int    i;
-	time_t now = time(&now);
-
-	printf("%ld # ID=%04x:%04x len=%d stat=%02x",
-		now,
-		msg->sid, msg->eid, msg->length, msg->status);
-	for (i = 0;i < msg->length; i++)
-	{
-		printf(" 0x%02x", msg->data[i]);
-	}
-	printf(" # 0x%02x %s\n", sum, comment != NULL ? comment : "");
-	fflush(stdout);
-}
-
 void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 {
-	::Lock lock(*this);
+	struct timeb  now;
+	::Lock        lock(*this);
+	uint8_t       cmd = msg->data[0];
+	const char   *cmd_text = find_cmd_text(cmd & CMD_MASK);
 
-	uint8_t  cmd = msg->data[0];
-	const char    *cmd_text = find_cmd_text(cmd & CMD_MASK);
-
+	ftime(&now);
 	if (cmd_text != NULL)
 	{
-		time_t  now = time(&now);
 		int     i;
 
 		if (cmd & MSG_RESULT)
 		{
 			const char *res_text = find_result_text(msg->data[1]);
 
-			printf("%ld # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x", now,
+			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
+				now.time, now.millitm,
 				msg->sid, msg->eid, msg->length, msg->status,
 				cmd_text,
 				res_text != NULL ? res_text : "<unknown>",
@@ -204,7 +190,8 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 		}
 		else
 		{
-			printf("%ld # ID=%04x:%04x len=%d stat=%02x # %s", now,
+			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %s",
+				now.time, now.millitm,
 				msg->sid, msg->eid, msg->length, msg->status, cmd_text);
 			if (cmd == SETSGN)
 			{
@@ -229,12 +216,21 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 			}
 			printf(" # 0x%02x %s\n", checksum, comment != NULL ? comment : "");
 		}
-		fflush(stdout);
 	}
 	else
 	{
-		dump_can_msg(msg, checksum, comment);
+		int    i;
+
+		printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x",
+			now.time, now.millitm,
+			msg->sid, msg->eid, msg->length, msg->status);
+		for (i = 0;i < msg->length; i++)
+		{
+			printf(" 0x%02x", msg->data[i]);
+		}
+		printf(" # 0x%02x %s\n", checksum, comment != NULL ? comment : "");
 	}
+	fflush(stdout);
 }
 
 void Log::Info(const char *message)

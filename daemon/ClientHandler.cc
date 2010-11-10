@@ -92,7 +92,7 @@ int ClientHandler::Reader()
 				switch (result)
 				{
 				case 1:
-					buffer.Dump("<");
+					buffer.Dump(">");
 					buffer.Write(reader.GetFD());
 					buffer.Init();
 					break;

@@ -16,6 +16,7 @@
 #ifndef RECEIVE_BUFFER_H
 #define RECEIVE_BUFFER_H
 
+#include <sys/timeb.h>
 #include "mcp2515.h"
 #include "Log.h"
 #include "UartReader.h"
@@ -71,10 +72,11 @@ public:
 			{
 				Lock lock(logger);
 
-				time_t now = time(&now);
+				struct timeb now;
 				int i;
 
-				printf("%ld # Checksum error [%02x]: ", now, checksum);
+				ftime(&now);
+				printf("%ld.%03d # Checksum error [%02x]: ", now.time, now.millitm, checksum);
 				for (i = 0;i < index;i++)
 				{
 					printf(" %02x", input.buffer[i]);

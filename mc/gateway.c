@@ -138,7 +138,7 @@ static int8_t uart_send_msg(CAN_message *msg)
 	register uint8_t  pos    = uart_tx_pos;
 	register uint8_t  sum    = 0;
 	register uint8_t  i;
-	register uint8_t  len    = offsetof(CAN_message, data[msg->length]);
+	register uint8_t  len = offsetof(CAN_message, data[msg->length]);
 
 	for(i = 0;i < len;i++)
 	{
@@ -152,10 +152,9 @@ static int8_t uart_send_msg(CAN_message *msg)
 	 * den Remote-Zustandsautomaten wieder In-Sync bringen, falls bei
 	 * der Übertragung ein Byte verloren gegangen ist.
 	 */
-	uart_tx_buffer[pos++] = 0x68;
-
-	uart_tx_count += (len + 2);
-	uart_tx_pos = pos;
+	len++;
+	uart_tx_count += len;
+	uart_tx_pos    = pos;
 	sei();
 
 	/*
