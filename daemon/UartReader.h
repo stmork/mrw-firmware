@@ -43,7 +43,7 @@ public:
 
 private:
 	static unsigned int Reader(void *ptr);
-	void Add(ReceiveBuffer &buffer);
+	       void         Add(ReceiveBuffer &buffer);
 };
 
 #endif
