@@ -214,8 +214,8 @@ ISR(USART_RXC_vect)
 ISR(USART_UDRE_vect)
 {
 	BUSY;
-	register uint8_t start = uart_tx_start;
-	register uint8_t pos   = uart_tx_pos;
+	register uint8_t  start = uart_tx_start;
+	register uint8_t  pos   = uart_tx_pos;
 	register uint16_t count = uart_tx_count;
 
 	if (count > 0)
