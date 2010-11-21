@@ -87,7 +87,7 @@ test_light.lst:	test_light.out
 # Firmware for RGB test
 #######################
 
-RGB.out:	RGB.o mcp2515.o spi.o eeprom.o config.o sleep.o 
+RGB.out:	RGB.o mcp2515.o spi.o eeprom.o config.o sleep.o light.o pwm.o serial.o random.o bit.o light_profile.o timer.o
 	$(LINK.c) -Wl,-Map,RGB.map -o $@ $^
 
 RGB.hex:	RGB.out
