@@ -7,7 +7,7 @@ SRC	= bootloader.c firmware.c gateway.c test.c\
 	CAN_NodeActivity.c\
 	bit.c rail.c signal.c switch.c\
 	mcp2515.c spi.c eeprom.c uart.c serial.c timer.c sleep.c can_ring.c cmd_queue.c result_queue.c config.c\
-	can_processing.c pwm.c test_light.c light_profile.c light.c random.c
+	can_processing.c pwm.c test_light.c light_profile.c light.c random.c RGB.c
 
 OBJCOPY=avr-objcopy
 OBJDUMP=avr-objdump
@@ -83,6 +83,19 @@ test_light.hex:	test_light.out
 test_light.lst:	test_light.out
 	$(OBJDUMP) -h -S -j .text -j .data $^ >$@
 
+#######################
+# Firmware for RGB test
+#######################
+
+RGB.out:	RGB.o mcp2515.o spi.o eeprom.o config.o sleep.o 
+	$(LINK.c) -Wl,-Map,RGB.map -o $@ $^
+
+RGB.hex:	RGB.out
+	$(OBJCOPY) -R .eeprom -O ihex $^ $@
+
+RGB.lst:	RGB.out
+	$(OBJDUMP) -h -S -j .text -j .data $^ >$@
+
 ######################
 # AVR promming targets
 ######################
@@ -98,6 +111,9 @@ install_bootloader_jtag:	bootloader.hex
 
 install_light:	test_light.hex
 	$(AVRDUDE) -p m32 -e -B 8 -U flash:w:$^
+
+install_rgb:	RGB.hex
+	$(AVRDUDE) -p m32 -e -B 8 -U flash:w:$^ -U hfuse:w:0x1:m -U lfuse:w:0x20:m -U lock:w:0x2f:m
 
 verify_firmware:	firmware.hex
 	$(AVRDUDE) -p m32 -B 4 -U flash:v:$^

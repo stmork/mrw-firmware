@@ -20,7 +20,7 @@
 */
 
 #ifndef F_CPU
-#define F_CPU 16000000L
+#define F_CPU 14745600UL
 #endif
 
 #include <stdlib.h>
@@ -106,7 +106,7 @@ int main(void)
 	do
 	{
 		/*
-		 * Ein bißchen was für die Umwelt tun. Es fängt halt
+		 * Ein bißchen was für die Umwelt tun. Es fängt
 		 * halt schon im Kleinen an ;-)
 		 */
 		IDLE;

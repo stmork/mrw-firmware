@@ -52,7 +52,7 @@ static void serial_putc(uint8_t val)
 		
 		// CLK0 setzt Datenbit gleich mit auf 0
 		CLK1;
-		NOP;
+//		NOP;
 		CLK0;
 		DATA0;
 	}
