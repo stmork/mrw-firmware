@@ -42,8 +42,32 @@
 #define INDEX_B2 1
 #define INDEX_G  0
 
+#define PORT_BUSY  PORTC
+#define DDR_BUSY   DDRC
+#define PIN_BUSY     7
+#define PIN_INT1     6
+#define PIN_INT2     5
+#define PIN_INT3     4
+
+#define BUSY_MAIN   (PORT_BUSY = (PORT_BUSY & ~(_BV(PIN_BUSY) | _BV(PIN_INT1) | _BV(PIN_INT2) | _BV(PIN_INT3))) | _BV(PIN_BUSY))
+#define BUSY_INT1   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT1)))
+#define BUSY_INT2   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT2)))
+#define BUSY_INT3   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT3)))
+#define IDLE        (PORT_BUSY &= ~(_BV(PIN_BUSY) | _BV(PIN_INT1) | _BV(PIN_INT2) | _BV(PIN_INT3)))
+ISR(INT2_vect)
+{
+	BUSY_INT1;
+	CAN_message msg;
+
+	while(can_get_msg(&msg) >= 0)
+	{
+	}
+	BUSY_MAIN;
+}
+
 ISR(TIMER1_COMPA_vect)
 {
+	BUSY_INT2;
 	mrw_device *dvc = config.dvc;
 	uint8_t     i;
 
@@ -52,6 +76,7 @@ ISR(TIMER1_COMPA_vect)
 		handle_pwm(&dvc->unit.u_light);
 		dvc++;
 	}
+	BUSY_MAIN;
 }
 
 static uint8_t counter;
@@ -59,6 +84,7 @@ static uint8_t state;
 
 ISR(TIMER2_OVF_vect)
 {
+	BUSY_INT3;
 	uint8_t inv = ~counter;
 
 	switch(state & 7)
@@ -109,6 +135,7 @@ ISR(TIMER2_OVF_vect)
 	{
 		state++;
 	}
+	BUSY_MAIN;
 }
 
 static void config_init(void)
@@ -116,7 +143,7 @@ static void config_init(void)
 	mrw_device *dvc = config.dvc;
 	uint8_t     i;
 
-	for (i = 0;i < 8;i++)
+	for (i = 0;i < 12;i++)
 	{
 		dvc->unit_no                = i + 1;
 		dvc->unit_type              = TYPE_LIGHT;
@@ -124,8 +151,8 @@ static void config_init(void)
 		dvc->unit.u_light.type      = 0;
 		config_connection(&dvc->unit.u_light.pin, i);
 
-		set_dimm  (&dvc->unit.u_light, 0);
 		light_init(&dvc->unit.u_light);
+		set_dimm  (&dvc->unit.u_light, 0);
 		dvc++;
 	}
 	config.count = i;
@@ -133,6 +160,10 @@ static void config_init(void)
 
 int main(void)
 {
+	DDR_BUSY  = 0xff;
+	PORT_BUSY = 0;
+	BUSY_MAIN;
+
 	read_eeprom_config(&config);
 
 	/* Takt initialisieren, so dass MCP2515 seine 16 MHz auch her gibt. */
@@ -150,7 +181,9 @@ int main(void)
 		 * Ein bißchen was für die Umwelt tun. Es fängt halt
 		 * halt schon im Kleinen an ;-)
 		 */
+		IDLE;
 		sleep();
+		BUSY_MAIN;
 	}
 	while(1);
 }
