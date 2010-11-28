@@ -509,6 +509,24 @@ static void signal_init(void)
 
 		for (i = 0;i < config.count; i++)
 		{
+			switch (dvc->unit_type)
+			{
+			case TYPE_SIGNAL_SL2:
+			case TYPE_SIGNAL_PL2:
+			case TYPE_SIGNAL_PL3:
+			case TYPE_SIGNAL_ML2:
+			case TYPE_SIGNAL_ML3:
+			case TYPE_SIGNAL_ML4:
+				for(uint8_t idx = 0; idx < dvc->unit.u_signal.count; idx++)
+				{
+					serial_limit(dvc->unit.u_signal.byte[idx]);
+				}
+				break;
+
+			case TYPE_SIMPLE_LIGHT:
+				serial_limit(dvc->unit.u_simple_light.byte);
+				break;
+			}
 			compute_signal(dvc++);
 		}
 	}

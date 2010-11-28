@@ -44,6 +44,7 @@
 
 extern uint8_t serial_buffer[MAX_SERIAL_BUFFER];
 
+extern void serial_limit(uint8_t byte);
 extern void serial_init(void);
 extern void serial_put_buffer(uint8_t *buffer, uint8_t len);
 extern void clear_serial_buffer(void);

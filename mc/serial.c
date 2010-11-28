@@ -31,7 +31,8 @@
 #define SET0  { PORT_SERIAL &= (~SER_SET); }
 #define SET1  { PORT_SERIAL |=   SER_SET; }
 
-uint8_t serial_buffer[MAX_SERIAL_BUFFER];
+       uint8_t serial_buffer[MAX_SERIAL_BUFFER];
+static uint8_t start_idx = sizeof(serial_buffer);
 
 void serial_init(void)
 {
@@ -50,9 +51,7 @@ static void serial_putc(uint8_t val)
 			DATA1;
 		}
 		
-		// CLK0 setzt Datenbit gleich mit auf 0
 		CLK1;
-//		NOP;
 		CLK0;
 		DATA0;
 	}
@@ -73,13 +72,32 @@ void serial_put_buffer(uint8_t *buffer, uint8_t len)
 
 void clear_serial_buffer(void)
 {
-	for (uint8_t i = 0;i < sizeof(serial_buffer);i++)
+	uint8_t *buffer = serial_buffer;
+
+	DATA0;
+	for (uint8_t i = sizeof(serial_buffer); i > 0; i--)
 	{
-		serial_buffer[i] = 0;
+		*buffer++ = 0;
+		for (uint8_t bit = 8; bit > 0; bit--)
+		{
+			CLK1;
+			CLK0;
+		}
+	}
+	SET1;
+	NOP;
+	SET0;
+}
+
+void serial_limit(uint8_t byte)
+{
+	if (byte < start_idx)
+	{
+		start_idx = byte;
 	}
 }
 
 void send_serial_buffer(void)
 {
-	serial_put_buffer(serial_buffer, sizeof(serial_buffer));
+	serial_put_buffer(&serial_buffer[start_idx], sizeof(serial_buffer) - start_idx);
 }
