@@ -573,7 +573,6 @@ int8_t sensor(CAN_message *msg)
 			if (lights > 0)
 			{
 				queue_infos3(msg->data[0], 0, MSG_OK, msg->data[1], msg->data[2], lights);
-//				queue_infos2(msg->data[0], 0, MSG_OK, serial_buffer[7], serial_buffer[6]);
 			}
 		}
 	}

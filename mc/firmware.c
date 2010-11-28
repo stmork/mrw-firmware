@@ -59,16 +59,64 @@
  */
 static void can_process_messages(void)
 {
+	int8_t buffer_no;
+
+	/* Erst mal alle eingehenden Meldungen verarbeiten */
 	while(ring_has_messages(&rx_ring))
 	{
 		CAN_message *msg = ring_get_start(&rx_ring);
+
+		/* Meldung verarbeiten */
+		CAN_Node(msg);
+
+		/* Meldung aus Ringpuffer nehmen */
 		ring_decrease(&rx_ring);
 
-		CAN_Node(msg);
-		if (ring_has_messages(&tx_ring))
+		/* Solange Antworten versenden, wie Meldungen zu
+		 * versenden sind und bis MCP keine TX-Buffer mehr frei hat.
+		 */
+		buffer_no = 0;
+		while (ring_has_messages(&tx_ring) && (buffer_no >= 0))
 		{
 			CAN_message *msg = ring_get_start(&tx_ring);
-			if (can_put_msg(msg) >= 0)
+			buffer_no = can_put_msg(msg);
+			if (buffer_no >= 0)
+			{
+				ring_decrease(&tx_ring);
+			}
+		}
+	}
+
+	if (ring_has_overflow(&tx_ring))
+	{
+		/*
+		 * Wenn der Ringpuffer zu voll ist, wird der Versand mindestens
+		 * einer Meldung erzwungen.
+		 */
+		CAN_message *msg = ring_get_start(&tx_ring);
+
+		do
+		{
+			buffer_no = can_put_msg(msg);
+		}
+		while (buffer_no < 0);
+		ring_decrease(&tx_ring);
+	}
+	else
+	{
+		/*
+		 * Wenn immer noch Meldungen versendet werden sollen, wird das hier versucht.
+		 */
+		buffer_no = 0;
+		while (ring_has_messages(&tx_ring) && (buffer_no >= 0))
+		{
+			CAN_message *msg = ring_get_start(&tx_ring);
+
+			/*
+			 * Hier wird nur versucht, eine Meldung zu versenden.
+			 */
+			buffer_no = can_put_msg(msg);
+			if (buffer_no >= 0)
 			{
 				ring_decrease(&tx_ring);
 			}
@@ -532,13 +580,38 @@ static void signal_init(void)
 	}
 }
 
+#ifdef HUNTING_SIMPLE_LIGHT_BUG
+static void init_debug_config(void)
+{
+	mrw_device *dvc = config.dvc;
+
+	config.id = 11;
+	config.magic = CONFIG_MAGIC;
+	config.count = MAX_DEVICES;
+
+	for (uint8_t i = 0;i < config.count;i++)
+	{
+		dvc->unit_no = i+1;
+		dvc->unit_type = TYPE_SIMPLE_LIGHT;
+		dvc->unit.u_simple_light.threshold = 32+i;
+		dvc->unit.u_simple_light.byte = (63 - i) >> 3;
+		dvc->unit.u_simple_light.bit  = (63 - i)  & 7;
+		dvc++;
+	}
+}
+#endif
+
 int main(int argc,char *argv[])
 {
 	MCP2515_error_status status;
 	uint8_t last_state = 0;
 
 	// Konfiguration ins SRAM lesen.
+#ifndef HUNTING_SIMPLE_LIGHT_BUG
 	read_eeprom_config(&config);
+#else
+	init_debug_config();
+#endif
 
 	// Workaround für Bootloader: FLASH_CHECK loswerden!
 	// Nach einem Flash hat das MCUCSR keinen Grund für einen Reset.
@@ -582,27 +655,6 @@ int main(int argc,char *argv[])
 	for (;;)
 	{
 		can_process_messages();
-
-		/*
-		 * Wenn Meldungen versendet werden sollen, wird das hier gemacht.
-		 */
-		if(ring_has_messages(&tx_ring))
-		{
-			CAN_message *msg = ring_get_start(&tx_ring);
-
-			if (ring_has_overflow(&tx_ring))
-			{
-				while (can_put_msg(msg) < 0);
-				ring_decrease(&tx_ring);
-			}
-			else
-			{
-				if (can_put_msg(msg) >= 0)
-				{
-					ring_decrease(&tx_ring);
-				}
-			}
-		}
 
 		/*
 		 * Wenn eine gültige Konfiguration vorliegt, werden die
