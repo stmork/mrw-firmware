@@ -443,9 +443,11 @@ int8_t can_put_msg(CAN_message *msg)
 		}
 		mcp2515_deselect();
 
-		/* CAN Nachricht verschicken
-		   die letzten drei Bit im RTS Kommando geben an, welcher
-		   Puffer gesendet werden soll */
+		/*
+		 * CAN Nachricht verschicken
+		 * die letzten drei Bit im RTS Kommando geben an, welcher
+		 * Puffer gesendet werden soll.
+		 */
 		mcp2515_request_to_send(buffer);
 	}
 	SREG = sreg;
@@ -476,18 +478,19 @@ int8_t can_send_msg(CAN_message *msg)
 int8_t can_get_msg(CAN_message *msg)
 {
 	uint8_t sreg = SREG;
+	uint8_t status;
+	int8_t  buffer;
 	
 	cli();
 
 	/* Status auslesen */
-	msg->status = mcp2515_read_rx_status();
-	int8_t buffer;
+	status = mcp2515_read_rx_status();
 
-	if (bit_is_set(msg->status, RX_STAT_RXB0))
+	if (bit_is_set(status, RX_STAT_RXB0))
 	{
 		buffer = 0;
 	}
-	else if (bit_is_set(msg->status, RX_STAT_RXB1))
+	else if (bit_is_set(status, RX_STAT_RXB1))
 	{
 		buffer = 1;
 	}
@@ -527,7 +530,7 @@ int8_t can_get_msg(CAN_message *msg)
 		/* Interrupt Flag löschen */
 		mcp2515_bit_modify(CANINTF, buffer == 0 ? _BV(RX0IF) : _BV(RX1IF), 0);
 		
-		buffer = msg->status & 0x7;
+		buffer = (msg->status = status) & 0x7;
 	}
 	SREG = sreg;
 

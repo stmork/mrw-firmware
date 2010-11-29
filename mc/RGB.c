@@ -87,50 +87,90 @@ ISR(TIMER2_OVF_vect)
 	BUSY_INT3;
 	uint8_t inv = ~counter;
 
-	switch(state & 7)
+	switch(state & 15)
 	{
-	case 0: // R B1 hoch
+	case  0: // R B1 hoch
 		set_dimm(&config.dvc[INDEX_R].unit.u_light, counter);
 		set_dimm(&config.dvc[INDEX_B1 + 4].unit.u_light, counter);
 		break;
 
-	case 1: // G R hoch
-		set_dimm(&config.dvc[INDEX_G].unit.u_light, counter);
+	case  1: // G R hoch
+		set_dimm(&config.dvc[INDEX_G    ].unit.u_light, counter);
 		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, counter);
 		break;
 
-	case 2: // R B1 runter
-		set_dimm(&config.dvc[INDEX_R].unit.u_light, inv);
+	case  2: // R B1 runter
+		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_B1 + 4].unit.u_light, inv);
 		break;
 
-	case 3: // B G hoch
-		set_dimm(&config.dvc[INDEX_B1].unit.u_light, counter);
+	case  3: // B G hoch
+		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, counter);
 		set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, counter);
 		break;
 
-	case 4: // G R runter
-		set_dimm(&config.dvc[INDEX_G].unit.u_light, inv);
+	case  4: // G R runter
+		set_dimm(&config.dvc[INDEX_G    ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, inv);
 		break;
 
-	case 5: // R B2 hoch
-		set_dimm(&config.dvc[INDEX_R].unit.u_light, counter);
+	case  5: // R B2 hoch
+		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, counter);
 		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, counter);
 		break;
 
-	case 6: // B G runter
-		set_dimm(&config.dvc[INDEX_B1].unit.u_light, inv);
+	case  6: // B G runter
+		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, inv);
 		break;
 
-	case 7: // R B2 runter
-		set_dimm(&config.dvc[INDEX_R].unit.u_light, inv);
+	case  7: // R B2 runter
+		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, inv);
+		break;
+
+	case  8:
+		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, counter);
+		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, counter);
+		break;
+
+	case  9:
+		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, counter);
+		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, counter);
+		break;
+
+	case 10:
+		set_dimm(&config.dvc[INDEX_G    ].unit.u_light, counter);
+		set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, counter);
+		break;
+
+	case 11:
+		set_dimm(&config.dvc[INDEX_B2    ].unit.u_light, counter);
+		set_dimm(&config.dvc[INDEX_B1 + 4].unit.u_light, counter);
+		break;
+
+	case 12:
+		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, inv);
+		break;
+
+	case 13:
+		set_dimm(&config.dvc[INDEX_G     ].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_B1 + 4].unit.u_light, inv);
+		break;
+
+	case 14:
+		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, inv);
+		break;
+
+	case 15:
+		set_dimm(&config.dvc[INDEX_B2   ].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, inv);
 		break;
 	}
 
-	counter+=4;
+	counter+=8;
 	if (counter == 0)
 	{
 		state++;
@@ -170,6 +210,15 @@ int main(void)
 	/* Ansonsten passiert hier heute per CAN-Bus nix ;-) */
 	mcp2515_init(config.id, 1, MCP2515_SINGLE_TX_BUFFER);
 	config_init();
+
+	set_dimm(&config.dvc[INDEX_R ].unit.u_light, 128);
+	set_dimm(&config.dvc[INDEX_G ].unit.u_light, 255);
+	set_dimm(&config.dvc[INDEX_B1].unit.u_light,  16);
+	set_dimm(&config.dvc[INDEX_B2].unit.u_light,  16);
+	
+	set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, 208);
+	set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, 240);
+
 	timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
 	timer2_init();
 	serial_init();

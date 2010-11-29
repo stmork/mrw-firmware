@@ -52,6 +52,26 @@
 #define NODE_READY     MCP_LED_GREEN
 #define NODE_ERROR    (MCP_LED_GREEN|MCP_LED_YELLOW)
 
+/*
+ * Solange Antworten versenden, wie Meldungen zu
+ * versenden sind und bis MCP keine TX-Buffer mehr frei hat.
+ */
+static void fill_tx_buffers(void)
+{
+	int8_t buffer_no = 0;
+
+	while (ring_has_messages(&tx_ring) && (buffer_no >= 0))
+	{
+		CAN_message *msg = ring_get_start(&tx_ring);
+
+		buffer_no = can_put_msg(msg);
+		if (buffer_no >= 0)
+		{
+			ring_decrease(&tx_ring);
+		}
+	}
+}
+
 /**
  * Hier werden evtl. nicht verabeitete CAN-Messages aus
  * ihren Empfangspuffern geholt. Das muss bei gesperrtem
@@ -59,8 +79,6 @@
  */
 static void can_process_messages(void)
 {
-	int8_t buffer_no;
-
 	/* Erst mal alle eingehenden Meldungen verarbeiten */
 	while(ring_has_messages(&rx_ring))
 	{
@@ -72,21 +90,11 @@ static void can_process_messages(void)
 		/* Meldung aus Ringpuffer nehmen */
 		ring_decrease(&rx_ring);
 
-		/* Solange Antworten versenden, wie Meldungen zu
-		 * versenden sind und bis MCP keine TX-Buffer mehr frei hat.
-		 */
-		buffer_no = 0;
-		while (ring_has_messages(&tx_ring) && (buffer_no >= 0))
-		{
-			CAN_message *msg = ring_get_start(&tx_ring);
-			buffer_no = can_put_msg(msg);
-			if (buffer_no >= 0)
-			{
-				ring_decrease(&tx_ring);
-			}
-		}
+		/* Nach Möglichkeit Antworten versenden. */
+		fill_tx_buffers();
 	}
 
+	fill_tx_buffers();
 	if (ring_has_overflow(&tx_ring))
 	{
 		/*
@@ -95,32 +103,8 @@ static void can_process_messages(void)
 		 */
 		CAN_message *msg = ring_get_start(&tx_ring);
 
-		do
-		{
-			buffer_no = can_put_msg(msg);
-		}
-		while (buffer_no < 0);
+		while(can_put_msg(msg) < 0);
 		ring_decrease(&tx_ring);
-	}
-	else
-	{
-		/*
-		 * Wenn immer noch Meldungen versendet werden sollen, wird das hier versucht.
-		 */
-		buffer_no = 0;
-		while (ring_has_messages(&tx_ring) && (buffer_no >= 0))
-		{
-			CAN_message *msg = ring_get_start(&tx_ring);
-
-			/*
-			 * Hier wird nur versucht, eine Meldung zu versenden.
-			 */
-			buffer_no = can_put_msg(msg);
-			if (buffer_no >= 0)
-			{
-				ring_decrease(&tx_ring);
-			}
-		}
 	}
 }
 
