@@ -26,13 +26,8 @@
 
 #include "mrw.h"
 
-#define PORT_LIGHT   PORTA
-#define DDR_LIGHT    DDRA
-#define PIN_LIGHT    PINA
-#define P_LIGHT_LED0 0
-#define P_LIGHT_LED1 1
-#define LIGHT_LED0   _BV(P_LIGHT_LED0)   // red
-#define LIGHT_LED1   _BV(P_LIGHT_LED1)  // green
+#define IS_PWM_DIMM(dvc) (((dvc)->dimm > 0) && ((dvc)->dimm < PWM_MAX))
+#define _IS_PWM_DIMM(dvc) 1
 
 extern void set_dimm(struct mrw_light *dvc, uint8_t value);
 extern void handle_pwm(struct mrw_light *dvc);

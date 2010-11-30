@@ -519,6 +519,7 @@ int8_t setSignal(CAN_message *msg)
 	{
 		dvc->unit.u_signal.img = msg->data[1];
 		compute_signal(dvc);
+		send_serial_buffer();
 		return MSG_OK;
 	}
 	return MSG_UNITTYPE_WRONG;
@@ -575,6 +576,7 @@ int8_t sensor(CAN_message *msg)
 				queue_infos3(msg->data[0], 0, MSG_OK, msg->data[1], msg->data[2], lights);
 			}
 		}
+		send_serial_buffer();
 	}
 	return NO_RESULT;
 }

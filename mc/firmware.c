@@ -351,16 +351,6 @@ ISR(TIMER2_OVF_vect)
 		case TYPE_SIGNAL_MF3:
 			form3_turn(&dvc->unit.u_form3, code);
 			break;
-
-		case TYPE_SIGNAL_SL2:
-		case TYPE_SIGNAL_PL2:
-		case TYPE_SIGNAL_PL3:
-		case TYPE_SIGNAL_ML2:
-		case TYPE_SIGNAL_ML3:
-		case TYPE_SIGNAL_ML4:
-		case TYPE_SIMPLE_LIGHT:
-			compute_signal(dvc);
-			break;
 		}
 	}
 	else
@@ -401,15 +391,6 @@ ISR(TIMER2_OVF_vect)
 				form3_off(&dvc->unit.u_form3);
 				queue_result(SETSGN, dvc->unit_no, MSG_OK);
 				break;
-
-			case TYPE_SIGNAL_SL2:
-			case TYPE_SIGNAL_PL2:
-			case TYPE_SIGNAL_PL3:
-			case TYPE_SIGNAL_ML2:
-			case TYPE_SIGNAL_ML3:
-			case TYPE_SIGNAL_ML4:
-				queue_result(SETSGN, dvc->unit_no, MSG_OK);
-				break;
 			}
 			cmd_remove();		
 		}
@@ -428,7 +409,10 @@ ISR(TIMER1_COMPA_vect)
 	{
 		if (dvc->unit_type == TYPE_LIGHT)
 		{
-			handle_pwm(&dvc->unit.u_light);
+			if (IS_PWM_DIMM(&dvc->unit.u_light))
+			{
+				handle_pwm(&dvc->unit.u_light);
+			}
 		}
 		dvc++;
 	}
@@ -553,14 +537,16 @@ static void signal_init(void)
 				{
 					serial_limit(dvc->unit.u_signal.byte[idx]);
 				}
+				compute_signal(dvc);
 				break;
 
 			case TYPE_SIMPLE_LIGHT:
 				serial_limit(dvc->unit.u_simple_light.byte);
 				break;
 			}
-			compute_signal(dvc++);
+			dvc++;
 		}
+		send_serial_buffer();
 	}
 }
 
@@ -638,14 +624,11 @@ int main(int argc,char *argv[])
 	sei();
 	for (;;)
 	{
-		can_process_messages();
-
 		/*
-		 * Wenn eine gültige Konfiguration vorliegt, werden die
-		 * Bitmuster für die Signalbilder berechnet und danach
-		 * ausgegeben.
+		 * CAN-Meldungen und nach Möglichkeit deren
+		 * Antworten bearbeiten.
 		 */
-		send_serial_buffer();
+		can_process_messages();
 
 		/*
 		 * Wenn Fehler/Warn Status vorhanden ist, dann muss

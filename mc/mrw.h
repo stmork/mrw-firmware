@@ -182,8 +182,9 @@ struct mrw_signal
 };
 
 #define PWM_BITS        5
-#define PWM_TABLE_SIZE (1 << PWM_BITS)
 #define PWM_SHIFT      (8 - PWM_BITS)
+#define PWM_TABLE_SIZE (1 << PWM_BITS)
+#define PWM_MAX        ((PWM_TABLE_SIZE) - 1)
 
 struct mrw_light
 {

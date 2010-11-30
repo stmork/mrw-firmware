@@ -60,6 +60,11 @@ void set_dimm(struct mrw_light *dvc, uint8_t value)
 		dvc->quotient = 0;
 		dvc->nom      = pgm_read_byte(&table_nom[value]);
 		dvc->denom    = pgm_read_byte(&table_denom[value]);
+
+		if (value == PWM_MAX)
+		{
+			set_pin(&dvc->pin);
+		}
 	}
 }
 
@@ -73,18 +78,15 @@ void set_dimm(struct mrw_light *dvc, uint8_t value)
  */
 void handle_pwm(struct mrw_light *dvc)
 {
-	if (dvc->dimm > 0)
+	/* Dimmen */
+	if (dvc->quotient < dvc->nom)
 	{
-		/* Dimmen */
-		if (dvc->quotient < dvc->nom)
-		{
-			dvc->quotient += dvc->denom;
-			set_pin(&dvc->pin);
-		}
-		else
-		{
-			clr_pin(&dvc->pin);
-		}
-		dvc->quotient -= dvc->nom;
+		dvc->quotient += dvc->denom;
+		set_pin(&dvc->pin);
 	}
+	else
+	{
+		clr_pin(&dvc->pin);
+	}
+	dvc->quotient -= dvc->nom;
 }

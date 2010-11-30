@@ -105,7 +105,7 @@ static void config_ports(int fd)
 		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_LIGHT + i);
 		can_add_data(&msg,   i);         // Anschlusspin
 		can_add_data(&msg, 26 * i + 12); // Schwellwert
-		can_add_data(&msg,  66);         // Profil
+		can_add_data(&msg,  i);         // Profil
 		uart_send_can_msg(fd, &msg);	
 	}
 #endif

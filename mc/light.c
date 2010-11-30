@@ -19,7 +19,13 @@
 **
 */
 
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
+#include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include <util/delay.h>
 
 #include "light.h"
 #include "bit.h"
@@ -62,9 +68,12 @@ uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightne
 			dvc->on = 1;
 			changed = 1;
 			SET_SER_BIT(dvc->byte, dvc->bit);
+			send_serial_buffer();
+			_delay_ms(10);
 		}
 		dvc->lightness = lightness;
 	}
+
 	return changed;
 }
 
@@ -88,6 +97,10 @@ uint8_t light_available(void)
 	return has_lights;
 }
 
+/*
+ * Diese Methode wird vom Timer-Interrupt aufgerufen und sucht den
+ * nächsten Helligkeitswert raus.
+ */
 void light_dimm(struct mrw_light *dvc)
 {
 	if (dvc->on)
@@ -110,7 +123,9 @@ void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 	{
 		uint8_t turn_on  = dvc->threshold;
 		uint8_t turn_off = dvc->threshold + 4;
+		uint8_t sreg = SREG;
 
+		cli();
 		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
 		{
 			/* Zustandsübergang: Ausschalten */
@@ -125,6 +140,7 @@ void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 			dvc->on      = 1;
 		}
 		dvc->lightness = lightness;
+		SREG = sreg;
 	}
 }
 

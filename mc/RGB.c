@@ -35,6 +35,8 @@
 #include "sleep.h"
 #include "timer.h"
 
+#define no_BUSY_TEST
+
 #define NODE_READY     MCP_LED_GREEN
 
 #define INDEX_B1 3
@@ -48,12 +50,15 @@
 #define PIN_INT1     6
 #define PIN_INT2     5
 #define PIN_INT3     4
+#define PIN_READY    0
 
 #define BUSY_MAIN   (PORT_BUSY = (PORT_BUSY & ~(_BV(PIN_BUSY) | _BV(PIN_INT1) | _BV(PIN_INT2) | _BV(PIN_INT3))) | _BV(PIN_BUSY))
 #define BUSY_INT1   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT1)))
 #define BUSY_INT2   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT2)))
 #define BUSY_INT3   (PORT_BUSY |= (_BV(PIN_BUSY) | _BV(PIN_INT3)))
+#define READY       (PORT_BUSY |=  _BV(PIN_READY))
 #define IDLE        (PORT_BUSY &= ~(_BV(PIN_BUSY) | _BV(PIN_INT1) | _BV(PIN_INT2) | _BV(PIN_INT3)))
+
 ISR(INT2_vect)
 {
 	BUSY_INT1;
@@ -73,7 +78,10 @@ ISR(TIMER1_COMPA_vect)
 
 	for (i = 0;i < config.count; i++)
 	{
-		handle_pwm(&dvc->unit.u_light);
+		if (IS_PWM_DIMM(&dvc->unit.u_light))
+		{
+			handle_pwm(&dvc->unit.u_light);
+		}
 		dvc++;
 	}
 	BUSY_MAIN;
@@ -82,9 +90,22 @@ ISR(TIMER1_COMPA_vect)
 static uint8_t counter;
 static uint8_t state;
 
+#ifdef BUSY_TEST
+static uint8_t busy_test_values[4] =
+{
+	0, 85, 170, 255
+};
+#endif
+
 ISR(TIMER2_OVF_vect)
 {
 	BUSY_INT3;
+#ifdef BUSY_TEST
+	for(uint8_t idx = 0;idx < 8; idx++)
+	{
+		set_dimm(&config.dvc[idx].unit.u_light, busy_test_values[state & 3]);
+	}
+#else
 	uint8_t inv = ~counter;
 
 	switch(state & 15)
@@ -150,25 +171,26 @@ ISR(TIMER2_OVF_vect)
 		break;
 
 	case 12:
-		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, inv);
-		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, inv);
 		break;
 
 	case 13:
 		set_dimm(&config.dvc[INDEX_G     ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_B1 + 4].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, inv);
 		break;
 
 	case 14:
 		set_dimm(&config.dvc[INDEX_R     ].unit.u_light, inv);
-		set_dimm(&config.dvc[INDEX_B2 + 4].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, inv);
 		break;
 
 	case 15:
 		set_dimm(&config.dvc[INDEX_B2   ].unit.u_light, inv);
+		set_dimm(&config.dvc[INDEX_B1   ].unit.u_light, inv);
 		set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, inv);
 		break;
 	}
+#endif
 
 	counter+=8;
 	if (counter == 0)
@@ -211,6 +233,7 @@ int main(void)
 	mcp2515_init(config.id, 1, MCP2515_SINGLE_TX_BUFFER);
 	config_init();
 
+#if 0
 	set_dimm(&config.dvc[INDEX_R ].unit.u_light, 128);
 	set_dimm(&config.dvc[INDEX_G ].unit.u_light, 255);
 	set_dimm(&config.dvc[INDEX_B1].unit.u_light,  16);
@@ -218,12 +241,16 @@ int main(void)
 	
 	set_dimm(&config.dvc[INDEX_R + 4].unit.u_light, 208);
 	set_dimm(&config.dvc[INDEX_G + 4].unit.u_light, 240);
+#else
+	timer2_init();
+#endif
 
 	timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
-	timer2_init();
+
 	serial_init();
 	mcp2515_write_rx_output_pins(NODE_READY);
 
+	READY;
 	do
 	{
 		/*
