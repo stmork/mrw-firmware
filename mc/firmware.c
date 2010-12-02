@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
 
@@ -607,7 +608,12 @@ int main(int argc,char *argv[])
 	// Lampen einschalten
 	if (light_available() > 0)
 	{
+		set_sleep_mode(SLEEP_MODE_IDLE);
 		timer1_init(F_CPU / (50 * PWM_TABLE_SIZE));
+	}
+	else
+	{
+		set_sleep_mode(SLEEP_MODE_ADC);
 	}
 
 	// Gerätedaten sortieren
