@@ -577,6 +577,9 @@ int main(int argc,char *argv[])
 	MCP2515_error_status status;
 	uint8_t last_state = 0;
 
+	// Timer für Zufallszahlen aktivieren.
+	random_preinit();
+
 	// Konfiguration ins SRAM lesen.
 #ifndef HUNTING_SIMPLE_LIGHT_BUG
 	read_eeprom_config(&config);
@@ -599,7 +602,6 @@ int main(int argc,char *argv[])
 
 	// Hardware initialisieren
 	timer2_init();
-	random_init();
 	init_ports();
 
 	// Initiale Signalbilder bereitstellen

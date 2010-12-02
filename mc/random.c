@@ -22,16 +22,18 @@
 #include "random.h"
 
 #include <avr/io.h>
-#include "config.h"
 
-void random_init(void)
+void random_preinit(void)
 {
+	/* Kein Prescaling */
+	TCCR0 = _BV(CS00);
+}
+
+void random_postinit(void)
+{	
 	uint8_t *ptr = (uint8_t *)(RAMEND & 0xff);
 	uint8_t  l = 0;
 
-	/* Kein Prescaling */
-	TCCR0 = _BV(CS00);
-	
 	/*
 	 * Initialisierung mit Zufallszahlen. Das RAM scheint hierfür
 	 * am Besten geeignet zu sein.
