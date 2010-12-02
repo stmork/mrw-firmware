@@ -24,7 +24,8 @@
 
 #include <stdint.h>
 
-extern void    random_init(void);
+extern void    random_preinit(void);
+extern void    random_postinit(void);
 extern uint8_t random_timer(void);
 
 #endif
