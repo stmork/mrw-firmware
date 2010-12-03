@@ -19,9 +19,10 @@
 **
 */
 
-#include "random.h"
-
 #include <avr/io.h>
+
+#include "config.h"
+#include "random.h"
 
 void random_preinit(void)
 {
@@ -38,19 +39,21 @@ void random_postinit(void)
 	 * Initialisierung mit Zufallszahlen. Das RAM scheint hierfür
 	 * am Besten geeignet zu sein.
 	 */
+	uint8_t rnd = config.id ^ TCNT2;
 	for (uint8_t h = RAMEND >> 8; h > 0; h--)
 	{
 		do
 		{
-			TCNT0 += *ptr++;
+			rnd ^= *ptr++;
 			
 			l++;
 		}
 		while(l != 0);
 	}
+	TCNT0 ^= rnd;
 }
 
 uint8_t random_timer(void)
 {
-	return TCNT0 >> 1;
+	return TCNT0;
 }

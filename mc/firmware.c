@@ -587,6 +587,9 @@ int main(int argc,char *argv[])
 	init_debug_config();
 #endif
 
+	// Gerätedaten sortieren
+	config_sort();
+
 	// Workaround für Bootloader: FLASH_CHECK loswerden!
 	// Nach einem Flash hat das MCUCSR keinen Grund für einen Reset.
 	if (bit_is_set(MCUCSR, WDRF))
@@ -602,6 +605,9 @@ int main(int argc,char *argv[])
 
 	// Hardware initialisieren
 	timer2_init();
+	random_postinit();
+
+	// Hardware an Hand der Konfiguration initialisieren
 	init_ports();
 
 	// Initiale Signalbilder bereitstellen
@@ -618,15 +624,21 @@ int main(int argc,char *argv[])
 		set_sleep_mode(SLEEP_MODE_ADC);
 	}
 
-	// Gerätedaten sortieren
-	config_sort();
-
 	// Watch dog einschalten.
 	wdt_enable(WDTO_1S);
 
 	// Queue startup message incl. reset reason.
 	queue_info(RESET, 0, MSG_BOOTED, MCUCSR);
 	MCUCSR = 0;
+
+#if 0
+	for(uint8_t t = 0; t < 10; t++)
+	{
+		queue_infos4(RESET, 0, MSG_BOOTED,
+			random_timer(), random_timer(),
+			random_timer(), random_timer());
+	}
+#endif
 
 	mcp2515_write_rx_output_pins(NODE_READY);
 	sei();

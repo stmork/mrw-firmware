@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <avr/io.h>
+#include <avr/sleep.h>
 
 #include "config.h"
 #include "eeprom.h"
@@ -249,6 +250,8 @@ int main(void)
 
 	serial_init();
 	mcp2515_write_rx_output_pins(NODE_READY);
+
+	set_sleep_mode(SLEEP_MODE_IDLE);
 
 	READY;
 	do
