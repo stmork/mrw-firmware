@@ -1,6 +1,6 @@
 /*
 **
-**	$Filename:	ping.c $
+**	$Filename:	send.c $
 **	$Revision$
 **	$Date$
 **	$Author$

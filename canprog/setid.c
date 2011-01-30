@@ -1,6 +1,6 @@
 /*
 **
-**	$Filename:	switch.c $
+**	$Filename:	setid.c $
 **	$Revision$
 **	$Date$
 **	$Author$

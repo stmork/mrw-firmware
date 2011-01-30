@@ -1,6 +1,6 @@
 /*
 **
-**	$Filename:	switch.c $
+**	$Filename:	config.c $
 **	$Revision$
 **	$Date$
 **	$Author$
