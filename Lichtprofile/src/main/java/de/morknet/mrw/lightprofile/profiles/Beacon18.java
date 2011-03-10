@@ -56,6 +56,11 @@ public class Beacon18 extends LightProfile
 	   	 20
 	};
 
+	static
+	{
+		LightProfile.profiles.add(new Beacon18());
+	}
+
 	@Override
 	protected int [] getArray()
 	{

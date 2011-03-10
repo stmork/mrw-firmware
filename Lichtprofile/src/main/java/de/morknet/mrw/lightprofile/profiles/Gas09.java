@@ -44,6 +44,11 @@ public class Gas09 extends LightProfile
 		249, 249, 250, 250, 251, 251, 252, 252, 253, 253, 254, 254, 255, 255, 255, 255
 	};
 
+	static
+	{
+		LightProfile.profiles.add(new Gas09());
+	}
+
 	@Override
 	protected int [] getArray()
 	{

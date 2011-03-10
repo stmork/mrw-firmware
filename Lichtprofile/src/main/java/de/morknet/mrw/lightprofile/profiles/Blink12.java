@@ -43,6 +43,11 @@ public class Blink12 extends LightProfile
 		0,0,0,0,0,0,0,0,0,0,0
 	};
 
+	static
+	{
+		LightProfile.profiles.add(new Blink12());
+	}
+
 	@Override
 	protected int [] getArray()
 	{
