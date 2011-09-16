@@ -17,10 +17,10 @@
 
 import uml;
 
-String programmify(String s) :
+String programmify(uml::String s) :
 	s.replaceAll(" ", "_").replaceAll("-", "_").replaceAll("\\.", "_");
 
-String method(String s) :
+String method(uml::String s) :
 	s.replaceAll(" ", "").replaceAll("!","").replaceAll("=","").replaceAll("-", "_").replaceAll("\\.", "");
 
 String smName(StateMachine sm) :
@@ -60,10 +60,10 @@ String smIncludeActivityName(StateMachine sm) :
 	programmify(sm.name).toUpperCase() + "_ACTIVITY_H";
 
 String defaultTransition(State s) :
-	"wrong" + s.name.toFirstUpper() + "Trigger";
+	"wrong" + s.name.toString().toFirstUpper() + "Trigger";
 
 cached Boolean named(NamedElement ne) :
-	(ne.name != null) && (ne.name.length > 0);
+	(ne.name != null) && (ne.name.toString().length > 0);
 
 private String stateName(Vertex v) :
 	"vertex";
@@ -89,10 +89,10 @@ private String getBody(OpaqueExpression oe) :
 cached String getGuard(Transition t) :
 	t.guard == null ? null : getBody(t.guard.specification);
 
-cached Set[String] callbacks(StateMachine sm) :
+cached Set[uml::String] callbacks(StateMachine sm) :
 	sm.eAllContents.typeSelect(Activity).name.toSet().sortBy(n|n);
 
-cached Set[String] guards(StateMachine sm) :
+cached Set[uml::String] guards(StateMachine sm) :
 	sm.eAllContents.typeSelect(OpaqueExpression).body.method().toSet().sortBy(e|e);
 
 private List[Pseudostate] getPseudoStates(StateMachine sm, PseudostateKind k) :

@@ -21,7 +21,7 @@
 
 «EXTENSION de::itemis::mrw::mc::sm»
 
-«DEFINE Header(String filename, String name) FOR NamedElement»
+«DEFINE Header(String filename, uml::String name) FOR NamedElement»
 /*
 **
 **	«svnTag("Id")»
@@ -43,7 +43,7 @@
 «ENDDEFINE»
 
 «DEFINE Comment FOR NamedElement»
-«IF ownedComment.exists(e|e.body.length > 0)»
+«IF ownedComment.exists(e|e.body.toString().length > 0)»
 /*******************************************************************
 «FOREACH ownedComment AS comment»«comment.body»«ENDFOREACH»
 *******************************************************************/
