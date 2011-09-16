@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 		int client = accept(s, (struct sockaddr *)&client_addr, &clientlen);
 		if (client >= 0)
 		{
-			printf("OK, connection from %08lx.\n", ntohl(client_addr.sin_addr.s_addr));
+			printf("OK, connection from %08x.\n", ntohl(client_addr.sin_addr.s_addr));
 
 			reader = fork();
 			if (reader == -1)

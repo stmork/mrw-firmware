@@ -237,7 +237,7 @@ void Log::Info(const char *message)
 {
 	::Lock lock(*this);
 
-	printf(message);
+	puts(message);
 	fflush(stdout);
 }
 
