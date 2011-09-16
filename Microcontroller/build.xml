@@ -37,41 +37,18 @@
 			<include name="**/org.eclipse.uml2*.jar"/>
 			<include name="**/org.apache.commons.*.jar"/>
 			<include name="**/*antlr*.jar"/>
-			<include name="**/*xerces*.jar"/>
 			<include name="com.ibm.*.jar"/>
 			<include name="*tools5*.jar"/>
 			<exclude name="**/*.source*.jar"/>
 			<exclude name="**/*.src*.jar"/>
 			<exclude name="**/*.editor*.jar"/>
 		</fileset>
+		<fileset dir="${lib-path}"/>
 		<path refid="plugins"/>
-	</path>
-
-	<path id="generate.classpath-x">
-		<fileset dir="${eclipse.home.plugins}">
-			<include name="**/org.eclipse.core*.jar"/>
-			<include name="**/org.eclipse.emf*.jar"/>
-			<include name="**/org.eclipse.xtend*.jar"/>
-			<include name="**/org.eclipse.xpand*.jar"/>
-			<include name="**/org.apache.commons.*.jar"/>
-			<include name="**/antlr*.jar"/>
-			<include name="**/*xerces*.jar"/>
-			<include name="**/*log4j*1.2.8*.jar"/>
-			<include name="org.apache.commons.*.jar"/>
-			<include name="org.eclipse.uml2*.jar"/>
-			<exclude name="org.eclipse*junit*.jar"/>
-			<exclude name="**/*.source*.jar"/>
-			<exclude name="**/*.src*.jar"/>
-			<exclude name="**/*.editor*.jar"/>
-		</fileset>
-		<fileset dir="${lib-path}">
-		</fileset>
-		<pathelement path="${res-path}" />
 	</path>
 
 	<path id="generate.classpath">
 		<path refid="oaw.lib"/>
-		<fileset dir="${lib-path}"/>
 		<pathelement path="${res-path}" />
 	</path>
 
