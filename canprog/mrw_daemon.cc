@@ -93,8 +93,11 @@ unsigned int SendBuffer::Sender(void *ptr)
 			printf("Sender %d [%d,%d]\n", dst, buffer->rpos, buffer->wpos);
 #endif
 			receive_buffer *send = &buffer->buffer[buffer->rpos];
-			write(dst, send->input.buffer, send->index);
-
+			if (write(dst, send->input.buffer, send->index) != send->index)
+			{
+				perror(0);
+			}
+			else
 			{
 				Lock lock(log_mutex);
 

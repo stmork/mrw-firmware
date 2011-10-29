@@ -112,11 +112,17 @@ int uart_send_can_msg(int fd, CAN_message *msg)
 void uart_sync(int fd)
 {
 	uint8_t byte = 0;
+	uint8_t buffer[16];
 	int     i;
 
-	for (i = 0;i < 16;i++)
+	for (i = 0;i < sizeof(buffer);i++)
 	{
-		write(fd, &byte, 1);
+		buffer[i] = 0;
+	}
+
+	if (write(fd, buffer, sizeof(buffer)) != sizeof(buffer))
+	{
+		perror("uart_sync");
 	}
 }
 

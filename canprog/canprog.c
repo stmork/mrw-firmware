@@ -245,7 +245,7 @@ int main(int argc,char *argv[])
 
 	if (buffer != NULL)
 	{
-		printf("size: %d\n", count);
+		printf("size: %lu\n", count);
 		result = flash(fd, buffer, count, hid);
 		free(buffer);
 	}
