@@ -87,7 +87,10 @@ void SerialLine::Sync()
 	logger.Info("Synchronizing serial connection...\n");
 	for (i = 0;i < 16;i++)
 	{
-		write(fd, &byte, 1);
+		if (write(fd, &byte, sizeof(byte)) != sizeof(byte))
+		{
+			logger.Error("Writing byte %02x", byte);
+		}
 	}
 }
 

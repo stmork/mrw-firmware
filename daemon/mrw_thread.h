@@ -247,7 +247,11 @@ private:
 	{
 		Thread *threadClass = (Thread *)ptr;
 
-		nice(threadClass->m_Prio);
+		if (nice(threadClass->m_Prio) == -1)
+		{
+			fprintf(stderr, "Priority couldn't set!\n");
+			fflush(stderr);
+		}
 		threadClass->m_Result = threadClass->m_CallProc((void *)threadClass->m_CallArg);
 
 		return null;

@@ -19,6 +19,7 @@
 */
 
 #include <sys/timeb.h>
+#include <stdarg.h>
 #include "Log.h"
 #include <algorithm>
 
@@ -233,18 +234,27 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 	fflush(stdout);
 }
 
-void Log::Info(const char *message)
+void Log::Info(const char *message, ...)
 {
 	::Lock lock(*this);
+	va_list args;
 
-	puts(message);
+	va_start(args, message);
+	vfprintf(stdout, message, args);
+	va_end(args);
 	fflush(stdout);
 }
 
-void Log::Error(const char *message)
+void Log::Error(const char *message, ...)
 {
 	::Lock lock(*this);
+	char buffer[256];
+	va_list args;
 
-	perror(message);
+	va_start(args, message);
+	vsnprintf(buffer, sizeof(buffer), message, args);
+	va_end(args);
+
+	perror(buffer);
 	fflush(stderr);
 }
