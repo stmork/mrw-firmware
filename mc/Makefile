@@ -1,8 +1,9 @@
-MCU	= atmega32
-CC	= avr-gcc
-CFLAGS	= -mmcu=$(MCU) -Wall -Wstrict-prototypes -O3 -funsigned-bitfields -fpack-struct -std=gnu99
-LDFLAGS	= -Wl,-Map,usart.map
-SRC	= bootloader.c firmware.c gateway.c test.c\
+MCU		= atmega32
+CC		= avr-gcc
+CFLAGS		= -mmcu=$(MCU) -Wall -Wstrict-prototypes -O3 -funsigned-bitfields -fpack-struct -std=gnu99
+CPPFLAGS	= $(CFLAGS)
+LDFLAGS		= -Wl,-Map,usart.map
+SRC		= bootloader.c firmware.c gateway.c test.c\
 	CAN_Node.c\
 	CAN_NodeActivity.c\
 	bit.c rail.c signal.c switch.c\
