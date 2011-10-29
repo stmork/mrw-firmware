@@ -44,11 +44,6 @@ public class Medium14 extends LightProfile
 			255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255
 	};
 
-	static
-	{
-		LightProfile.profiles.add(new Medium14());
-	}
-
 	@Override
 	protected int [] getArray()
 	{

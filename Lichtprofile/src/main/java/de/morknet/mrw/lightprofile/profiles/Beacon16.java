@@ -44,11 +44,6 @@ public class Beacon16 extends LightProfile
 		 22,  24,  26,  24,  22,  20,  20,  19,  19,  19,  18,  18,  17,  16,  14,  12
 	};
 
-	static
-	{
-		LightProfile.profiles.add(new Beacon16());
-	}
-
 	@Override
 	protected int [] getArray()
 	{

@@ -34,6 +34,27 @@ import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
+import de.morknet.mrw.lightprofile.profiles.Beacon16;
+import de.morknet.mrw.lightprofile.profiles.Beacon17;
+import de.morknet.mrw.lightprofile.profiles.Beacon18;
+import de.morknet.mrw.lightprofile.profiles.Beacon19;
+import de.morknet.mrw.lightprofile.profiles.Blink12;
+import de.morknet.mrw.lightprofile.profiles.Fast15;
+import de.morknet.mrw.lightprofile.profiles.Gas08;
+import de.morknet.mrw.lightprofile.profiles.Gas09;
+import de.morknet.mrw.lightprofile.profiles.Gas10;
+import de.morknet.mrw.lightprofile.profiles.Gas11;
+import de.morknet.mrw.lightprofile.profiles.Medium14;
+import de.morknet.mrw.lightprofile.profiles.Neon00;
+import de.morknet.mrw.lightprofile.profiles.Neon01;
+import de.morknet.mrw.lightprofile.profiles.Neon02;
+import de.morknet.mrw.lightprofile.profiles.Neon03;
+import de.morknet.mrw.lightprofile.profiles.Neon04;
+import de.morknet.mrw.lightprofile.profiles.Neon05;
+import de.morknet.mrw.lightprofile.profiles.Neon06;
+import de.morknet.mrw.lightprofile.profiles.Neon07;
+import de.morknet.mrw.lightprofile.profiles.Slow13;
+
 public abstract class LightProfile implements Comparable<LightProfile>
 {
 	protected final static Set<LightProfile> profiles = new TreeSet<LightProfile>();
@@ -44,6 +65,30 @@ public abstract class LightProfile implements Comparable<LightProfile>
 	private final static int   X_OFFSET = 8;
 	private final static int   Y_OFFSET = 8;
 
+	static 
+	{
+		profiles.add(new Neon00());
+		profiles.add(new Neon01());
+		profiles.add(new Neon02());
+		profiles.add(new Neon03());
+		profiles.add(new Neon04());
+		profiles.add(new Neon05());
+		profiles.add(new Neon06());
+		profiles.add(new Neon07());
+		profiles.add(new Gas08());
+		profiles.add(new Gas09());
+		profiles.add(new Gas10());
+		profiles.add(new Gas11());
+		profiles.add(new Blink12());
+		profiles.add(new Slow13());
+		profiles.add(new Medium14());
+		profiles.add(new Fast15());
+		profiles.add(new Beacon16());
+		profiles.add(new Beacon17());
+		profiles.add(new Beacon18());
+		profiles.add(new Beacon19());
+	}
+	
 	protected LightProfile()
 	{
 		image = new BufferedImage(

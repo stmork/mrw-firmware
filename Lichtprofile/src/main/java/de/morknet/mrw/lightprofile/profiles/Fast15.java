@@ -44,11 +44,6 @@ public class Fast15 extends LightProfile
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255
 	};
 
-	static
-	{
-		LightProfile.profiles.add(new Fast15());
-	}
-
 	@Override
 	protected int [] getArray()
 	{

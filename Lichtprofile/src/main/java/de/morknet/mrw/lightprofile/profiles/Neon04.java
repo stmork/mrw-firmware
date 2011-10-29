@@ -45,11 +45,6 @@ public class Neon04 extends LightProfile
 		255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
 	};
 
-	static
-	{
-		LightProfile.profiles.add(new Neon04());
-	}
-
 	@Override
 	protected int [] getArray()
 	{
