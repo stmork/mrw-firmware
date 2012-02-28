@@ -11,11 +11,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.openarchitectureware.base.oawBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.xtend.shared.ui.xtendBuilder</name>
 			<arguments>
 			</arguments>
