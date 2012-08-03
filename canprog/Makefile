@@ -48,7 +48,7 @@ setid:	setid.o can_pc.o mrw_dump.o
 busy:	busy.o can_pc.o mrw_dump.o
 
 mrw_daemon:	mrw_daemon.o mrw_dump.o can_pc.o
-	$(LINK.cc) -o $@ $^ 
+	$(LINK.cc) -o $@ $^ $(LDFLAGS)
 
 test:
 	splint $(CPPFLAGS) $(SRC)

@@ -17,6 +17,7 @@
 #define RECEIVE_BUFFER_H
 
 #include <sys/timeb.h>
+#include <stddef.h>
 #include "mcp2515.h"
 #include "Log.h"
 #include "UartReader.h"

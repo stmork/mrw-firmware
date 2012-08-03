@@ -9,7 +9,7 @@ CPPFLAGS	= -I ../mc
 all:	$(PROGS)
 
 mrw_daemon:	mrw_daemon.o SerialLine.o ServerSocket.o UartReader.o Log.o ClientHandler.o
-	$(LINK.cc) -o $@ $^
+	$(LINK.cc) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -rf *.o $(PROGS) .dep
