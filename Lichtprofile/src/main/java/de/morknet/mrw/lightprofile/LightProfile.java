@@ -273,6 +273,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			pw.println("\treturn (sizeof(profiles) / sizeof(struct light_profile));");
 			pw.println("}");
 
+			pw.flush();
 			fos.flush();
 		}
 		finally
