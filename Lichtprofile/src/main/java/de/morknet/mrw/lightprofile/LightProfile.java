@@ -189,8 +189,8 @@ public abstract class LightProfile implements Comparable<LightProfile>
 	{
 		int [] array = getArray();
 
-		System.out.printf("Writing array of %s (%d bytes)\n", getName(), array.length);
-		writer.printf("static const uint8_t %s[LIGHT_PROFILE_SIZE] PROGMEM =\n", getName().toLowerCase(locale));
+		System.out.printf("Writing array of %s (%d bytes)%n", getName(), array.length);
+		writer.printf(locale, "static const uint8_t %s[LIGHT_PROFILE_SIZE] PROGMEM =%n", getName().toLowerCase(locale));
 		writer.println("{");
 		for (int i = 0;i < array.length;i++)
 		{
@@ -206,7 +206,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 				}
 				writer.print("\t");
 			}
-			writer.printf(" %3d", array[i]);
+			writer.printf(locale, " %3d", array[i]);
 		}
 		writer.println("\n};");
 		writer.println("");
@@ -223,6 +223,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		{
 			fos = new FileOutputStream(filename);
 			pw  = new PrintWriter(fos);
+
 			pw.println("/*");
 			pw.println("**");
 			pw.println("**\t$Filename:\tlight_profile.c $"); 
@@ -263,7 +264,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 					pw.print(",");
 				}
 				pw.println("");
-				pw.printf("\t{ %10s, %d }", profile.getName().toLowerCase(locale), profile.isRepeatable() ? 1 : 0);
+				pw.printf(locale, "\t{ %10s, %d }", profile.getName().toLowerCase(locale), profile.isRepeatable() ? 1 : 0);
 			}
 			pw.println("\n};");
 			pw.println("");
@@ -272,7 +273,6 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			pw.println("\treturn (sizeof(profiles) / sizeof(struct light_profile));");
 			pw.println("}");
 
-			pw.flush();
 			fos.flush();
 		}
 		finally
@@ -293,12 +293,12 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		{
 			try
 			{
-				System.out.printf("%2d: %s\n", profile.getIndex(), profile.getName());
+				System.out.printf("%2d: %s%n", profile.getIndex(), profile.getName());
 				profile.save(imageDir);
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace(System.err);
+				e.printStackTrace();
 			}
 		}
 		try
@@ -307,7 +307,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace(System.err);
+			e.printStackTrace();
 		}
 	}
 

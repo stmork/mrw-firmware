@@ -18,7 +18,7 @@
 		
 	<path id="findbugs.lib">
 		<fileset dir="${findbugs.home}">
-			<include name="**/*.jar"/>
+			<include name="lib/*.jar"/>
 		</fileset>
 	</path>
 
