@@ -290,6 +290,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 		final String imageDir = args.length >= 1 ? args[0] : ".";
 		final String mcDir    = args.length >= 2 ? args[1] : ".";
 
+		System.setProperty("java.awt.headless", "true");
 		for (LightProfile profile : profiles)
 		{
 			try

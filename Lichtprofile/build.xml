@@ -55,6 +55,7 @@
 
 	<target name="run" depends="compile">
 		<java classname="de.morknet.mrw.lightprofile.LightProfile" classpathref="run.classpath">
+			<sysproperty key="java.awt.headless" value="true"/>
 			<arg value="${image-path}"/>
 			<arg value="${mc-path}"/>
 		</java>
