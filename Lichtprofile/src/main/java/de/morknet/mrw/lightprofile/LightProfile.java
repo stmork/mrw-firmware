@@ -216,13 +216,11 @@ public abstract class LightProfile implements Comparable<LightProfile>
 
 	private static void printMC(String filename) throws IOException
 	{
-		FileOutputStream fos = null;
-		PrintWriter pw;
+		PrintWriter pw = null;
 
 		try
 		{
-			fos = new FileOutputStream(filename);
-			pw  = new PrintWriter(fos);
+			pw  = new PrintWriter(filename, "UTF-8");
 
 			pw.println("/*");
 			pw.println("**");
@@ -274,13 +272,12 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			pw.println("}");
 
 			pw.flush();
-			fos.flush();
 		}
 		finally
 		{
-			if (fos != null)
+			if (pw != null)
 			{
-				fos.close();
+				pw.close();
 			}
 		}
 	}
