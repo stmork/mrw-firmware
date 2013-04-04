@@ -23,6 +23,7 @@
 #define BIT_H
 
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 #define SET_PORT_BIT(port,pin)       ((port) |=  _BV(pin))
 #define CLR_PORT_BIT(port,pin)       ((port) &= ~_BV(pin))
@@ -54,8 +55,8 @@ typedef struct
 	uint8_t        state:1;
 } mrw_input;
 
-extern uint8_t set_bits[8];
-extern uint8_t clr_bits[8];
+extern const uint8_t set_bits[8] PROGMEM;
+extern const uint8_t clr_bits[8] PROGMEM;
 
 extern void    set_pin(mrw_connection *con);
 extern void    clr_pin(mrw_connection *con);

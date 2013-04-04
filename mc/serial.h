@@ -37,8 +37,8 @@
 #define SER_DATA   _BV(P_DATA)
 #define SER_SET    _BV(P_SET)
 
-#define SET_SER_BIT(byte,bit) { serial_buffer[byte] |= set_bits[bit]; }
-#define CLR_SER_BIT(byte,bit) { serial_buffer[byte] &= clr_bits[bit]; }
+#define SET_SER_BIT(byte,bit) { serial_buffer[byte] |= pgm_read_byte(&set_bits[bit]); }
+#define CLR_SER_BIT(byte,bit) { serial_buffer[byte] &= pgm_read_byte(&clr_bits[bit]); }
 
 #define MAX_SERIAL_BUFFER 8
 

@@ -25,12 +25,12 @@
 #include "bit.h"
 #include "serial.h"
 
-uint8_t set_bits[8] =
+const uint8_t set_bits[8] PROGMEM =
 {
 	0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80
 };
 
-uint8_t clr_bits[8] =
+const uint8_t clr_bits[8] PROGMEM =
 {
 	0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f
 };
@@ -39,7 +39,7 @@ void set_pin(mrw_connection *con)
 {
 	register uint8_t bit   = CONNECTION_BITS(con->bit);
 	register uint8_t port  = CONNECTION_PORT(con->bit);
-	register uint8_t value = set_bits[bit];
+	register uint8_t value = pgm_read_byte(&set_bits[bit]);
 
 	switch(port)
 	{
@@ -59,7 +59,7 @@ void clr_pin(mrw_connection *con)
 {
 	register uint8_t bit  = CONNECTION_BITS(con->bit);
 	register uint8_t port = CONNECTION_PORT(con->bit);
-	register uint8_t mask = clr_bits[bit];
+	register uint8_t mask = pgm_read_byte(&clr_bits[bit]);
 
 	switch(port)
 	{
@@ -79,7 +79,7 @@ void out_pin(mrw_connection *con)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
 	register uint8_t bit   = CONNECTION_BITS(con->bit);
-	register uint8_t value = set_bits[bit];
+	register uint8_t value = pgm_read_byte(&set_bits[bit]);
 
 	switch(port)
 	{
@@ -99,7 +99,7 @@ void in_pin(mrw_connection *con, uint8_t pullup)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
 	register uint8_t bit   = CONNECTION_BITS(con->bit);
-	register uint8_t mask  = clr_bits[bit];
+	register uint8_t mask  = pgm_read_byte(&clr_bits[bit]);
 
 	switch(port)
 	{
@@ -116,7 +116,7 @@ void in_pin(mrw_connection *con, uint8_t pullup)
 	
 	if (pullup)
 	{
-		uint8_t value = set_bits[bit];
+		uint8_t value = pgm_read_byte(&set_bits[bit]);
 
 		switch(port)
 		{
@@ -152,7 +152,7 @@ uint8_t tst_pin(mrw_connection *con)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
 	register uint8_t bit   = CONNECTION_BITS(con->bit);
-	register uint8_t mask  = set_bits[bit];
+	register uint8_t mask  = pgm_read_byte(&set_bits[bit]);
 
 	switch(port)
 	{
