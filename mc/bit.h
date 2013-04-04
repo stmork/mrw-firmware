@@ -8,7 +8,7 @@
 **
 **	Bit handling
 **
-**	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**	Copyright (C) 2013 committers of this modelrailway project. All rights reserved.
 **
 **	This program and the accompanying materials are made available under the
 **	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -23,7 +23,10 @@
 #define BIT_H
 
 #include <stdint.h>
+
+#ifdef AVR
 #include <avr/pgmspace.h>
+#endif
 
 #define SET_PORT_BIT(port,pin)       ((port) |=  _BV(pin))
 #define CLR_PORT_BIT(port,pin)       ((port) &= ~_BV(pin))
@@ -55,8 +58,10 @@ typedef struct
 	uint8_t        state:1;
 } mrw_input;
 
+#ifdef AVR
 extern const uint8_t set_bits[8] PROGMEM;
 extern const uint8_t clr_bits[8] PROGMEM;
+#endif
 
 extern void    set_pin(mrw_connection *con);
 extern void    clr_pin(mrw_connection *con);
