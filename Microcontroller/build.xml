@@ -60,6 +60,7 @@
 
 	<target name="generate">
 		<mkdir dir="${gen-path}" />
+		<echo message="${eclipse.home}"/>
 		<workflow file="Microcontroller.mwe" classpathref="generate.classpath" failonerror="true"/>
 	</target>
 
