@@ -62,6 +62,11 @@ static void fill_message(
 	msg->data[msg->length++] = unit_no >> 8;
 }
 
+/**
+ * Diese Methode erhöht den Index des Ringsendebuffers.
+ * Gleichzeitig wird, wenn ein CAN-Sendebuffer frei ist,
+ * der Versand angestoßen.
+ */
 static void bump_ring(void)
 {
 	if (ring_increase(&tx_ring))
@@ -73,6 +78,9 @@ static void bump_ring(void)
 	}
 }
 
+/**
+ * Diese Methode reiht eine Antwort in den Ringbuffer ein.
+ */
 void queue_result(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -84,6 +92,10 @@ void queue_result(
 	bump_ring();
 }
 
+/**
+ * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
+ * Antwort enthält zusätzlich noch ein Informationsbyte.
+ */
 void queue_info(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -97,6 +109,10 @@ void queue_info(
 	bump_ring();
 }
 
+/**
+ * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
+ * Antwort enthält zusätzlich noch zwei Informationsbytes.
+ */
 void queue_infos2(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -112,6 +128,10 @@ void queue_infos2(
 	bump_ring();
 }
 
+/**
+ * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
+ * Antwort enthält zusätzlich noch drei Informationsbytes.
+ */
 void queue_infos3(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -129,6 +149,10 @@ void queue_infos3(
 	bump_ring();
 }
 
+/**
+ * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
+ * Antwort enthält zusätzlich noch vier Informationsbytes.
+ */
 void queue_infos4(
 	uint8_t  cmd,
 	uint16_t unit_no,
@@ -149,7 +173,7 @@ void queue_infos4(
 }
 
 /**
- * Diese Methode entleert den CAN Sendepuffer. die Routine
+ * Diese Methode entleert den CAN Sendepuffer. Die Routine
  * wird erst verlassen, wenn keine CAN Message mehr im Ringpuffer
  * verblieben ist. Das Entleeren ist nur sinnvoll, wenn ein
  * Reset ansteht, um keine Daten zu verlieren.
