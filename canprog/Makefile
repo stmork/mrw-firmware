@@ -1,12 +1,11 @@
-CC		= gcc
-CPP		= gcc
+CFLAGS	= -O3
 SRC		= canprog.c gwsim.c can_pc.c mrw_dump.c receive.c ping.c send.c\
 	qryerr.c qrybuf.c reset.c switch.c signal.c form.c config.c setid.c\
 	rail.c occupation.c light.c busy.c mrw_daemon.cc
 PROGS		= canprog gwsim receive ping send reset switch signal form config qrybuf\
 	qryerr setid rail occupation light busy mrw_daemon controller11
 
-LDFLAGS		= -lm -lpthread
+LDLIBS		= -lm -lpthread
 CPPFLAGS	= -I ../mc
 
 all:	$(PROGS)
@@ -48,7 +47,7 @@ setid:	setid.o can_pc.o mrw_dump.o
 busy:	busy.o can_pc.o mrw_dump.o
 
 mrw_daemon:	mrw_daemon.o mrw_dump.o can_pc.o
-	$(LINK.cc) -o $@ $^ $(LDFLAGS)
+	$(LINK.cc) -o $@ $^ $(LDLIBS)
 
 test:
 	splint $(CPPFLAGS) $(SRC)
