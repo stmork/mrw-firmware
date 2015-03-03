@@ -1,55 +1,55 @@
-«REM»
-«»
-«»
-«»	$Id$
-«»	$Revision$
-«»	$Date$
-«»	$Author$
-«»
-«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
-«»
-«»	This program and the accompanying materials are made available under the
-«»	terms of the Eclipse Public License v1.0.
-«»
-«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-«»
-«»
-«»
-«ENDREM»
+Â«REMÂ»
+Â«Â»
+Â«Â»
+Â«Â»	$Id$
+Â«Â»	$Revision$
+Â«Â»	$Date$
+Â«Â»	$Author$
+Â«Â»
+Â«Â»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+Â«Â»
+Â«Â»	This program and the accompanying materials are made available under the
+Â«Â»	terms of the Eclipse Public License v1.0.
+Â«Â»
+Â«Â»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+Â«Â»
+Â«Â»
+Â«Â»
+Â«ENDREMÂ»
 
-«IMPORT uml»
+Â«IMPORT umlÂ»
 
-«EXTENSION de::itemis::mrw::mc::sm»
+Â«EXTENSION de::itemis::mrw::mc::smÂ»
 
-«DEFINE Main FOR StateMachine»
-«FILE smImplFileName()»
-«EXPAND Tools::Header(smImplFileName(), name)»
-«EXPAND Tools::Comment»
+Â«DEFINE Main FOR StateMachineÂ»
+Â«FILE smImplFileName()Â»
+Â«EXPAND Tools::Header(smImplFileName(), name)Â»
+Â«EXPAND Tools::CommentÂ»
 
 #include <avr/io.h>
 
-#include "«smIncludeFileName()»"
-#include "«smIncludeCommandFileName()»"
-#include "«smIncludeActivityFileName()»"
+#include "Â«smIncludeFileName()Â»"
+#include "Â«smIncludeCommandFileName()Â»"
+#include "Â«smIncludeActivityFileName()Â»"
 #include "result_queue.h"
 #include "tool.h"
 
 /************************************************/
-/* Vorwärtsdeklaration der choices Pseudostates */
+/* VorwÃ¤rtsdeklaration der choices Pseudostates */
 /************************************************/
-«FOREACH getChoices() AS choice»
-«IF named(choice)»
-static int8_t «method(choice.name)»(CAN_message *msg);
-«ENDIF»
-«ENDFOREACH»
+Â«FOREACH getChoices() AS choiceÂ»
+Â«IF named(choice)Â»
+static int8_t Â«method(choice.name)Â»(CAN_message *msg);
+Â«ENDIFÂ»
+Â«ENDFOREACHÂ»
 
 /**********************/
 /* Der aktuelle State */
 /**********************/
 
-static int8_t state = «initialDefinition()»;
+static int8_t state = Â«initialDefinition()Â»;
 
-int8_t «smGetState()»()
+int8_t Â«smGetState()Â»()
 {
 				return state;
 }
@@ -57,47 +57,47 @@ int8_t «smGetState()»()
 /****************************************************/
 /* Initialisierung und Verlassen des Initial States */
 /****************************************************/
-«FOREACH getInitials() AS initial»
-void «smInit()»(void)
+Â«FOREACH getInitials() AS initialÂ»
+void Â«smInit()Â»(void)
 {
 				int8_t result;
 
-				state = «initialDefinition()»;
+				state = Â«initialDefinition()Â»;
 				CAN_message *msg = null;
-«EXPAND Transition FOREACH initial.outgoing»
+Â«EXPAND Transition FOREACH initial.outgoingÂ»
 }
-«ENDFOREACH»
+Â«ENDFOREACHÂ»
 
 /************************/
 /* Die Auswerteschleife */
 /************************/
-void «method(name)»(CAN_message *msg)
+void Â«method(name)Â»(CAN_message *msg)
 {
 	int8_t   cmd     = msg->data[0];
 	uint16_t unit_no = bit_is_set(msg->status, RX_STAT_FRAME_EXTENDED) ? msg->eid : 0;
 	int8_t   result;
 
-	result = «smCheckCommand()»(msg);
+	result = Â«smCheckCommand()Â»(msg);
 	if (result >= 0)
 	{
 		switch (state)
 		{
-«FOREACH getStates() AS state»
-«EXPAND Tools::Comment FOR state»
-		case «stateDefinition(state)»:
+Â«FOREACH getStates() AS stateÂ»
+Â«EXPAND Tools::Comment FOR stateÂ»
+		case Â«stateDefinition(state)Â»:
 			switch(cmd)
 			{
-«FOREACH state.outgoing.select(e|named(e)) AS transition»
-			case «transition.name»:
-«EXPAND Transition FOR transition»
+Â«FOREACH state.outgoing.select(e|named(e)) AS transitionÂ»
+			case Â«transition.nameÂ»:
+Â«EXPAND Transition FOR transitionÂ»
 				break;
-«ENDFOREACH»
+Â«ENDFOREACHÂ»
 			default:
-				result = «defaultTransition(state)»(msg);
+				result = Â«defaultTransition(state)Â»(msg);
 				break;
 			}
 			break;
-«ENDFOREACH»
+Â«ENDFOREACHÂ»
 		}
 	}
 	if (result >= 0)
@@ -109,51 +109,51 @@ void «method(name)»(CAN_message *msg)
 /****************/
 /* Pseudostates */
 /****************/
-«FOREACH getChoices() AS choice»
-static int8_t «method(choice.name)»(CAN_message *msg)
+Â«FOREACH getChoices() AS choiceÂ»
+static int8_t Â«method(choice.name)Â»(CAN_message *msg)
 {
 	int8_t result = -1;
-«EXPAND Transition FOREACH choice.outgoing SEPARATOR "	else"»
+Â«EXPAND Transition FOREACH choice.outgoing SEPARATOR "	else"Â»
 	return result;
 }
-«ENDFOREACH»
+Â«ENDFOREACHÂ»
 
-«ENDFILE»
-«ENDDEFINE»
+Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
-«REM»
-««« Template for a transition »»»
-«ENDREM»
+Â«REMÂ»
+Â«Â«Â« Template for a transition Â»Â»Â»
+Â«ENDREMÂ»
 
-«DEFINE Transition FOR Transition»
-«LET getGuard() AS body»
-«IF body != null»
-	if («body»(msg))
+Â«DEFINE Transition FOR TransitionÂ»
+Â«LET getGuard() AS bodyÂ»
+Â«IF body != nullÂ»
+	if (Â«bodyÂ»(msg))
 	{
-«ENDIF»
-«FOREACH allOwnedElements().typeSelect(Activity).select(e|named(e)) AS activity»
-				result = «method(activity.name)»(msg);
-«ENDFOREACH»
-«EXPAND Target(this) FOR target»
-«IF body != null»
+Â«ENDIFÂ»
+Â«FOREACH allOwnedElements().typeSelect(Activity).select(e|named(e)) AS activityÂ»
+				result = Â«method(activity.name)Â»(msg);
+Â«ENDFOREACHÂ»
+Â«EXPAND Target(this) FOR targetÂ»
+Â«IF body != nullÂ»
 	}
-«ENDIF»
-«ENDLET»
-«ENDDEFINE»
+Â«ENDIFÂ»
+Â«ENDLETÂ»
+Â«ENDDEFINEÂ»
 
-«REM»
-««« Target vertices »»»
-«ENDREM»
-«DEFINE Target(Transition t) FOR State»
-«IF t.source != this»
-				state = «stateDefinition(this)»;
-«ENDIF»
-«ENDDEFINE»
+Â«REMÂ»
+Â«Â«Â« Target vertices Â»Â»Â»
+Â«ENDREMÂ»
+Â«DEFINE Target(Transition t) FOR StateÂ»
+Â«IF t.source != thisÂ»
+				state = Â«stateDefinition(this)Â»;
+Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Target(Transition t) FOR Pseudostate»
-				result = «method(name)»(msg);
-«ENDDEFINE»
+Â«DEFINE Target(Transition t) FOR PseudostateÂ»
+				result = Â«method(name)Â»(msg);
+Â«ENDDEFINEÂ»
 
-«DEFINE Target(Transition t) FOR Vertex»
-				// «metaType.name» - «name»
-«ENDDEFINE»
+Â«DEFINE Target(Transition t) FOR VertexÂ»
+				// Â«metaType.nameÂ» - Â«nameÂ»
+Â«ENDDEFINEÂ»

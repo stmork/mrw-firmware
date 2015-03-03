@@ -25,7 +25,7 @@
 	<component id="generator" class="org.eclipse.xpand2.Generator" skipOnErrors="false">
 		<metaModel idRef="MM_EMF"/>
 		<metaModel idRef="MM_UML2"/>
-		<fileEncoding value="ISO-8859-1"/>
+		<fileEncoding value="UTF-8"/>
 
 		<expand value="de::itemis::mrw::mc::Main::Main FOR ${modelslot}"/>
 		<outlet path="${srcGenPath}">

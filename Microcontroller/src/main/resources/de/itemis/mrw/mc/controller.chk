@@ -22,19 +22,19 @@ extension de::itemis::mrw::mc::sm;
 context Transition if isCommandTransition() ERROR "Eine Transition (" + source.name + " -> " + target.name + ") muss benannt sein!" :
 	named();
 
-context Transition if isCommandTransition() ERROR "Die Transition " + name + " muss exakt einen Auslöser haben!" :
+context Transition if isCommandTransition() ERROR "Die Transition " + name + " muss exakt einen AuslÃ¶ser haben!" :
 	trigger.size == 1;
 
-context Transition if isCommandTransition() ERROR "Transition aus Zustand " + source.name + " muss einen Auslöser haben!" :
+context Transition if isCommandTransition() ERROR "Transition aus Zustand " + source.name + " muss einen AuslÃ¶ser haben!" :
 	MessageEvent.isInstance(trigger.first().event);
 
-context Transition if isCommandTransition() ERROR "Ein Auslöser muss einen Namen haben!" :
+context Transition if isCommandTransition() ERROR "Ein AuslÃ¶ser muss einen Namen haben!" :
 	named(trigger.first());
 
 context Transition if isCommandTransition() ERROR "Ein Ereignis muss einen Namen haben!" :
 	named(trigger.first().event);
 
-context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleichen Namen wie sein Auslöser haben!" :
+context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleichen Namen wie sein AuslÃ¶ser haben!" :
 	trigger.first().name == trigger.first().event.name;
 
 context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleichen Namen wie seine Transition!" :
@@ -43,11 +43,11 @@ context Transition if isCommandTransition() ERROR "Ein Ereignis muss den gleiche
 context Transition if isCommandTransition() && State.isInstance(target) ERROR "Eine Transition muss eine Activity haben!" :
 	effect != null;
 
-context Transition if isChoice(source) ERROR "Ausgehende Transitionen von Entscheidungen müssen eine Bedingung haben!" :
+context Transition if isChoice(source) ERROR "Ausgehende Transitionen von Entscheidungen mÃ¼ssen eine Bedingung haben!" :
 	guard != null;
 
 context Pseudostate if isChoice() ERROR "Eine Entscheidung muss benannt sein!" :
 	named();
 
-context Activity ERROR "Eine Aktivität muss benannt sein!" :
+context Activity ERROR "Eine AktivitÃ¤t muss benannt sein!" :
 	named();

@@ -1,49 +1,49 @@
-«REM»
-«»
-«»
-«»	$Id$
-«»	$Revision$
-«»	$Date$
-«»	$Author$
-«»
-«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
-«»
-«»	This program and the accompanying materials are made available under the
-«»	terms of the Eclipse Public License v1.0.
-«»
-«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-«»
-«»
-«»
-«ENDREM»
+Â«REMÂ»
+Â«Â»
+Â«Â»
+Â«Â»	$Id$
+Â«Â»	$Revision$
+Â«Â»	$Date$
+Â«Â»	$Author$
+Â«Â»
+Â«Â»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+Â«Â»
+Â«Â»	This program and the accompanying materials are made available under the
+Â«Â»	terms of the Eclipse Public License v1.0.
+Â«Â»
+Â«Â»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+Â«Â»
+Â«Â»
+Â«Â»
+Â«ENDREMÂ»
 
-«IMPORT uml»
+Â«IMPORT umlÂ»
 
-«EXTENSION de::itemis::mrw::mc::sm»
+Â«EXTENSION de::itemis::mrw::mc::smÂ»
 
-«DEFINE Main FOR StateMachine»
-«FILE smIncludeFileName()»
-«EXPAND Tools::Header(smIncludeFileName(), name)»
+Â«DEFINE Main FOR StateMachineÂ»
+Â«FILE smIncludeFileName()Â»
+Â«EXPAND Tools::Header(smIncludeFileName(), name)Â»
 
-#ifndef «smIncludeName()»
-#define «smIncludeName()»
+#ifndef Â«smIncludeName()Â»
+#define Â«smIncludeName()Â»
 
 #include "mcp2515.h"
 
-#define «initialDefinition()» 0
-«LET getStates() AS states»
-«FOREACH 1.upTo(states.size) AS idx»
-«LET states.get(idx-1) AS state»
-«EXPAND Tools::Comment FOR state»
-#define «stateDefinition(state)» «idx»
-«ENDLET»
-«ENDFOREACH»
-«ENDLET»
+#define Â«initialDefinition()Â» 0
+Â«LET getStates() AS statesÂ»
+Â«FOREACH 1.upTo(states.size) AS idxÂ»
+Â«LET states.get(idx-1) AS stateÂ»
+Â«EXPAND Tools::Comment FOR stateÂ»
+#define Â«stateDefinition(state)Â» Â«idxÂ»
+Â«ENDLETÂ»
+Â«ENDFOREACHÂ»
+Â«ENDLETÂ»
 
-extern int8_t «smGetState()»(void);
-extern void   «smInit()»(void);
-extern void   «method(name)»(CAN_message *msg);
+extern int8_t Â«smGetState()Â»(void);
+extern void   Â«smInit()Â»(void);
+extern void   Â«method(name)Â»(CAN_message *msg);
 
 #endif
-«ENDFILE»
-«ENDDEFINE»
+Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»

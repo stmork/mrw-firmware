@@ -1,36 +1,36 @@
-«REM»
-«»
-«»
-«»	$Id$
-«»	$Revision$
-«»	$Date$
-«»	$Author$
-«»
-«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
-«»
-«»	This program and the accompanying materials are made available under the
-«»	terms of the Eclipse Public License v1.0.
-«»
-«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-«»
-«»
-«»
-«ENDREM»
+Â«REMÂ»
+Â«Â»
+Â«Â»
+Â«Â»	$Id$
+Â«Â»	$Revision$
+Â«Â»	$Date$
+Â«Â»	$Author$
+Â«Â»
+Â«Â»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+Â«Â»
+Â«Â»	This program and the accompanying materials are made available under the
+Â«Â»	terms of the Eclipse Public License v1.0.
+Â«Â»
+Â«Â»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+Â«Â»
+Â«Â»
+Â«Â»
+Â«ENDREMÂ»
 
-«IMPORT uml»
+Â«IMPORT umlÂ»
 
-«EXTENSION de::itemis::mrw::mc::sm»
+Â«EXTENSION de::itemis::mrw::mc::smÂ»
 
-«DEFINE Main FOR StateMachine»
-«FILE smIncludeCommandFileName() ONCE»
-«EXPAND Tools::Header(smIncludeCommandFileName(), name)»
-#ifndef «smIncludeCommandName()»
-#define «smIncludeCommandName()»
-«LET getCommands().toList() AS commands»
-«FOREACH 1.upTo(commands.size) AS idx»
-#define «commands.get(idx-1)» «idx»
-«ENDFOREACH»
-«ENDLET»
+Â«DEFINE Main FOR StateMachineÂ»
+Â«FILE smIncludeCommandFileName() ONCEÂ»
+Â«EXPAND Tools::Header(smIncludeCommandFileName(), name)Â»
+#ifndef Â«smIncludeCommandName()Â»
+#define Â«smIncludeCommandName()Â»
+Â«LET getCommands().toList() AS commandsÂ»
+Â«FOREACH 1.upTo(commands.size) AS idxÂ»
+#define Â«commands.get(idx-1)Â» Â«idxÂ»
+Â«ENDFOREACHÂ»
+Â«ENDLETÂ»
 #endif
-«ENDFILE»
-«ENDDEFINE»
+Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»

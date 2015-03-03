@@ -1,91 +1,91 @@
-«REM»
-«»
-«»
-«»	$Id$
-«»	$Revision$
-«»	$Date$
-«»	$Author$
-«»
-«»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
-«»
-«»	This program and the accompanying materials are made available under the
-«»	terms of the Eclipse Public License v1.0.
-«»
-«»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-«»
-«»
-«»
-«ENDREM»
+Â«REMÂ»
+Â«Â»
+Â«Â»
+Â«Â»	$Id$
+Â«Â»	$Revision$
+Â«Â»	$Date$
+Â«Â»	$Author$
+Â«Â»
+Â«Â»	Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+Â«Â»
+Â«Â»	This program and the accompanying materials are made available under the
+Â«Â»	terms of the Eclipse Public License v1.0.
+Â«Â»
+Â«Â»	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+Â«Â»
+Â«Â»
+Â«Â»
+Â«ENDREMÂ»
 
-«IMPORT uml»
+Â«IMPORT umlÂ»
 
-«EXTENSION de::itemis::mrw::mc::sm»
+Â«EXTENSION de::itemis::mrw::mc::smÂ»
 
-«DEFINE Main FOR Model»
-«FILE "elements.log" LOG»
-«EXPAND xpt::Tools::Comment»
-«EXPAND Main FOREACH ownedElement.typeSelect(Package).select(e|e.name == "diagram")»
-«ENDFILE»
-«ENDDEFINE»
+Â«DEFINE Main FOR ModelÂ»
+Â«FILE "elements.log" LOGÂ»
+Â«EXPAND xpt::Tools::CommentÂ»
+Â«EXPAND Main FOREACH ownedElement.typeSelect(Package).select(e|e.name == "diagram")Â»
+Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Package»
-«EXPAND Main FOREACH ownedElement.typeSelect(StateMachine)»
-«ENDDEFINE»
+Â«DEFINE Main FOR PackageÂ»
+Â«EXPAND Main FOREACH ownedElement.typeSelect(StateMachine)Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR StateMachine»
-«EXPAND xpt::StateHeader::Main»
-«EXPAND xpt::StateImplementation::Main»
-«EXPAND xpt::CommandHeader::Main»
-«EXPAND xpt::ActivityHeader::Main»
-«EXPAND xpt::ActivityImplementation::Main»
-(State Machine)«name»
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR StateMachineÂ»
+Â«EXPAND xpt::StateHeader::MainÂ»
+Â«EXPAND xpt::StateImplementation::MainÂ»
+Â«EXPAND xpt::CommandHeader::MainÂ»
+Â«EXPAND xpt::ActivityHeader::MainÂ»
+Â«EXPAND xpt::ActivityImplementation::MainÂ»
+(State Machine)Â«nameÂ»
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Transition»
-(Transition)«name»: «this.source.name» -> «this.target.name»
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR TransitionÂ»
+(Transition)Â«nameÂ»: Â«this.source.nameÂ» -> Â«this.target.nameÂ»
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Activity»
-(Activity)«name» («metaType.name»)
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR ActivityÂ»
+(Activity)Â«nameÂ» (Â«metaType.nameÂ»)
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Trigger»
-(Trigger)«name» («metaType.name»)
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR TriggerÂ»
+(Trigger)Â«nameÂ» (Â«metaType.nameÂ»)
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Signal»
-(Signal)«name» («metaType.name»)
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR SignalÂ»
+(Signal)Â«nameÂ» (Â«metaType.nameÂ»)
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Pseudostate»
-(Pseudostate)«name» («metaType.name») «kind.toString()»
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR PseudostateÂ»
+(Pseudostate)Â«nameÂ» (Â«metaType.nameÂ») Â«kind.toString()Â»
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR State»
-(State)«name» («metaType.name»)
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR StateÂ»
+(State)Â«nameÂ» (Â«metaType.nameÂ»)
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR OpaqueExpression»
-(Opaque Expression)«name» («metaType.name»)
-«FOREACH body AS text»
-  «text»
-«ENDFOREACH»
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR OpaqueExpressionÂ»
+(Opaque Expression)Â«nameÂ» (Â«metaType.nameÂ»)
+Â«FOREACH body AS textÂ»
+  Â«textÂ»
+Â«ENDFOREACHÂ»
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR NamedElement»
-(«this.metaType.name»)«this.name»
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR NamedElementÂ»
+(Â«this.metaType.nameÂ»)Â«this.nameÂ»
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE Main FOR Element»
-(«this.metaType.name»)
-«EXPAND Main FOREACH ownedElement»
-«ENDDEFINE»
+Â«DEFINE Main FOR ElementÂ»
+(Â«this.metaType.nameÂ»)
+Â«EXPAND Main FOREACH ownedElementÂ»
+Â«ENDDEFINEÂ»
