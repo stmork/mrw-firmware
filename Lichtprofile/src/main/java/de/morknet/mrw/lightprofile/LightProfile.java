@@ -20,8 +20,10 @@
 
 package de.morknet.mrw.lightprofile;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -134,8 +136,9 @@ public abstract class LightProfile implements Comparable<LightProfile>
 	
 	final void save(String imageDir) throws IOException
 	{
-		Graphics gfx = image.getGraphics();
-		FileOutputStream os = null;
+		Graphics2D gfx = image.createGraphics();
+
+        FileOutputStream os = null;
 		try
 		{
 			os = new FileOutputStream(imageDir + File.separator + getName() + ".gif");
@@ -145,6 +148,10 @@ public abstract class LightProfile implements Comparable<LightProfile>
 	
 			gfx.setColor(Color.WHITE);
 			gfx.fillRect(0, 0, image.getWidth(), image.getHeight());
+			gfx.setStroke(new BasicStroke(1.25f));
+			gfx.setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 
 			gfx.setColor(Color.LIGHT_GRAY);
 			do

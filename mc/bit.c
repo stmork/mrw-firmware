@@ -35,6 +35,9 @@ const uint8_t clr_bits[8] PROGMEM =
 	0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f
 };
 
+/**
+ * Diese Methode setzt das zur Connection korrespondierende Bit.
+ */
 void set_pin(mrw_connection *con)
 {
 	register uint8_t bit   = CONNECTION_BITS(con->bit);
@@ -55,6 +58,9 @@ void set_pin(mrw_connection *con)
 	}
 }
 
+/**
+ * Diese Methode löscht das zur Connection korrespondierende Bit.
+ */
 void clr_pin(mrw_connection *con)
 {
 	register uint8_t bit  = CONNECTION_BITS(con->bit);
@@ -75,6 +81,9 @@ void clr_pin(mrw_connection *con)
 	}
 }
 
+/**
+ * Diese Methode konfiguriert das zu einer Connection korrespondierende Bit als Output.
+ */
 void out_pin(mrw_connection *con)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
@@ -95,6 +104,9 @@ void out_pin(mrw_connection *con)
 	}
 }
 
+/**
+ * Diese Methode konfiguriert das zu einer Connection korrespondierende Bit als Input.
+ */
 void in_pin(mrw_connection *con, uint8_t pullup)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
@@ -148,6 +160,9 @@ void in_pin(mrw_connection *con, uint8_t pullup)
 	}
 }
 
+/**
+ * Diese Methode testet den Zustand des zu einer Connection korrespondierenden Bits.
+ */
 uint8_t tst_pin(mrw_connection *con)
 {
 	register uint8_t port  = CONNECTION_PORT(con->bit);
@@ -171,6 +186,10 @@ void config_connection(mrw_connection *con, uint8_t con_no)
 	con->bit = con_no < 8 ? 7 - con_no : con_no;
 }
 
+/**
+ * Diese Methode konfiguriert einen Input Pin und initialisiert den
+ * Zustand des Bits gleich mit.
+ */
 void init_input(mrw_input *input, uint8_t pullup)
 {
 	in_pin(&input->connection, pullup);
@@ -179,6 +198,9 @@ void init_input(mrw_input *input, uint8_t pullup)
 	input->state      = tst_pin(&input->connection) != 0;
 }
 
+/**
+ * Diese Methode testet ein Input Pin und führt einen Entprellvorgang aus.
+ */
 int8_t test_state_change(mrw_input *input)
 {
 	uint8_t state  = tst_pin(&input->connection) != 0;

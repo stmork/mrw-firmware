@@ -34,6 +34,10 @@
        uint8_t serial_buffer[MAX_SERIAL_BUFFER];
 static uint8_t start_idx = sizeof(serial_buffer);
 
+/**
+ * Diese Medthode initialisiert die für die Schieberegister nötigen Portbits. Der
+ * Schiebepuffer wird dabei ebenfalls gelöscht und versendet.
+ */
 void serial_init(void)
 {
 	DDR_SERIAL |= SER_CLK | SER_DATA | SER_SET;
@@ -41,6 +45,9 @@ void serial_init(void)
 	send_serial_buffer();
 }
 
+/**
+ * Diese Methode schreibt ein einzelnes Byte in die Schieberegister.
+ */
 static void serial_putc(uint8_t val)
 {
 	for (uint8_t bit = 1; bit != 0; bit = bit << 1)
@@ -57,6 +64,9 @@ static void serial_putc(uint8_t val)
 	}
 }
 
+/**
+ * Diese Methode schreibt einen kompletten Puffer in die Schieberegister.
+ */
 void serial_put_buffer(uint8_t *buffer, uint8_t len)
 {
 	DATA0;
@@ -70,6 +80,10 @@ void serial_put_buffer(uint8_t *buffer, uint8_t len)
 	SET0;
 }
 
+/**
+ * Diese Methode löscht den Sendepuffer und sendet ihn gleichzeitig
+ * über die Schieberegister.
+ */
 void clear_serial_buffer(void)
 {
 	uint8_t *buffer = serial_buffer;

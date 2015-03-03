@@ -40,7 +40,8 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
 };
 
 /*
- * Hier wird aus einer Tabelle Zähler und Nenner für die Helligkeit ausgelesen. Wichtig hier
+ * Hier wird ein neuer Helligkeitswert für das Dimmen bestimmt. Dabei werden
+ * aus einer Tabelle Zähler und Nenner für die Helligkeit ausgelesen. Wichtig hier
  * ist, dass die Werte aus dem Flash geholt werden (const/PROGMEM), um RAM zu sparen.
  */
 void set_dimm(struct mrw_light *dvc, uint8_t value)

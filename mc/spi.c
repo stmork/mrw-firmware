@@ -22,6 +22,9 @@
 #include "spi.h"
 #include "bit.h"
 
+/**
+ * Diese Methode initialisiert das SPI-Interface.
+ */
 void spi_init(void)
 {
 	// Aktivieren der Pins für das SPI Interface
@@ -40,6 +43,11 @@ void spi_init(void)
 	SPSR = SPI_X2002;
 }
 
+/**
+ * Diese Methode liest ein Byte aus dem SPI aus. Vor
+ * dem Lesen wird auf eine evtl. bestehende Übertragung
+ * gewartet.
+ */
 uint8_t spi_readc(void)
 {
 	// Sendet ein Byte
@@ -52,6 +60,11 @@ uint8_t spi_readc(void)
 	return SPDR;
 }
 
+/**
+ * Diese Methode liest ein Byte aus dem SPI aus. Vor
+ * dem Lesen wird nicht auf eine evtl. bestehende Übertragung
+ * gewartet.
+ */
 uint8_t spi_getc(void)
 {
 	// Sendet ein Byte
@@ -64,6 +77,10 @@ uint8_t spi_getc(void)
 	return SPDR;
 }
 
+/**
+ * Diese Methode stößt das Lesen eines Bytes aus dem SPI an. Es
+ * wird nicht auf die Beendigung des Lesevorgangs gewartet.
+ */
 uint8_t spi_prefetchc(void)
 {
 	uint8_t result;
@@ -80,6 +97,12 @@ uint8_t spi_prefetchc(void)
 	return result;	
 }
 
+/**
+ * Diese Methode schreibt ein Byte auf das SPI aus. Vor der
+ * Ausführung wird auf Beendigunge eines evtl. bestehenden
+ * Übertragungsvorgangs gewartet. Auf das Ende des Schreibens
+ * wird nicht gewartet.
+ */
 void spi_putc( uint8_t data )
 {
 	// Wartet bis Byte gesendet wurde

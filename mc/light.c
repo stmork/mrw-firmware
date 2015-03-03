@@ -144,25 +144,33 @@ void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 	}
 }
 
+/**
+ * Hier wird gemäß https://sourceforge.net/p/mrw/wiki/LichtProfile/ ein
+ * Lichtprofil gewählt.
+ */
 const struct light_profile *get_light_profile(uint8_t type)
 {
 	uint8_t idx;
 
 	if (type < light_profile_count())
 	{
+		// Direkt nummeriertes Profil.
 		idx = type;
 	}
 	else switch (type)
 	{
 	case  64:
+		// Zufällige Neonröhren
 		idx = (random_timer() % 15) & 7;
 		break;
 
 	case  65:
+		// Zufällige Gaslaternen
 		idx = (random_timer() & 3)  + 8;
 		break;
 
 	case  66:
+		// Zufällige Rundumlichter
 		idx = (random_timer() & 3) + 16;
 		break;
 
