@@ -2,7 +2,6 @@
 **
 **	$Filename:	LightProfile.java $
 **	$Revision$
-**	$Date$
 **	$Author$
 **	$Id$
 **
@@ -226,7 +225,6 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			pw.println("**");
 			pw.println("**\t$Filename:\tlight_profile.c $"); 
 			pw.println("**\t$Revision$");
-			pw.println("**\t$Date$");
 			pw.println("**\t$Author$");
 			pw.println("**\t$Id$");
 			pw.println("**");

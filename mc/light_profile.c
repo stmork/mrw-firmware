@@ -2,7 +2,6 @@
 **
 **	$Filename:	light_profile.c $
 **	$Revision$
-**	$Date$
 **	$Author$
 **	$Id$
 **

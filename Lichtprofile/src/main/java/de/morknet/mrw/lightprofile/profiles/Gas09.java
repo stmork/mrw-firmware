@@ -1,7 +1,6 @@
 /*
 **
 **	$Revision$
-**	$Date$
 **	$Author$
 **	$Id$
 **
