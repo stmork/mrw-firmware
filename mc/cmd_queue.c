@@ -38,8 +38,8 @@ static volatile uint8_t     ring_size  = 0;
 /**
  * Hier werden alle Langzeitkommandows eingereiht. Langzeitkommandos sind
  * alle Kommandos an Magnetartikel, weil deren Verarbeitung mit etwa einer
- * Sekunde veranschlagt werden. Der Interrupt muss für diese Routine
- * außerhalb gesperrt werden.
+ * Sekunde veranschlagt werden. Der Interrupt muss fÃ¼r diese Routine
+ * auÃŸerhalb gesperrt werden.
  */
 uint8_t cmd_enqueue(mrw_device *dvc, uint8_t cmd, uint8_t code)
 {
@@ -68,7 +68,7 @@ uint8_t cmd_enqueue(mrw_device *dvc, uint8_t cmd, uint8_t code)
 
 /**
  * Hier wird das aktuelle Kommando aus dem Ring Buffer genommen.
- * Der Interrupt muss für diese Routine außerhalb gesperrt werden.
+ * Der Interrupt muss fÃ¼r diese Routine auÃŸerhalb gesperrt werden.
  */
 void cmd_remove(void)
 {

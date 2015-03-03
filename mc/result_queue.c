@@ -39,7 +39,7 @@ struct can_ring tx_ring;
  * sowie wenn vorhanden die Unitnumber eingetragen. Im Kommandobyte
  * wird noch das Ergbnisbit gesetzt und der Verarbeitungszustand
  * untergebracht. Der Ring Buffer wird im Hauptprogramm verarbeitet.
- * Der Interrupt muss f¸r diese Routine auﬂerhalb gesperrt werden.
+ * Der Interrupt muss f√ºr diese Routine au√üerhalb gesperrt werden.
  */
 static void fill_message(
 	CAN_message *msg,
@@ -63,9 +63,9 @@ static void fill_message(
 }
 
 /**
- * Diese Methode erhˆht den Index des Ringsendebuffers.
+ * Diese Methode erh√∂ht den Index des Ringsendebuffers.
  * Gleichzeitig wird, wenn ein CAN-Sendebuffer frei ist,
- * der Versand angestoﬂen.
+ * der Versand angesto√üen.
  */
 static void bump_ring(void)
 {
@@ -94,7 +94,7 @@ void queue_result(
 
 /**
  * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
- * Antwort enth‰lt zus‰tzlich noch ein Informationsbyte.
+ * Antwort enth√§lt zus√§tzlich noch ein Informationsbyte.
  */
 void queue_info(
 	uint8_t  cmd,
@@ -111,7 +111,7 @@ void queue_info(
 
 /**
  * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
- * Antwort enth‰lt zus‰tzlich noch zwei Informationsbytes.
+ * Antwort enth√§lt zus√§tzlich noch zwei Informationsbytes.
  */
 void queue_infos2(
 	uint8_t  cmd,
@@ -130,7 +130,7 @@ void queue_infos2(
 
 /**
  * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
- * Antwort enth‰lt zus‰tzlich noch drei Informationsbytes.
+ * Antwort enth√§lt zus√§tzlich noch drei Informationsbytes.
  */
 void queue_infos3(
 	uint8_t  cmd,
@@ -151,7 +151,7 @@ void queue_infos3(
 
 /**
  * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
- * Antwort enth‰lt zus‰tzlich noch vier Informationsbytes.
+ * Antwort enth√§lt zus√§tzlich noch vier Informationsbytes.
  */
 void queue_infos4(
 	uint8_t  cmd,

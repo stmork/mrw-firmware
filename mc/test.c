@@ -107,7 +107,7 @@ static void pong(void)
 
 /**
  * Hier findet die eigentliche Verarbeitung statt.
- * Die Verarbeitung ist hier nur das Hochzählen samt Anzeigen an LEDs.
+ * Die Verarbeitung ist hier nur das HochzÃ¤hlen samt Anzeigen an LEDs.
  */
 static void process_can_message(void)
 {
@@ -164,9 +164,9 @@ static void port_init(void)
 
 /**
  * Interrupt Service Routine Overflow Timer 2. Hier wird im 64 Hz Takt
- * der Zustand des Tasters überprüft. Die Zustandüberprüfung entprellt
+ * der Zustand des Tasters Ã¼berprÃ¼ft. Die ZustandÃ¼berprÃ¼fung entprellt
  * gleichzeitig den Taster. Da der Input Active Low ist, entspricht eine
- * fallende Flanke dem Drücken des Tasters. In diesem Fall wird eine
+ * fallende Flanke dem DrÃ¼cken des Tasters. In diesem Fall wird eine
  * CAN-Message versendet.
  */
 ISR(TIMER2_OVF_vect)
@@ -174,7 +174,7 @@ ISR(TIMER2_OVF_vect)
 #if 0
 	state(++counter);
 #else
-	// Taster ist active low, daher ist fallende Flanke drücken.
+	// Taster ist active low, daher ist fallende Flanke drÃ¼cken.
 	if (test_state_change(&taster) == PIN_FALLING_EDGE)
 	{
 		pong();
@@ -197,7 +197,7 @@ int main(void)
 		save_eeprom_id(&config);
 	}
 
-	/* Initialisieren und ab dafür! */
+	/* Initialisieren und ab dafÃ¼r! */
 	port_init();
 	timer2_init();
 

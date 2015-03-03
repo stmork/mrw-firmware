@@ -73,7 +73,7 @@ void config_sort(void)
 }
 
 /**
- * Hier werden alle Bit- und Byte-Positionen für die Lichtsignale berechnet.
+ * Hier werden alle Bit- und Byte-Positionen fÃ¼r die Lichtsignale berechnet.
  */
 void init_light_signal(
 	mrw_device *dvc,

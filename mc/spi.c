@@ -24,7 +24,7 @@
 
 void spi_init(void)
 {
-	// Aktivieren der Pins für das SPI Interface
+	// Aktivieren der Pins fÃ¼r das SPI Interface
 	// SCP und MOSI auf out
 	// MISO auf in
 	DDR_SPI |= _BV(P_SCK);

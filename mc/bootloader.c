@@ -54,7 +54,7 @@ typedef void (*app_ptr)(void);
 static app_ptr main_entry = (app_ptr)0x0000;
 
 /**
- * Hier wird mittels des watch dogs ein Reset ausgelöst. Der Watchdog wird
+ * Hier wird mittels des watch dogs ein Reset ausgelÃ¶st. Der Watchdog wird
  * erst hier aktiviert und in eine Endlosschleife verzweigt.
  */
 static void reset(void)
@@ -122,9 +122,9 @@ static void app_start(void)
 	mcp2515_write_rx_output_pins(MODE_APPSTART);
 
 	/*
-	 * Hier wird geprüft, ob ein JMP-Befehl ab Adresse
+	 * Hier wird geprÃ¼ft, ob ein JMP-Befehl ab Adresse
 	 * $0000 steht, der nicht auf die Adresse $ffff
-	 * zeigt. Ein unprogrammiertes Flash enthält $ff.
+	 * zeigt. Ein unprogrammiertes Flash enthÃ¤lt $ff.
 	 */
 	for(i = 0;i < 4;i++)
 	{

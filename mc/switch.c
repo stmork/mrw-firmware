@@ -88,7 +88,7 @@ uint8_t switch_dir(struct mrw_switch *device)
 }
 
 /***************************/
-/* 2-flügelige Formsignale */
+/* 2-flÃ¼gelige Formsignale */
 /***************************/
 
 void form2_init(struct mrw_form2 *signal)
@@ -133,7 +133,7 @@ void form2_off(struct mrw_form2 *signal)
 }
 
 /***************************/
-/* 3-flügelige Formsignale */
+/* 3-flÃ¼gelige Formsignale */
 /***************************/
 
 void form3_init(struct mrw_form3 *signal)

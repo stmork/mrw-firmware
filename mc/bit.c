@@ -186,7 +186,7 @@ int8_t test_state_change(mrw_input *input)
 
 	if (input->last_state != state)
 	{
-		// OK, Zustandsänderung seit dem letzten Mal. Entprellen!
+		// OK, ZustandsÃ¤nderung seit dem letzten Mal. Entprellen!
 		input->last_state = state;
 		input->counter = DEPRELL_COUNT;
 	}
@@ -198,16 +198,16 @@ int8_t test_state_change(mrw_input *input)
 			// Ja!
 			input->counter--;
 
-			// Taste während des Entprellens
+			// Taste wÃ¤hrend des Entprellens
 			if (input->counter == 0)
 			{
-				// OK, abgezählt = stabilisiert. Jetzt muss nur noch
+				// OK, abgezÃ¤hlt = stabilisiert. Jetzt muss nur noch
 				// getestet werden, ob der stabilisierte Zustand sich
 				// vom Zustand vor dem Entprellen unterscheidet.
 				if (input->state != state)
 				{
-					// Zustand nur melden, wenn sich endgültig
-					// Zustand geändert hat!
+					// Zustand nur melden, wenn sich endgÃ¼ltig
+					// Zustand geÃ¤ndert hat!
 					input->state = state;
 					result = state ? PIN_RISING_EDGE : PIN_FALLING_EDGE;
 				}

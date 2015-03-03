@@ -33,7 +33,7 @@
 #define BAUD_ERROR    (((UBRR_VAL + 2) * 100 - REAL) % 100)
 
 #if (BAUD_ERROR > 1)
-#error "Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!"
+#error "Systematischer Fehler der Baudrate grÃ¶sser 1% und damit zu hoch!"
 #endif
 
 #define UART_TX_WAIT loop_until_bit_is_set(UCSRA, UDRE)
@@ -77,7 +77,7 @@ void uart_tx_byte(uint8_t val)
 }
 
 /**
- * Diese Routine empfängt ein Byte.
+ * Diese Routine empfÃ¤ngt ein Byte.
  */
 uint8_t uart_rx_byte(void)
 {

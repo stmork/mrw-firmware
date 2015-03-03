@@ -38,7 +38,7 @@ uint16_t read_eeprom_module_uid(void)
 }
 
 /**
- * Diese Routine prüft auf eine gültige Konfiguration. Dazu muss das
+ * Diese Routine prÃ¼ft auf eine gÃ¼ltige Konfiguration. Dazu muss das
  * Magic Byte im EEPROM auf dem richtigen Wert stehen.
  */
 uint8_t is_eeprom_configured(void)
@@ -49,8 +49,8 @@ uint8_t is_eeprom_configured(void)
 
 /**
  * Diese Routine liest die gesamte Konfiguration aus dem EEPROM und
- * kopiert sie ins RAM. Dabei wird berücksichtigt, ob die Konfiguration
- * gültig ist. Wenn nicht, sind Controller ID und Geräteanzahl auf 0 gesetzt.
+ * kopiert sie ins RAM. Dabei wird berÃ¼cksichtigt, ob die Konfiguration
+ * gÃ¼ltig ist. Wenn nicht, sind Controller ID und GerÃ¤teanzahl auf 0 gesetzt.
  * Das Ergebnis entspricht dem von is_eeprom_configured().
  */
 uint8_t read_eeprom_config(struct eeprom_area *config)
@@ -86,7 +86,7 @@ uint8_t read_eeprom_config(struct eeprom_area *config)
 /**
  * Diese Routine speichert die aktuelle Konfiguration im EEPROM.
  * Das geschieht sicher, so dass ein Abbruch im Zweifelsfall einer
- * ungültigen Konfiguration entspricht bzw. keine Geräte konfiguriert
+ * ungÃ¼ltigen Konfiguration entspricht bzw. keine GerÃ¤te konfiguriert
  * sind.
  */
 void save_eeprom_config(struct eeprom_area *config)
@@ -119,7 +119,7 @@ void save_eeprom_config(struct eeprom_area *config)
 /**
  * Diese Routine speichert eine neue Controller ID im EEPROM. Diese
  * Routine sollte nur aufgerufen werden, wenn sich die ID wirklich
- * ändert und auch die Gerätezahl auf 0 gesetzt wurde.
+ * Ã¤ndert und auch die GerÃ¤tezahl auf 0 gesetzt wurde.
  */
 void save_eeprom_id(struct eeprom_area *config)
 {

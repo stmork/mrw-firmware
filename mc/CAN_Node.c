@@ -19,7 +19,7 @@
 
 /*******************************************************************
 Dieser Zustandsautomat verarbeitet eingehende
-CAN-Kommandos abhängig vom inneren
+CAN-Kommandos abhÃ¤ngig vom inneren
 Betriebszustand des CAN-Knotens.
 *******************************************************************/
 
@@ -32,7 +32,7 @@ Betriebszustand des CAN-Knotens.
 #include "tool.h"
 
 /************************************************/
-/* Vorwärtsdeklaration der choices Pseudostates */
+/* VorwÃ¤rtsdeklaration der choices Pseudostates */
 /************************************************/
 
 static int8_t checkIdButton(CAN_message *msg);
@@ -174,7 +174,7 @@ Steuerkommandos verarbeitet.
 
 /*******************************************************************
 Im Konfigurationsmodus werden Konfigurationskommandos
-verarbeitet. Dieser Zustand kann nur in einen Reset überführt
+verarbeitet. Dieser Zustand kann nur in einen Reset Ã¼berfÃ¼hrt
 werden. Durch den Reset wird dann die hardware neu
 initialisiert.
 *******************************************************************/
@@ -278,10 +278,10 @@ initialisiert.
 			break;
 
 /*******************************************************************
-Dieser Zustand ist ein Übergangszustand. Es wurde ein Watchdog Reset
-ausgelöst. Dieser wird erst nach einer Sekunde durchgeführt. Während
+Dieser Zustand ist ein Ãœbergangszustand. Es wurde ein Watchdog Reset
+ausgelÃ¶st. Dieser wird erst nach einer Sekunde durchgefÃ¼hrt. WÃ¤hrend
 dessen ist der Mikrocontroller in diesem Zustand und kann keine Aufgaben
-durchführen.
+durchfÃ¼hren.
 *******************************************************************/
 
 		case CAN_NODE__RESETTING:
@@ -310,7 +310,7 @@ durchführen.
 
 /*******************************************************************
 Dieser Betriebsmodus wird nach dem Booten erreicht, wenn
-keine gültige Konfiguration im EEPROM abgelegt ist. Von hier
+keine gÃ¼ltige Konfiguration im EEPROM abgelegt ist. Von hier
 aus kann nur konfiguriert oder gebootet werden.
 *******************************************************************/
 

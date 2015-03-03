@@ -25,7 +25,7 @@
 #include "config.h"
 #include "pwm.h"
 
-/* Z‰hlertabelle */
+/* Z√§hlertabelle */
 static const uint8_t table_nom[PWM_TABLE_SIZE] PROGMEM =
 {
 	0x00, 0x01, 0x01, 0x03, 0x01, 0x05, 0x03, 0x07, 0x01, 0x09, 0x05, 0x0b, 0x03, 0x0d, 0x07, 0x0f,
@@ -40,7 +40,7 @@ static const uint8_t table_denom[PWM_TABLE_SIZE] PROGMEM =
 };
 
 /*
- * Hier wird aus einer Tabelle Z‰hler und Nenner f¸r die Helligkeit ausgelesen. Wichtig hier
+ * Hier wird aus einer Tabelle Z√§hler und Nenner f√ºr die Helligkeit ausgelesen. Wichtig hier
  * ist, dass die Werte aus dem Flash geholt werden (const/PROGMEM), um RAM zu sparen.
  */
 void set_dimm(struct mrw_light *dvc, uint8_t value)
@@ -69,11 +69,11 @@ void set_dimm(struct mrw_light *dvc, uint8_t value)
 }
 
 /*
- * Das hier ist die Soft-PWM-Routine. Sie kann acht Kan‰le gleichzeitig unabh‰ngig
+ * Das hier ist die Soft-PWM-Routine. Sie kann acht Kan√§le gleichzeitig unabh√§ngig
  * voneinander bearbeiten. Der Trick, hier ohne langsame Division auszukommen ist,
- * dass so ‰hnlich wie beim Linienzeichnen (Gfx!!), die Steigung durch Ann‰herung
+ * dass so √§hnlich wie beim Linienzeichnen (Gfx!!), die Steigung durch Ann√§herung
  * nachgehalten wird. Da die Steigung immer zwischen [0.0, 1.0] ist, ist die Steigung
- * immer flach, was den Algorithmus vereinfacht. Diese Routine d¸rfte nicht mehr
+ * immer flach, was den Algorithmus vereinfacht. Diese Routine d√ºrfte nicht mehr
  * als 300 Takte brauchen.
  */
 void handle_pwm(struct mrw_light *dvc)

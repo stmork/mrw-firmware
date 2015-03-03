@@ -257,7 +257,7 @@ int main(void)
 	do
 	{
 		/*
-		 * Ein biﬂchen was f¸r die Umwelt tun. Es f‰ngt halt
+		 * Ein bi√üchen was f√ºr die Umwelt tun. Es f√§ngt halt
 		 * halt schon im Kleinen an ;-)
 		 */
 		IDLE;

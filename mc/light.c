@@ -57,14 +57,14 @@ uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightne
 
 		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
 		{
-			/* Zustandsübergang: Ausschalten */
+			/* ZustandsÃ¼bergang: Ausschalten */
 			dvc->on = 0;
 			changed = 1;
 			CLR_SER_BIT(dvc->byte, dvc->bit);
 		}
 		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
 		{
-			/* Zustandsübergang: Einschalten */
+			/* ZustandsÃ¼bergang: Einschalten */
 			dvc->on = 1;
 			changed = 1;
 			SET_SER_BIT(dvc->byte, dvc->bit);
@@ -99,7 +99,7 @@ uint8_t light_available(void)
 
 /*
  * Diese Methode wird vom Timer-Interrupt aufgerufen und sucht den
- * nächsten Helligkeitswert raus.
+ * nÃ¤chsten Helligkeitswert raus.
  */
 void light_dimm(struct mrw_light *dvc)
 {
@@ -128,14 +128,14 @@ void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 		cli();
 		if ((dvc->lightness < turn_off) && (turn_off <= lightness) && dvc->on)
 		{
-			/* Zustandsübergang: Ausschalten */
+			/* ZustandsÃ¼bergang: Ausschalten */
 			set_dimm(dvc, 0);
 			dvc->counter = 0;
 			dvc->on      = 0;
 		}
 		else if ((lightness < turn_on) && (turn_on <= dvc->lightness) && !dvc->on)
 		{
-			/* Zustandsübergang: Einschalten */
+			/* ZustandsÃ¼bergang: Einschalten */
 			dvc->counter = 0;
 			dvc->on      = 1;
 		}

@@ -92,7 +92,7 @@ static volatile uint8_t     uart_idx   = 0;
 static volatile uint8_t     uart_sum   = 0;
 
 /**
- * Diese Methode prüft auf sichere Weise, ob
+ * Diese Methode prÃ¼ft auf sichere Weise, ob
  * Bytes im RS232 Empfangspuffer vorliegen.
  */
 static uint8_t test_rx_buffer(void)
@@ -107,7 +107,7 @@ static uint8_t test_rx_buffer(void)
 /**
  * Hier werden alle einkommenden CAN-Messages in den
  * CAN receive Ring Buffer geholt. Falls dieser
- * überläuft, wird die Overflow LED angeschaltet.
+ * Ã¼berlÃ¤uft, wird die Overflow LED angeschaltet.
  */
 static void process_can_messages(void)
 {
@@ -126,9 +126,9 @@ static void process_can_messages(void)
 }
 
 /**
- * Hier wird eine CAN-Message über RS232 übertragen. Abschließend
- * wird ein Prüfbyte versendet. Die Summe aller CAN-Message Bytes
- * und des Prüfbytes muss 0 ergeben.
+ * Hier wird eine CAN-Message Ã¼ber RS232 Ã¼bertragen. AbschlieÃŸend
+ * wird ein PrÃ¼fbyte versendet. Die Summe aller CAN-Message Bytes
+ * und des PrÃ¼fbytes muss 0 ergeben.
  */
 static int8_t uart_send_msg(CAN_message *msg)
 {
@@ -148,9 +148,9 @@ static int8_t uart_send_msg(CAN_message *msg)
 	uart_tx_buffer[pos++] = sum;
 	
 	/*
-	 * Das hier wäre eine neue CAN-Länge. Sie ist ungültig und kann
+	 * Das hier wÃ¤re eine neue CAN-LÃ¤nge. Sie ist ungÃ¼ltig und kann
 	 * den Remote-Zustandsautomaten wieder In-Sync bringen, falls bei
-	 * der Übertragung ein Byte verloren gegangen ist.
+	 * der Ãœbertragung ein Byte verloren gegangen ist.
 	 */
 	len++;
 	uart_tx_count += len;
@@ -158,11 +158,11 @@ static int8_t uart_send_msg(CAN_message *msg)
 	sei();
 
 	/*
-	 * Wenn der Sendepuffer leer ist, muss die Übertragung von Hand
-	 * angestoßen werden. Den Rest erledigt die ISR. UDRE sollte noch
+	 * Wenn der Sendepuffer leer ist, muss die Ãœbertragung von Hand
+	 * angestoÃŸen werden. Den Rest erledigt die ISR. UDRE sollte noch
 	 * vom letzten Mal gesetzt sein. Daher wird unmittelbar nach der
-	 * nächsten Methode der ISR beim Aktivieren von UDRIE der ISR
-	 * ausgelöst.
+	 * nÃ¤chsten Methode der ISR beim Aktivieren von UDRIE der ISR
+	 * ausgelÃ¶st.
 	 */
 	UART_ENABLE_TX_IRQ();
 
@@ -183,11 +183,11 @@ ISR(INT2_vect)
  * Interrupt Service Routine UART buffer receive.
  * Hier wird ein einkommendes Byte verarbeitet. Dieses
  * kann nur Teil einer CAN-Message sein. Ob dieses Byte
- * in diese Message passt, wird während der Verarbeitung
- * geprüft. Als letztes Byte wird ein Prüfbyte übertragen.
- * Alle CAN-Message bytes und das Prüfbyte müssen zusamman
- * als Summe 0 ergeben. Ist eine CAN-Message samt Proüfsumme
- * korrekt übertragen, wird der Ring Buffer hochgezählt.
+ * in diese Message passt, wird wÃ¤hrend der Verarbeitung
+ * geprÃ¼ft. Als letztes Byte wird ein PrÃ¼fbyte Ã¼bertragen.
+ * Alle CAN-Message bytes und das PrÃ¼fbyte mÃ¼ssen zusamman
+ * als Summe 0 ergeben. Ist eine CAN-Message samt ProÃ¼fsumme
+ * korrekt Ã¼bertragen, wird der Ring Buffer hochgezÃ¤hlt.
  */
 ISR(USART_RXC_vect)
 {
@@ -197,7 +197,7 @@ ISR(USART_RXC_vect)
 	uart_received++;
 
 	/*
-	 * Wenn der Byte Buffer überläuft, zeigt eine LED diesen
+	 * Wenn der Byte Buffer Ã¼berlÃ¤uft, zeigt eine LED diesen
 	 * Fehlerzustand an.
 	 */
 	if (uart_rx_count >= sizeof(uart_rx_buffer))
@@ -229,14 +229,14 @@ ISR(USART_UDRE_vect)
 	else
 	{
 		/*
-		 * Wenn alles übertragen ist, Interrupt wieder ausschalten. Das ist
-		 * wichtig, weil sonst nur noch "leere" Interrupts ausgeführt werden.
+		 * Wenn alles Ã¼bertragen ist, Interrupt wieder ausschalten. Das ist
+		 * wichtig, weil sonst nur noch "leere" Interrupts ausgefÃ¼hrt werden.
 		 */
 		UART_DISABLE_TX_IRQ();
 
 		/*
-		 * Puffer wird mit Synchronisationssequenz aufgefüllt, wenn er leer
-		 * gelaufen ist. Beim nächsten Senden wird diese vorausgeschickt.
+		 * Puffer wird mit Synchronisationssequenz aufgefÃ¼llt, wenn er leer
+		 * gelaufen ist. Beim nÃ¤chsten Senden wird diese vorausgeschickt.
 		 */		
 		start = 0;
 		count =
@@ -252,17 +252,17 @@ ISR(USART_UDRE_vect)
 }
 
 /**
- * Diese Methode verarbeitet ein einzelnes Byte, das über
- * RS232 empfangen wurde. Es müssen dabei folgende Bedingungen
- * für eine gültige Empfangsverarbeitung erfüllt sein:
- * 1. Der CAN-Frame Buffer darf nicht überfüllt sein.
+ * Diese Methode verarbeitet ein einzelnes Byte, das Ã¼ber
+ * RS232 empfangen wurde. Es mÃ¼ssen dabei folgende Bedingungen
+ * fÃ¼r eine gÃ¼ltige Empfangsverarbeitung erfÃ¼llt sein:
+ * 1. Der CAN-Frame Buffer darf nicht Ã¼berfÃ¼llt sein.
  * 2. Das erste Byte muss im Bereich [1..8] liegen. Es ist das
- *    die Längendefinition.
- * 3. Das Byte nach den Datenbytes muss eine richtige Prüfsumme
+ *    die LÃ¤ngendefinition.
+ * 3. Das Byte nach den Datenbytes muss eine richtige PrÃ¼fsumme
  *    sein.
  * Sollte eine der Bedingungen nicht zutreffen, wird der Pufferindex
- * und die Prüfsumme zurückgesetzt. Ist nach Überprüfung der
- * Prüfsumme alles OK, wird das empfangene Frame über den CAN-Bus
+ * und die PrÃ¼fsumme zurÃ¼ckgesetzt. Ist nach ÃœberprÃ¼fung der
+ * PrÃ¼fsumme alles OK, wird das empfangene Frame Ã¼ber den CAN-Bus
  * verschickt.
  */
 static void uart_process_byte(uint8_t udr)
@@ -278,7 +278,7 @@ static void uart_process_byte(uint8_t udr)
 
 	/*
 	 * Das erste Byte einer CAN-Message ist immer ein Kommando (Application Layer).
-	 * Daher gibt es hier nie leere CAN-Messages. Das wird hier überprüft.
+	 * Daher gibt es hier nie leere CAN-Messages. Das wird hier Ã¼berprÃ¼ft.
 	 */
 	if ((uart_input.can.length == 0) || (uart_input.can.length > 8))
 	{
@@ -287,8 +287,8 @@ static void uart_process_byte(uint8_t udr)
 
 		/*
 		 * Das kann passieren, wenn die Kommunikation Out-Of-Sync ist.
-		 * Daher senden wir einfach mal ein Byte zurück, um den Remote
-		 * Empfänger auch wieder In-Sync zu bringen.
+		 * Daher senden wir einfach mal ein Byte zurÃ¼ck, um den Remote
+		 * EmpfÃ¤nger auch wieder In-Sync zu bringen.
 		 */
 		if (uart_tx_count < UART_OVL_WARNING_LEVEL)
 		{
@@ -307,12 +307,12 @@ static void uart_process_byte(uint8_t udr)
 	}
 #endif
 	/*
-	 * Wenn die CAN-Message vollständig ist, muss nur noch das Prüfbyte überprüft werden.
+	 * Wenn die CAN-Message vollstÃ¤ndig ist, muss nur noch das PrÃ¼fbyte Ã¼berprÃ¼ft werden.
 	 */
 	else if ((uart_input.can.length + offsetof(CAN_message, data) + 1) == uart_idx)
 	{
 		/*
-		 * Wenn das Prüfbyte jetzt 0 ist, ist die Prüfsumme OK. Dann
+		 * Wenn das PrÃ¼fbyte jetzt 0 ist, ist die PrÃ¼fsumme OK. Dann
 		 * kann die CAN-Message abgesetzt werden.
 		 */
 		if (uart_sum == 0)
@@ -336,7 +336,7 @@ static void port_init(void)
 	DDR_BUSY  |= _BV(P_BUSY);
 	BUSY;
 
-	/* LED Pins auf Output setzen und Anzeige löschen. */
+	/* LED Pins auf Output setzen und Anzeige lÃ¶schen. */
 	DDR_OVL  |=    OVL_CAN | OVL_UART;
 	PORT_OVL &= (~(OVL_CAN | OVL_UART));
 }
@@ -463,9 +463,9 @@ int main(void)
 	do
 	{
 		/*
-		 * Prüfen auf Empfang einer CAN Message über RS232.
-		 * Das Versenden über CAN-Bus darf nicht durch Interrupt
-		 * gestört werden.
+		 * PrÃ¼fen auf Empfang einer CAN Message Ã¼ber RS232.
+		 * Das Versenden Ã¼ber CAN-Bus darf nicht durch Interrupt
+		 * gestÃ¶rt werden.
 		 */
 		while (test_rx_buffer())
 		{
@@ -478,7 +478,7 @@ int main(void)
 		}
 
 		/*
-		 * Prüfen auf Empfang einer CAN Message über CAN-Bus.
+		 * PrÃ¼fen auf Empfang einer CAN Message Ã¼ber CAN-Bus.
 		 * Das Versenden kann asynchron zum Empfang passieren.
 		 * Daher muss der Interrupt erst beim Korrigieren des
 		 * Ring Buffers gesperrt werden.
@@ -492,7 +492,7 @@ int main(void)
 		}
 
 		/*
-		 * Test auf das Versenden von Frames über CAN-Bus
+		 * Test auf das Versenden von Frames Ã¼ber CAN-Bus
 		 */
 		if(ring_has_messages(&tx_ring))
 		{
@@ -504,7 +504,7 @@ int main(void)
 			}
 			
 			/*
-			 * Warnung bei drohendem UART-Überlauf.
+			 * Warnung bei drohendem UART-Ãœberlauf.
 			 */
 			if (ring_has_overflow(&tx_ring))
 			{
@@ -517,7 +517,7 @@ int main(void)
 		}
 
 		/*
-		 * Warnung bei drohendem UART-Überlauf.
+		 * Warnung bei drohendem UART-Ãœberlauf.
 		 */
 		if ((uart_tx_count >= UART_OVL_WARNING_LEVEL) || (uart_rx_count >= UART_OVL_WARNING_LEVEL))
 		{
@@ -544,8 +544,8 @@ int main(void)
 			process_can_messages();
 
 			/*
-			 * Jetzt müssen noch die Overflow Flags gelöscht werden. Mehr
-			 * können wir nicht tun.
+			 * Jetzt mÃ¼ssen noch die Overflow Flags gelÃ¶scht werden. Mehr
+			 * kÃ¶nnen wir nicht tun.
 			 */
 			mcp2515_reset_overflow(status.eflg);
 		}
@@ -553,15 +553,15 @@ int main(void)
 		/*
 		 * Wenn beide Ring Buffer leer sind, kann die MCU
 		 * schlafen. Die Bedingung darf nicht durch Interrupts
-		 * gestört werden, weil eine einkommende Übertragung diese
-		 * Bedingung verändern könnte.
+		 * gestÃ¶rt werden, weil eine einkommende Ãœbertragung diese
+		 * Bedingung verÃ¤ndern kÃ¶nnte.
 		 */
 		cli();
 		if ((!ring_has_messages(&rx_ring)) &&
 		    (!ring_has_messages(&tx_ring)) &&
 		    (uart_rx_count == 0))
 		{
-			// Sleep aktiviert den Interrupt wieder, sonst würde er
+			// Sleep aktiviert den Interrupt wieder, sonst wÃ¼rde er
 			// ewig schlafen :-(
 			IDLE;
 			sleep();

@@ -36,7 +36,7 @@ void random_postinit(void)
 	uint8_t  l = 0;
 
 	/*
-	 * Initialisierung mit Zufallszahlen. Das RAM scheint hierfür
+	 * Initialisierung mit Zufallszahlen. Das RAM scheint hierfÃ¼r
 	 * am Besten geeignet zu sein.
 	 */
 	uint8_t rnd = config.id ^ TCNT2;

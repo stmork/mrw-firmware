@@ -91,7 +91,7 @@ static void can_process_messages(void)
 		/* Meldung aus Ringpuffer nehmen */
 		ring_decrease(&rx_ring);
 
-		/* Nach Möglichkeit Antworten versenden. */
+		/* Nach MÃ¶glichkeit Antworten versenden. */
 		fill_tx_buffers();
 	}
 
@@ -164,10 +164,10 @@ static int8_t get_timeout(uint8_t dvc_type)
 {
 	/*
 	 * Wir haben den Timer auf den Prescaler 1024 gestellt und alle
-	 * 256 Zählschritte tritt ein Overflow und somit dieser Interrupt
+	 * 256 ZÃ¤hlschritte tritt ein Overflow und somit dieser Interrupt
 	 * auf. 1024 * 256 = (1 << 10) * (1 << 8) = (1 << (10 + 8))
-	 * Wir müssen also den MCU Takt durch 2^18 teilen um die Überläufe
-	 * pro Sekunde zu bekommen. Das wird unser Schaltzähler.
+	 * Wir mÃ¼ssen also den MCU Takt durch 2^18 teilen um die ÃœberlÃ¤ufe
+	 * pro Sekunde zu bekommen. Das wird unser SchaltzÃ¤hler.
 	 */
 	int8_t to = F_CPU >> TIMER2_SHIFT;
 
@@ -218,10 +218,10 @@ ISR(TIMER2_OVF_vect)
 	uint8_t     i;
 
 	/*
-	 * Hier wird der Watch dog reset durchgeführt. Da das die einzige
-	 * sichere regelmäßige Stelle ist, ist es hier sinnvoll. Bleibt eine
+	 * Hier wird der Watch dog reset durchgefÃ¼hrt. Da das die einzige
+	 * sichere regelmÃ¤ÃŸige Stelle ist, ist es hier sinnvoll. Bleibt eine
 	 * Interrupt Aktivierung aus - was ein Software Fehler ist - wird der
-	 * Watch dog die MCU resetten. Was auch gut ist: Wir können in den
+	 * Watch dog die MCU resetten. Was auch gut ist: Wir kÃ¶nnen in den
 	 * Sleep Modus wechseln und trotzdem den Watch Dog benutzen.
 	 */
 	if (!isResetting())
@@ -242,7 +242,7 @@ ISR(TIMER2_OVF_vect)
 	}
 
 	/*
-	 * Hier wird überprüft, ob es an neuen Weichen mit Endabschaltung einen
+	 * Hier wird Ã¼berprÃ¼ft, ob es an neuen Weichen mit Endabschaltung einen
 	 * manuellen Umschaltvorgang gegeben hat oder ob die Gleisbesetztmeldung
 	 * einen Zustandswechsel entdeckt hat. Dann muss eine CAN-Message
 	 * verschickt werden.
@@ -259,7 +259,7 @@ ISR(TIMER2_OVF_vect)
 				command *entry = cmd_get_first();
 
 				/*
-				 * Hier wird ein laufender Schaltauftrag überprüft. Das kann nur
+				 * Hier wird ein laufender Schaltauftrag Ã¼berprÃ¼ft. Das kann nur
 				 * eine Weiche mit Endabschaltung sein.
 				 */
 				check_switching_state(&dvc->unit.u_switch, entry->cmd);
@@ -281,7 +281,7 @@ ISR(TIMER2_OVF_vect)
 			else
 			{
 				/*
-				 * Hier wird der Zustand einer Weiche mit Endabschaltung überprüft,
+				 * Hier wird der Zustand einer Weiche mit Endabschaltung Ã¼berprÃ¼ft,
 				 * die keinen aktuellen Schaltauftrag hat. Das entspricht einem manuellen
 				 * Eingriff in die Weichenschaltung.
 				 */
@@ -296,7 +296,7 @@ ISR(TIMER2_OVF_vect)
 		case TYPE_RAIL:
 			if (rail_state_changed(&dvc->unit.u_rail))
 			{
-				/* Gleiszustand hat sich geändert. */
+				/* Gleiszustand hat sich geÃ¤ndert. */
 				queue_info(GETRBS, dvc->unit_no, MSG_OK, rail_occupied(&dvc->unit.u_rail));
 			}
 			break;
@@ -308,15 +308,15 @@ ISR(TIMER2_OVF_vect)
 		dvc++;
 	}
 
-	/* Test, ob es überhaupt was zu tun gibt. */
+	/* Test, ob es Ã¼berhaupt was zu tun gibt. */
 	if (cmd_ring_size() == 0)
 	{
 		return;
 	}
 
 	/**
-	 * Wenn der Ring Buffer Kommandos enthält und der Zähler bei 0
-	 * angelangt ist, kann der nächste Antrieb aktiviert werden.
+	 * Wenn der Ring Buffer Kommandos enthÃ¤lt und der ZÃ¤hler bei 0
+	 * angelangt ist, kann der nÃ¤chste Antrieb aktiviert werden.
 	 */
 	if (switch_counter <= 0)
 	{
@@ -357,8 +357,8 @@ ISR(TIMER2_OVF_vect)
 	else
 	{
 		/*
-		 * Wenn der Zähler größer 0 ist, ist ein Spulenantrieb geschaltet. Wenn
-		 * dieser beim Herabzählen 0 erreicht hat, muss der Antrieb abgeschaltet
+		 * Wenn der ZÃ¤hler grÃ¶ÃŸer 0 ist, ist ein Spulenantrieb geschaltet. Wenn
+		 * dieser beim HerabzÃ¤hlen 0 erreicht hat, muss der Antrieb abgeschaltet
 		 * werden. Der Schaltvorgang ist somit beendet und das Kommando kann aus
 		 * dem Ring Buffer entfernt werden.
 		 */
@@ -399,7 +399,7 @@ ISR(TIMER2_OVF_vect)
 }
 
 /*
- * Hier wird das Soft-PWM durchgeführt.
+ * Hier wird das Soft-PWM durchgefÃ¼hrt.
  */
 ISR(TIMER1_COMPA_vect)
 {
@@ -443,7 +443,7 @@ static void init_ports(void)
 	}
 
 	/*
-	 * Hier wird pro konfiguriertem Gerät die Portansteuerung programmiert.
+	 * Hier wird pro konfiguriertem GerÃ¤t die Portansteuerung programmiert.
 	 */
 	mrw_device *dvc = config.dvc;
 	for (i = 0;i < config.count; i++)
@@ -577,7 +577,7 @@ int main(int argc,char *argv[])
 	MCP2515_error_status status;
 	uint8_t last_state = 0;
 
-	// Timer für Zufallszahlen aktivieren.
+	// Timer fÃ¼r Zufallszahlen aktivieren.
 	random_preinit();
 
 	// Konfiguration ins SRAM lesen.
@@ -587,11 +587,11 @@ int main(int argc,char *argv[])
 	init_debug_config();
 #endif
 
-	// Gerätedaten sortieren
+	// GerÃ¤tedaten sortieren
 	config_sort();
 
-	// Workaround für Bootloader: FLASH_CHECK loswerden!
-	// Nach einem Flash hat das MCUCSR keinen Grund für einen Reset.
+	// Workaround fÃ¼r Bootloader: FLASH_CHECK loswerden!
+	// Nach einem Flash hat das MCUCSR keinen Grund fÃ¼r einen Reset.
 	if (bit_is_set(MCUCSR, WDRF))
 	{
 		can_wait_for_tx();
@@ -645,7 +645,7 @@ int main(int argc,char *argv[])
 	for (;;)
 	{
 		/*
-		 * CAN-Meldungen und nach Möglichkeit deren
+		 * CAN-Meldungen und nach MÃ¶glichkeit deren
 		 * Antworten bearbeiten.
 		 */
 		can_process_messages();
@@ -660,14 +660,14 @@ int main(int argc,char *argv[])
 		if (mcp2515_read_error_status(&status))
 		{
 			/*
-			 * Jetzt müssen noch die Overflow flags gelöscht werden. Mehr
-			 * können wir nicht tun.
+			 * Jetzt mÃ¼ssen noch die Overflow flags gelÃ¶scht werden. Mehr
+			 * kÃ¶nnen wir nicht tun.
 			 */
 			mcp2515_reset_overflow(status.eflg);
 		}
 
 		/*
-		 * Fehlerzustand bei Änderung automatisch versenden.
+		 * Fehlerzustand bei Ã„nderung automatisch versenden.
 		 */
 		if (last_state != status.eflg)
 		{
@@ -676,8 +676,8 @@ int main(int argc,char *argv[])
 		}
 
 		/*
-		 * Hier wird der Status über die gelbe LED ausgegeben, ob ein
-		 * Fehlerzähler erhöht wurde.
+		 * Hier wird der Status Ã¼ber die gelbe LED ausgegeben, ob ein
+		 * FehlerzÃ¤hler erhÃ¶ht wurde.
 		 */
 		mcp2515_write_rx_output_pins(
 			(status.rec > 0) || (status.tec > 0) || (status.eflg != 0) ?
@@ -687,15 +687,15 @@ int main(int argc,char *argv[])
 		/*
 		 * Wenn der Ring Buffer leer ist, kann die MCU
 		 * schlafen. Die Bedingung darf nicht durch Interrupts
-		 * gestört werden, weil eine einkommende Übertragung diese
-		 * Bedingung verändern könnte.
+		 * gestÃ¶rt werden, weil eine einkommende Ãœbertragung diese
+		 * Bedingung verÃ¤ndern kÃ¶nnte.
 		 */
 		cli();
 		if ((!ring_has_messages(&rx_ring)) &&
 		    (!ring_has_messages(&tx_ring)) &&
 		    (!isResetting()))
 		{
-			// Sleep aktiviert den Interrupt wieder, sonst würde er
+			// Sleep aktiviert den Interrupt wieder, sonst wÃ¼rde er
 			// ewig schlafen :-(
 			sleep();
 		}

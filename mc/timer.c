@@ -45,7 +45,7 @@ void timer1_init(uint16_t clock)
 	/* Kein OC1x output */
 	TCCR1A = 0;
 
-	/* CTC Timer bei Gleichheit zurücksetzen, kein Prescaler */
+	/* CTC Timer bei Gleichheit zurÃ¼cksetzen, kein Prescaler */
 	TCCR1B = _BV(WGM12) | _BV(CS10);
 
 	/* Interrupt einschalten */

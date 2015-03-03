@@ -37,7 +37,7 @@
 #include "timer.h"
 
 /*
- * Hier wird das Soft-PWM durchgef¸hrt.
+ * Hier wird das Soft-PWM durchgef√ºhrt.
  */
 ISR(TIMER1_COMPA_vect)
 {
@@ -106,7 +106,7 @@ int main(void)
 	do
 	{
 		/*
-		 * Ein biﬂchen was f¸r die Umwelt tun. Es f‰ngt
+		 * Ein bi√üchen was f√ºr die Umwelt tun. Es f√§ngt
 		 * halt schon im Kleinen an ;-)
 		 */
 		IDLE;

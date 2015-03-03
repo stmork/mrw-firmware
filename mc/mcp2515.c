@@ -58,13 +58,13 @@
 
 /**************************************************************************
 
-Die Datenübertragung über SPI zum MCP2515 darf nur während des Chip Selects
-durchgeführt werden. Wird CS deaktiviert, muss die Datenübertragung entweder
+Die DatenÃ¼bertragung Ã¼ber SPI zum MCP2515 darf nur wÃ¤hrend des Chip Selects
+durchgefÃ¼hrt werden. Wird CS deaktiviert, muss die DatenÃ¼bertragung entweder
 sicher beendet sein (z.B. durch spi_getc() oder spi_readc()), oder es muss
 nach spi_putc() auf Beendigung mittels WAIT_SPI gewartet werden. Das stellt
-auch sicher, dass bei deaktiviertem CS keine Datenübertragung läuft. Daraus
+auch sicher, dass bei deaktiviertem CS keine DatenÃ¼bertragung lÃ¤uft. Daraus
 ergibt sich auch, dass bei einem Aktivieren des CS nicht auf ein Ende der
-Datenübertragung gewartet werden muss.
+DatenÃ¼bertragung gewartet werden muss.
 
 ***************************************************************************/
 
@@ -338,7 +338,7 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 		 */
 	}
 
-	/* Error Flags löschen */
+	/* Error Flags lÃ¶schen */
 	mcp2515_reset_overflow(_BV(RX1OVR) | _BV(RX0OVR));
 
 	/* Standard ID ist komplette Maske */
@@ -527,7 +527,7 @@ int8_t can_get_msg(CAN_message *msg)
 		}
 		mcp2515_deselect();
 
-		/* Interrupt Flag löschen */
+		/* Interrupt Flag lÃ¶schen */
 		mcp2515_bit_modify(CANINTF, buffer == 0 ? _BV(RX0IF) : _BV(RX1IF), 0);
 		
 		buffer = (msg->status = status) & 0x7;
