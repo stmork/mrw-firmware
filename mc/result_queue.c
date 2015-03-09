@@ -63,7 +63,7 @@ static void fill_message(
 }
 
 /**
- * Diese Methode erhöht den Index des Ringsendebuffers.
+ * Diese Methode erhöht den Index des Ringsendepuffers.
  * Gleichzeitig wird, wenn ein CAN-Sendebuffer frei ist,
  * der Versand angestoßen.
  */
@@ -79,7 +79,7 @@ static void bump_ring(void)
 }
 
 /**
- * Diese Methode reiht eine Antwort in den Ringbuffer ein.
+ * Diese Methode reiht eine Antwort in den Ringsendebuffer ein.
  */
 void queue_result(
 	uint8_t  cmd,
@@ -93,7 +93,7 @@ void queue_result(
 }
 
 /**
- * Diese Methode reiht eine Antwort in den Ringbuffer ein. Die
+ * Diese Methode reiht eine Antwort in den Ringsendebuffer ein. Die
  * Antwort enthält zusätzlich noch ein Informationsbyte.
  */
 void queue_info(

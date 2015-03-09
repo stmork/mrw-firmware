@@ -24,6 +24,9 @@
 
 #include "can_ring.h"
 
+/**
+ * Diese Methode initialisiert einen Ringbuffer.
+ */
 void ring_init(struct can_ring *ring)
 {
 	ring->start = 0;
@@ -32,6 +35,11 @@ void ring_init(struct can_ring *ring)
 	ring->count = 0;
 }
 
+/**
+ * Diese Methode gibt die hinterste Position
+ * im Ringbuffer an, in die eine CAN-Message
+ * geschrieben werden soll.
+ */
 CAN_message *ring_get_pos(struct can_ring *ring)
 {
 	uint8_t sreg = SREG;
@@ -43,6 +51,11 @@ CAN_message *ring_get_pos(struct can_ring *ring)
 	return msg;
 }
 
+/**
+ * Diese Methode gibt die vorderste Position im
+ * Ringbuffer an, von der eine CAN-Message
+ * gelesen werden soll.
+ */
 CAN_message *ring_get_start(struct can_ring *ring)
 {
 	uint8_t sreg = SREG;
@@ -54,6 +67,11 @@ CAN_message *ring_get_start(struct can_ring *ring)
 	return msg;
 }
 
+/**
+ * Diese Methode erhöht die Schreibposition im
+ * Ringbuffer. Zusätzlich wird geprüft, ob der
+ * Ringbuffer vollgelaufen ist.
+ */
 uint8_t ring_increase(struct can_ring *ring)
 {
 	register uint8_t sreg = SREG;
@@ -71,6 +89,11 @@ uint8_t ring_increase(struct can_ring *ring)
 	return size >= CAN_RING_SIZE;
 }
 
+/**
+ * Diese Methode erniedrigt die Leseposition im
+ * Ringbuffer. Ein Unterlauf wird nicht
+ * überprüft.
+ */
 void ring_decrease(struct can_ring *ring)
 {
 	uint8_t sreg = SREG;

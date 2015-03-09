@@ -161,6 +161,11 @@ static void app_start(void)
 	while(1);
 }
 
+/**
+ * Diese Methode flasht eine einzelne Flash Page. Wie allgemein
+ * üblich, wird zuerst die betroffene Page geloöscht und danach
+ * beschrieben.
+ */
 static void boot_program_page (uint16_t address, uint8_t *buf)
 {
 	uint32_t page = address & PAGE_START;
@@ -191,6 +196,9 @@ static void boot_program_page (uint16_t address, uint8_t *buf)
 	page_count++;
 }
 
+/**
+ * Diese Methode bildet die Prüfsumme eines Flash-Speicherbereiches.
+ */
 static uint8_t sum_flash(uint16_t start, uint16_t end)
 {
 	uint8_t sum = 0;
@@ -203,6 +211,12 @@ static uint8_t sum_flash(uint16_t start, uint16_t end)
 	return sum;
 }
 
+/**
+ * Diese Methode vergleicht den Controllertyp auf
+ * Basis der FLASH_REQ-Befehls. Nur wenn der
+ * Controllertyp zum eigenen Controller passt,
+ * wird ein Flash-Vorgang eingeleitet.
+ */
 static uint8_t check_controller_type(CAN_message *msg)
 {
 	if (msg->length >= 5)
@@ -220,6 +234,9 @@ static uint8_t check_controller_type(CAN_message *msg)
 	return 0;
 }
 
+/**
+ * Dies hier ist die Hauptschleife für den Flash-Vorgang.
+ */
 static void flash(uint16_t cid)
 {
 	CAN_message msg;
@@ -340,6 +357,12 @@ static void flash(uint16_t cid)
 	while (1);
 }
 
+/**
+ * Der Bootloader hat die Aufgabe, in den ersten zwei Sekunden nach
+ * dem Starten ggf. eine neue Firmware per CAN-Bus entgegenzunehmen
+ * und zu flashen. In dieser Zeit muss also ein FLASH_REQ-Befehl
+ * mit dem passenden Controllertyp empfangen werden.
+ */
 int main(void)
 {
 	wdt_disable();
