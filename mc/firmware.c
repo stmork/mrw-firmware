@@ -534,6 +534,7 @@ static void signal_init(void)
 			case TYPE_SIGNAL_ML2:
 			case TYPE_SIGNAL_ML3:
 			case TYPE_SIGNAL_ML4:
+				// Größe des benötigten Sendepuffers abgleichen
 				for(uint8_t idx = 0; idx < dvc->unit.u_signal.count; idx++)
 				{
 					serial_limit(dvc->unit.u_signal.byte[idx]);

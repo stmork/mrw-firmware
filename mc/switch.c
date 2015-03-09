@@ -26,12 +26,25 @@
 /* Weichen */
 /***********/
 
+/**
+ * Diese Methode initialisiert alle Portbits für
+ * eine alte Weiche ohne Endabschaltung. In solch
+ * einem Fall steht die Weichenlage nicht zur
+ * Verfügung.
+ */
 void switch_init_old(struct mrw_switch *device)
 {
 	out_pin(&device->left);
 	out_pin(&device->right);
 }
 
+/**
+ * Diese Methode initialisiert alle Portbits für
+ * eine alte Weiche ohne Endabschaltung. In diesem
+ * Falle steht die Weichenlage zur Verfügung und
+ * es müssen zwei weitere Input-Pins konfiguriert
+ * werden.
+ */
 void switch_init_new(struct mrw_switch *device)
 {
 	out_pin(&device->left);
@@ -40,23 +53,39 @@ void switch_init_new(struct mrw_switch *device)
 	init_input(&device->right_input, 0);
 }
 
-
+/**
+ * Diese Methode schaltet den Schaltvorgang für
+ * eine Weiche ab.
+ */
 void switch_off(struct mrw_switch *device)
 {
 	clr_pin(&device->left);
 	clr_pin(&device->right);
 }
 
+/**
+ * Diese Methode leitet einen Schaltvorgang
+ * nach links für eine Weiche ein.
+ */
 void switch_left(struct mrw_switch *device)
 {
 	set_pin(&device->left);
 }
 
+/**
+ * Diese Methode leitet einen Schaltvorgang
+ * nach rechts für eine Weiche ein.
+ */
 void switch_right(struct mrw_switch *device)
 {
 	set_pin(&device->right);
 }
 
+/**
+ * Diese Methode überprüft, ob sich ein Zustands-
+ * wechsel in der Lageposition der Weiche ereignet
+ * hat. Abhängig davon wird die Lage ermittelt.
+ */
 uint8_t switch_test(struct mrw_switch *device)
 {
 	if (test_state_change(&device->left_input) == PIN_FALLING_EDGE)
@@ -71,6 +100,9 @@ uint8_t switch_test(struct mrw_switch *device)
 	return 0;
 }
 
+/**
+ * Diese Methode ermittelt den Lagezustand einer Weiche.
+ */
 uint8_t switch_dir(struct mrw_switch *device)
 {
 	uint8_t type = 0;
@@ -88,9 +120,14 @@ uint8_t switch_dir(struct mrw_switch *device)
 }
 
 /***************************/
-/* 2-flügelige Formsignale */
+/* 1-flügelige Formsignale */
 /***************************/
 
+/**
+ * Diese Methode initialisiert ein 1-flügeliges
+ * Formsignal. Damit können zwei Begriffe dar-
+ * gestellt werden.
+ */
 void form2_init(struct mrw_form2 *signal)
 {
 	for (uint8_t i = 0;i < 2;i++)
@@ -99,6 +136,10 @@ void form2_init(struct mrw_form2 *signal)
 	}
 }
 
+/**
+ * Diese Methode leitet abhängig im Signal-
+ * begriff den Umschaltvorgang ein.
+ */
 uint8_t form2_turn(struct mrw_form2 *signal, uint8_t cmd)
 {
 	uint8_t pin = 0;
@@ -124,6 +165,10 @@ uint8_t form2_turn(struct mrw_form2 *signal, uint8_t cmd)
 	return pin;
 }
 
+/**
+ * Diese Methode schaltet den Umschaltvorgang
+ * für Signale aus.
+ */
 void form2_off(struct mrw_form2 *signal)
 {
 	for (uint8_t i = 0;i < 2;i++)
@@ -133,9 +178,14 @@ void form2_off(struct mrw_form2 *signal)
 }
 
 /***************************/
-/* 3-flügelige Formsignale */
+/* 2-flügelige Formsignale */
 /***************************/
 
+/**
+ * Diese Methode initialisiert ein 2-flügeliges
+ * Formsignal. Damit können drei Begriffe dar-
+ * gestellt werden.
+ */
 void form3_init(struct mrw_form3 *signal)
 {
 	for (uint8_t i = 0;i < 3;i++)
@@ -144,6 +194,10 @@ void form3_init(struct mrw_form3 *signal)
 	}
 }
 
+/**
+ * Diese Methode leitet abhängig im Signal-
+ * begriff den Umschaltvorgang ein.
+ */
 uint8_t form3_turn(struct mrw_form3 *signal, uint8_t cmd)
 {
 	uint8_t pin = 0;
@@ -178,6 +232,10 @@ uint8_t form3_turn(struct mrw_form3 *signal, uint8_t cmd)
 	return pin;
 }
 
+/**
+ * Diese Methode schaltet den Umschaltvorgang
+ * für Signale aus.
+ */
 void form3_off(struct mrw_form3 *signal)
 {
 	for (uint8_t i = 0;i < 3;i++)

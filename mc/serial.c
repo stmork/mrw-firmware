@@ -35,7 +35,7 @@
 static uint8_t start_idx = sizeof(serial_buffer);
 
 /**
- * Diese Medthode initialisiert die für die Schieberegister nötigen Portbits. Der
+ * Diese Methode initialisiert die für die Schieberegister nötigen Portbits. Der
  * Schiebepuffer wird dabei ebenfalls gelöscht und versendet.
  */
 void serial_init(void)
@@ -103,11 +103,15 @@ void clear_serial_buffer(void)
 	SET0;
 }
 
-void serial_limit(uint8_t byte)
+/**
+ * Diese Methode gleicht die Größe des Sendepuffers ab. Ist
+ * die Größe 0, gibt es auch nichts zu senden.
+ */
+void serial_limit(uint8_t idx)
 {
-	if (byte < start_idx)
+	if (idx < start_idx)
 	{
-		start_idx = byte;
+		start_idx = idx;
 	}
 }
 
