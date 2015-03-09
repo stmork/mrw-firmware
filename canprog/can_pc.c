@@ -39,6 +39,10 @@
 
 #include "mrw_dump.h"
 
+/**
+ * Diese Methode öffnet eine Verbindung mit einer
+ * seriellen Schnittstelle.
+ */
 int uart_open(char *name)
 {
 	struct termios oldtio,newtio;	
@@ -77,6 +81,12 @@ int uart_open(char *name)
 	return fd;
 }
 
+/**
+ * Diese Methode sendet eine CAN-Message über die
+ * serielle Schnittstelle. Die Länge der gesendeten
+ * Bytes wird zurückgegeben. Ist ein Fehler aufgetaucht,
+ * wird -1 zurückgegeben.
+ */
 int uart_send_can_msg(int fd, CAN_message *msg)
 {
 	unsigned char *ptr = (unsigned char *)msg;
@@ -109,6 +119,12 @@ int uart_send_can_msg(int fd, CAN_message *msg)
 	return result;
 }
 
+/**
+ * Diese Methode sendet 16 0-Bytes. Das
+ * kann keine gültige CAN-Message sein,
+ * wodurch das CAN-Gateway die Übertragung
+ * neu synchronisiert.
+ */
 void uart_sync(int fd)
 {
 	uint8_t byte = 0;
@@ -126,6 +142,10 @@ void uart_sync(int fd)
 	}
 }
 
+/**
+ * Diese Methode sendet Daten an eine normale CAN-ID. Die CAN-Message
+ * wird entsprechend aufbereitet und versendet.
+ */
 int uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int length)
 {
 	CAN_message msg;
@@ -144,6 +164,10 @@ int uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int len
 	return uart_send_can_msg(fd, &msg);
 }
 
+/**
+ * Diese Methode sendet Daten an eine extended CAN-ID. Die CAN-Message
+ * wird entsprechend aufbereitet und versendet.
+ */
 int uart_send_ext_can_data(int fd, unsigned long id, unsigned char *buffer, int length)
 {
 	CAN_message msg;
@@ -167,6 +191,21 @@ void uart_init(receive_buffer *buffer)
 	bzero(buffer, sizeof(receive_buffer));
 }
 
+/**
+ * Diese Methode bekommt das letzte Byte aus der Übertragung mit
+ * der seriellen Schnittstelle und baut so die CAN-Messages zusammen.
+ * Diese Methode versucht mit dem CAN-Gateway synchron zu bleiben:
+ * 1. Die CAN-Meldung muss eine gültige Länge zwischen ]0,8] haben.
+ * 2. Wurden ausreichend Bytes samt der Metadaten übertragen, folgt
+ *    das Prüfsummen-Byte.
+ * 3. Die übertragenen Bytes inkl. Prüfsumme muss 0 betragen.
+ * In allen anderen Fällen wird von einer Neuübertragung ausgegangen
+ * und die Prozedur beginnt von 1. aus.
+ * 
+ * Wenn das Byte erfolgreich hinzugefügt wurde, wird 1 zurückgegeben.
+ * Ansonsten wird der Empfangsbuffer mit Nullen gefüllt und -1 zurück-
+ * gegeben.
+ */
 int uart_receive(receive_buffer *buffer, uint8_t b)
 {
 	int complete = 0;
@@ -210,11 +249,18 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 	return complete;
 }
 
+/**
+ * Diese Methode hängt ein Datenbyte an eine CAN-Message an.
+ */
 void can_add_data(CAN_message *msg, uint8_t data)
 {
 	msg->data[msg->length++] = data;
 }
 
+/**
+ * Diese Methode initialisiert eine CAN-Message mit einem MRW-Kommando,
+ * der Controller-ID und der Unit ID.
+ */
 void  can_fill_message(CAN_message *msg, uint8_t cmd, uint16_t id, uint16_t no)
 {
 	msg->sid    = id;

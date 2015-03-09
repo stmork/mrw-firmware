@@ -29,6 +29,9 @@
 #include "can_pc.h"
 #include "testdef.h"
 
+/**
+ * Diese Methode baut eine CAN-Message für das MRW-Kommando SET_ID zusammen.
+ */
 static int set_id(int fd, int old_id, int new_id)
 {
 	unsigned char  buffer[8];
@@ -50,6 +53,7 @@ int main(int argc,char *argv[])
 		return EXIT_SUCCESS;
 	}
 
+	// Neue ID aus Programm Argumenten extrahieren.
 	if (argc >= 3)
 	{
 		if (sscanf(argv[2], "%d", &id) != 1)
@@ -58,6 +62,7 @@ int main(int argc,char *argv[])
 		}
 	}
 
+	// Serielle Schnittstelle öffnen
 	int fd = uart_open(argv[1]);
 	if (fd < 0)
 	{
@@ -65,8 +70,10 @@ int main(int argc,char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	// Übertragung synchronisieren
 	uart_sync(fd);
 
+	// SET_ID senden mit neuer ID an alle senden.
 	set_id(fd, BROADCAST_SID, id);
 
 	close(fd);

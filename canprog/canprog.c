@@ -48,6 +48,11 @@
 
 static int use_reset = 1;
 
+/**
+ * Diese Methode liest eine HEX-Datei mit der zu flashenden Firmware ein.
+ * Der Buffer wird zurückgegeben und die Größe im Parameter <em>size</em>
+ * vermerkt.
+ */
 static unsigned char * read_hex(const char *filename, size_t *size)
 {
 	FILE          *file = fopen(filename, "r");
@@ -61,6 +66,7 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 
 		while (fgets(line, sizeof(line), file) == line)
 		{
+			// Adresse extrahieren
 			if (sscanf(line, ":%02x%04x%02x", &count, &address, &type) == 3)
 			{
 				unsigned char *bytes = NULL;
@@ -107,6 +113,9 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 	return buffer;
 }
 
+/**
+ * Diese Methode sendet ein MRW-PING-Kommando.
+ */
 static int ping(int fd)
 {
 	unsigned char  buffer[8];
@@ -115,6 +124,9 @@ static int ping(int fd)
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
+/**
+ * Diese Methode sendet ein MRW-RESET-Kommando.
+ */
 static int reset(int fd)
 {
 	unsigned char  buffer[8];
@@ -123,6 +135,9 @@ static int reset(int fd)
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
+/**
+ * Diese Methode sendet Firmware an die CAN-Knoten.
+ */
 static int flash(int fd, unsigned char *buffer, int size, int hid)
 {
 	unsigned int   address  = 0;
@@ -136,9 +151,12 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 		{
 			return EXIT_FAILURE;
 		}
+		// Den CAN-Knoten Zeit für Reset geben. Das kann bis
+		// zu einer Sekunde dauern.
 		usleep(DELAY_RESET);
 	}
 	
+	// Flash-Vorgang anfordern.
 	msg[0] = FLASH_REQ;
 	msg[1] = (unsigned char)(hid & 0xff);
 	msg[2] = SIGNATURE_BYTE_1;
@@ -152,12 +170,16 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 		}
 		usleep(DELAY_FLASH_REQUEST);
 	}
+
+	// Ping! Sind alle noch da ;-)
 	if (ping(fd) < 0)
 	{
 		return EXIT_FAILURE;
 	}
 	usleep(DELAY_FLASH_REQUEST);
 
+	// Jetzt seitenweise die Pages senden. Nach einer Page wird
+	// dem CAN-Knoten Zeit zum Flashen gegeben.
 	while (size >= SPM_PAGESIZE)
 	{
 		int loop;
@@ -183,6 +205,7 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 		usleep(DELAY_FLASH_PAGE);
 	}
 	
+	// Restlichen Überhang schicken.
 	while (size >= 0)
 	{
 		msg[0] = FLASH_DATA;
@@ -201,6 +224,10 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 	printf("-\n");
 	usleep(DELAY_FLASH_PAGE);
 
+	// Zum Schluss muss noch die Prüfsumme verschickt werden. Das
+	// gibt den CAN-Knoten die Gelegenheit, den Erfolg des Flashens
+	// zu überprüfen. Dementsprechend antworten die CAN-Knoten mit
+	// Erfolg- oder Fehlermeldung.
 	msg[0] = FLASH_CHECK;
 	msg[1] = (unsigned char)(address & 0xff);
 	msg[2] = (unsigned char)(address >> 8);
