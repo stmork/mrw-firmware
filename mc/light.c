@@ -40,12 +40,19 @@ static uint8_t has_lights = 0;
 /* Lampen ohne Profil */
 /*********************/
 
+/**
+ * Diese Methode initialisiert nicht dimmfähiges Licht.
+ */
 void simple_light_init(struct mrw_simple_light *dvc)
 {
 	dvc->on        =   0;
 	dvc->lightness = 255;
 }
 
+/**
+ * Diese Methode entscheidet, ob an Hand eines Schwellwerts das Licht
+ * eingeschaltet oder ausgeschaltet werden soll.
+ */
 uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightness)
 {
 	uint8_t changed = 0;
@@ -81,6 +88,9 @@ uint8_t simple_light_set_lightness(struct mrw_simple_light *dvc, uint8_t lightne
 /* Lampen mit Profil */
 /*********************/
 
+/**
+ * Diese Methode initialisiert dimmfähiges Licht.
+ */
 void light_init(struct mrw_light *dvc)
 {
 	dvc->on        =   0;
@@ -117,12 +127,17 @@ void light_dimm(struct mrw_light *dvc)
 	}
 }
 
+/**
+ * Diese Methode setzt einen neuen Helligkeitswert. Dieser entscheidet
+ * an Hand eines Schwellwertes, ob das ein- oder ausgeschaltet werden
+ * soll.
+ */
 void light_set_lightness(struct mrw_light *dvc, uint8_t lightness)
 {
 	if (lightness != dvc->lightness)
 	{
 		uint8_t turn_on  = dvc->threshold;
-		uint8_t turn_off = dvc->threshold + 4;
+		uint8_t turn_off = dvc->threshold + 4; // Hysterese
 		uint8_t sreg = SREG;
 
 		cli();

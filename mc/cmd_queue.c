@@ -83,11 +83,20 @@ void cmd_remove(void)
 	SREG = sreg;
 }
 
+/**
+ * Diese Methode meldet zurück, wieviele Einträge sich
+ * im Ringbuffer befinden.
+ */
 uint8_t cmd_ring_size(void)
 {
 	return ring_size;
 }
 
+/**
+ * Diese Methode meldet den Buffer-Index zu einem
+ * passenden Device zurück. Wird kein Eintrag im
+ * Ringbuffer gefunden, wird -1 zurückgegeben.
+ */
 int8_t cmd_find_device(mrw_device *dvc)
 {
 	for (uint8_t i = 0;i < ring_size;i++)
@@ -101,11 +110,20 @@ int8_t cmd_find_device(mrw_device *dvc)
 	return -1;
 }
 
+/**
+ * Diese Methode meldet, ob das Device zum vordersten Eintrag im Ringbuffer
+ * passt. Dazu muss natürlich ein Eintrag im Ringbuffer vorliegen.
+ */
 int8_t cmd_is_first(mrw_device *dvc)
 {
 	return (cmd_ring_size() > 0) && (dvc == ring[ring_start].device);
 }
 
+/**
+ * Diese Methode gibt den vordersten Eintrag aus dem
+ * Ringbuffer zurück. Ist der Buffer leer, wird null
+ * zurückgegeben.
+ */
 command *cmd_get_first(void)
 {
 	return ring_size > 0 ? &ring[ring_start] : null;

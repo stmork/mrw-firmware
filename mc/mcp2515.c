@@ -74,12 +74,19 @@ Datenübertragung gewartet werden muss.
 
 static uint8_t multi_tx_buffer = 0;
 
+/**
+ * Diese Methode aktiviert Chip Select und setzt ein SPI-Kommando ab.
+ */
 static void mcp2515_select(uint8_t cmd)
 {
 	MCP2515_SELECT;
 	SPDR = cmd;
 }
 
+/**
+ * Diese Methode wartet auf das Ende der SPI-Übertragung
+ * und schaltet danach das Chip Select aus.
+ */
 static void mcp2515_deselect(void)
 {
 	WAIT_SPI;
@@ -163,6 +170,9 @@ static uint8_t mcp2515_set_mode(uint8_t mode)
 	return canctrl == mode;
 }
 
+/**
+ * Diese Methode führt einen Reset des MCP2515 durch.
+ */
 static void mcp2515_reset(void)
 {
 	/*
@@ -219,6 +229,9 @@ uint8_t mcp2515_read_error_status(MCP2515_error_status *status)
 	return status->tec | status->rec | status->eflg;
 }
 
+/**
+ * Diese Methode setzt alle Overflow-Fehler wieder zurück.
+ */
 void mcp2515_reset_overflow(uint8_t eflg)
 {
 	register uint8_t sreg = SREG;
@@ -229,6 +242,9 @@ void mcp2515_reset_overflow(uint8_t eflg)
 	SREG = sreg;
 }
 
+/**
+ * Diese Methode zieht einen Register Dump des MCP2515.
+ */
 void mcp2515_dump_register(uint8_t *ptr)
 {
 	register uint8_t i;
@@ -247,6 +263,9 @@ void mcp2515_dump_register(uint8_t *ptr)
 	SREG = sreg;
 }
 
+/**
+ * Diese Methode fragt die Tx Input Pins des MCP2515 ab.
+ */
 uint8_t mcp2515_read_tx_input_pins(void)
 {
 	register uint8_t sreg = SREG;
@@ -257,6 +276,9 @@ uint8_t mcp2515_read_tx_input_pins(void)
 	return result;
 }
 
+/**
+ * Diese Methode setzt die Tx Output Pins auf den angegebenen Zustand.
+ */
 void mcp2515_write_rx_output_pins(uint8_t state)
 {
 	register uint8_t sreg = SREG;
@@ -266,6 +288,9 @@ void mcp2515_write_rx_output_pins(uint8_t state)
 	SREG = sreg;
 }
 
+/**
+ * Diese Methode setzt den MCP2515 in den gewünschten Betriebszustand.
+ */
 void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 {
 	/* Flag, ob einer oder mehrere TX-Buffer benutzt werden sollen. */

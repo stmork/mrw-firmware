@@ -28,7 +28,9 @@
 struct eeprom_area config;
 
 /**
- * Diese Routine sucht an Hand einer Unitnumber die Device-Konfiguration.
+ * Diese Routine sucht an Hand einer Unit Number die Device-Konfiguration.
+ * Es wird Binärsuche auf die Devices angewendet, was eine entsprechende
+ * Sortierung voraussetzt.
  */
 mrw_device *find_device(uint16_t unit_no)
 {
@@ -59,6 +61,15 @@ mrw_device *find_device(uint16_t unit_no)
 	return null;
 }
 
+/**
+ * Diese Methode vergleicht zwei Devices an Hand ihrer Unit Numbers.
+ * Es ist die Vergleichsmethode, die für qsort() Verwendung findet.
+ * Dementsprechend gelten die Regeln:
+ * - kleiner
+ * - gleich
+ * - größer
+ * für den Return Wert dieser Methode.
+ */
 static int compare_device(const void *A, const void *B)
 {
 	const mrw_device *a = A;
@@ -67,6 +78,10 @@ static int compare_device(const void *A, const void *B)
 	return a->unit_no - b->unit_no;
 }
 
+/**
+ * Diese Methode sortiert die Devices an Hand ihrer Unit Number. So
+ * lässt sich ein Device über Binärsuche effizienter wiederfinden.
+ */
 void config_sort(void)
 {
 	qsort(config.dvc, config.count, sizeof(mrw_device), compare_device);
