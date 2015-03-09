@@ -60,6 +60,10 @@
 #define READY       (PORT_BUSY |=  _BV(PIN_READY))
 #define IDLE        (PORT_BUSY &= ~(_BV(PIN_BUSY) | _BV(PIN_INT1) | _BV(PIN_INT2) | _BV(PIN_INT3)))
 
+/**
+ * Diese ISR holt eine CAN-Meldung aus dem MCP2515 ab. Die
+ * Meldung wird ignoriert.
+ */
 ISR(INT2_vect)
 {
 	BUSY_INT1;
@@ -71,6 +75,11 @@ ISR(INT2_vect)
 	BUSY_MAIN;
 }
 
+/**
+ * Diese ISR wird aufgerufen, wenn eine DA-Wandlung durchgeführt
+ * wurde. Der gewandelte Wert wird als Helligkeitswert interpretiert
+ * und dementsprechend werden die konfigurierten Lampen angesteuert.
+ */
 ISR(TIMER1_COMPA_vect)
 {
 	BUSY_INT2;
@@ -98,6 +107,14 @@ static uint8_t busy_test_values[4] =
 };
 #endif
 
+/**
+ * Über diesen Timer ISR werden fortlaufend die Warbwerte
+ * der RGB-LEDs angesteuert. Es wird kontinuierlich zwischen
+ * Rot, Grün und Blau ein Farbwechsel interpoliert. Das
+ *
+ * Ergebnis kann bei YouTube eingesehen werden:
+ * https://www.youtube.com/watch?v=oTN2_jRfX8c
+ */
 ISR(TIMER2_OVF_vect)
 {
 	BUSY_INT3;
@@ -201,6 +218,9 @@ ISR(TIMER2_OVF_vect)
 	BUSY_MAIN;
 }
 
+/**
+ * Diese Methode initialisiert die Device Konfiguration.
+ */
 static void config_init(void)
 {
 	mrw_device *dvc = config.dvc;
@@ -221,6 +241,11 @@ static void config_init(void)
 	config.count = i;
 }
 
+/**
+ * Die Hauptmethode initialisiert die Hardware und
+ * macht im Betrieb nichts außer schlafen. D.h., die
+ * Arbeit wird nur in den ISRs erledigt :-) 
+ */
 int main(void)
 {
 	DDR_BUSY  = 0xff;

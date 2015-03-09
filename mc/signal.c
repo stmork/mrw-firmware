@@ -159,6 +159,10 @@ static void signal4_hp2(struct mrw_signal *signal)
 /* Dispatcher fuer Signale */
 /***************************/
 
+/**
+ * Diese Methode ermittelt das Bitmuster für das Signalbild
+ * für zweibegriffige Lichtsignale.
+ */
 static void set_signal2(struct mrw_signal *signal)
 {
 	switch (signal->img)
@@ -184,6 +188,10 @@ static void set_signal2(struct mrw_signal *signal)
 	}
 }
 
+/**
+ * Diese Methode ermittelt das Bitmuster für das Signalbild
+ * für dreibegriffige Lichtsignale.
+ */
 static void set_signal3(struct mrw_signal *signal)
 {
 	switch (signal->img)
@@ -215,6 +223,10 @@ static void set_signal3(struct mrw_signal *signal)
 	}
 }
 
+/**
+ * Diese Methode ermittelt das Bitmuster für das Signalbild
+ * für vierbegriffige Lichtsignale.
+ */
 static void set_signal4(struct mrw_signal *signal)
 {
 	switch (signal->img)
@@ -240,6 +252,11 @@ static void set_signal4(struct mrw_signal *signal)
 	}
 }
 
+/**
+ * Diese Methode berechnet an Hand des Devices,
+ * wie das Bitmuster für den Serial Buffer
+ * aussehen muss.
+ */
 void compute_signal(mrw_device *dvc)
 {
 	switch(dvc->unit_type)

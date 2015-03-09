@@ -115,6 +115,10 @@ void serial_limit(uint8_t idx)
 	}
 }
 
+/**
+ * Diese Methode sendet den Buffer. Es werden nur die Bytes
+ * gesendet, die für das Senden auch gebraucht werden.
+ */
 void send_serial_buffer(void)
 {
 	serial_put_buffer(&serial_buffer[start_idx], sizeof(serial_buffer) - start_idx);

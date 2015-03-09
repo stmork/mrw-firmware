@@ -193,6 +193,9 @@ static void mcp2515_reset(void)
 	}
 }
 
+/**
+ * Diese Methode setzt den CAN-Identifier gemäß Standard 2.0A.
+ */
 static void mcp2515_write_sid(uint8_t address, uint16_t id)
 {
 	mcp2515_select(SPI_WRITE);
@@ -204,6 +207,9 @@ static void mcp2515_write_sid(uint8_t address, uint16_t id)
 	mcp2515_deselect();
 }
 
+/**
+ * Diese Methode setzt den extended CAN-Identifier gemäß Standard 2.0B.
+ */
 static void mcp2515_write_eid(uint8_t address, uint16_t id)
 {
 	mcp2515_select(SPI_WRITE);
@@ -216,6 +222,10 @@ static void mcp2515_write_eid(uint8_t address, uint16_t id)
 	mcp2515_deselect();
 }
 
+/**
+ * Diese Methode liest den Fehlerstatus des MCP2515 aus. Wenn
+ * kein Fehler entdeckt wurde, wird 00 zurückgegeben.
+ */
 uint8_t mcp2515_read_error_status(MCP2515_error_status *status)
 {
 	register uint8_t sreg = SREG;
@@ -405,6 +415,10 @@ void mcp2515_init(uint16_t id, uint8_t config_valid, uint8_t multi_tx)
 	SET_PORT_BIT(GICR,  INT2); /* INT 2 enable */
 }
 
+/**
+ * Diese Methode sucht einen freien Sendebuffer im MCP2515. Ist
+ * kein Buffer frei, wird -1 zurückgegeben.
+ */
 static int8_t can_get_free_buffer(void)
 {
 	uint8_t status = mcp2515_read_status();

@@ -30,6 +30,10 @@ void random_preinit(void)
 	TCCR0 = _BV(CS00);
 }
 
+/**
+ * Diese Methode führt einen Seed durch und initialisiert den
+ * Timer entsprechend.
+ */
 void random_postinit(void)
 {	
 	uint8_t *ptr = (uint8_t *)(RAMEND & 0xff);
@@ -53,6 +57,10 @@ void random_postinit(void)
 	TCNT0 ^= rnd;
 }
 
+/**
+ * Die Zufallszahl wird aus dem laufenden Timer einfach
+ * ausgelesen.
+ */
 uint8_t random_timer(void)
 {
 	return TCNT0;

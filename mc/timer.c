@@ -33,6 +33,11 @@ void timer0_init(void)
 	TIMSK |= _BV(TOIE0);
 }
 
+/**
+ * Diese Methode initialisiert den Timer 1 für die
+ * PWM-Ansteuerung. Die Taktrate wurde vorher schon
+ * für die benötigte Frequenz berechnet.
+ */
 void timer1_init(uint16_t clock)
 {
 	uint8_t sreg = SREG;
@@ -54,6 +59,11 @@ void timer1_init(uint16_t clock)
 	SREG = sreg;
 }
 
+/**
+ * Diese Methode initialisiert den Timer 2 für
+ * langlaufende Schaltbefehle wie z.B. Weichen-
+ * Schaltungen.
+ */
 void timer2_init(void)
 {
 	/* Prescaler 1024 */

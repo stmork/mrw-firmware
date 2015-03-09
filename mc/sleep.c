@@ -24,6 +24,10 @@
 
 #include <avr/sleep.h>
 
+/**
+ * Diese Methode führt einfach einen Sleep aus. Der
+ * Zustand wird durch einen Interrupt abgebrochen.
+ */
 void sleep(void)
 {
 	sleep_enable();
