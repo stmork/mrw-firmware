@@ -237,7 +237,7 @@ public abstract class LightProfile implements Comparable<LightProfile>
 			pw.println("**");
 			pw.println("**\tLight dimming profiles");
 			pw.println("**");
-			pw.println("**\tCopyright (C) 2010 committers of this modelrailway project. All rights reserved.");
+			pw.println("**\tCopyright (C) 2016 committers of this modelrailway project. All rights reserved.");
 			pw.println("**");
 			pw.println("**\tThis program and the accompanying materials are made available under the");
 			pw.println("**\tterms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0");
