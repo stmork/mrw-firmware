@@ -58,7 +58,7 @@ import de.morknet.mrw.lightprofile.profiles.Slow13;
 
 public abstract class LightProfile implements Comparable<LightProfile>
 {
-	protected final static Set<LightProfile> profiles = new TreeSet<LightProfile>();
+	        final static Set<LightProfile> profiles = new TreeSet<LightProfile>();
 	private final static Locale locale = Locale.GERMAN;
 	private final BufferedImage image;
 	private final static float X_SCALE = 2.0f;
