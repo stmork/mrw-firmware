@@ -42,7 +42,7 @@ void serial_init(void)
 {
 	DDR_SERIAL |= SER_CLK | SER_DATA | SER_SET;
 	clear_serial_buffer();
-	send_serial_buffer();
+//	send_serial_buffer();
 }
 
 /**
@@ -75,9 +75,11 @@ void serial_put_buffer(uint8_t *buffer, uint8_t len)
 		serial_putc(*buffer++);
 		len--;
 	}
-	SET1;
-	NOP;
+
+	// Serielles Schieberegister in parallele Ausgabepuffer übernehmen.
 	SET0;
+	NOP;
+	SET1;
 }
 
 /**
@@ -98,9 +100,11 @@ void clear_serial_buffer(void)
 			CLK0;
 		}
 	}
-	SET1;
-	NOP;
+
+	// Serielles Schieberegister in parallele Ausgabepuffer übernehmen.
 	SET0;
+	NOP;
+	SET1;
 }
 
 /**
