@@ -27,6 +27,7 @@
 #include <strings.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #ifdef __linux__
 #	include <asm/ioctls.h>
