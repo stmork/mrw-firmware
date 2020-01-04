@@ -48,7 +48,10 @@ int main(int argc,char *argv[])
 
 	while(1)
 	{
-		write(fd, &zero, sizeof(zero));
+		if (write(fd, &zero, sizeof(zero)) <= 0)
+		{
+			perror(argv[1]);
+		}
 	}
 	
 	return EXIT_SUCCESS;
