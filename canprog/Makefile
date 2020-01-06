@@ -1,4 +1,4 @@
-CFLAGS	= -O3
+CFLAGS	= -O3 -Wall
 SRC		= canprog.c gwsim.c can_pc.c mrw_dump.c receive.c ping.c send.c\
 	qryerr.c qrybuf.c reset.c switch.c signal.c form.c config.c setid.c\
 	rail.c occupation.c light.c busy.c mrw_daemon.cc

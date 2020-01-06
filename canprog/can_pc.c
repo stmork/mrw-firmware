@@ -128,7 +128,6 @@ int uart_send_can_msg(int fd, CAN_message *msg)
  */
 void uart_sync(int fd)
 {
-	uint8_t byte = 0;
 	uint8_t buffer[16];
 	int     i;
 
