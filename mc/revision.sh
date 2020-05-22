@@ -1,6 +1,6 @@
 #!/bin/bash
 
-revision=`svn info | fgrep "Rev: " | cut -d":" -f2`
+revision=${BUILD_NUMBER:-0}
 today=`date`
 year=`date +%Y`
 file=revision.h
@@ -28,13 +28,13 @@ echo ""  >>$file
 echo "#ifndef REVISION_H" >>$file
 echo "#define REVISION_H" >>$file
 echo "" >>$file
-echo "#define FIRMWARE_VERSION  3" >>$file
+echo "#define FIRMWARE_VERSION  4" >>$file
 echo "#define FIRMWARE_REVISION $revision" >>$file
 echo "" >>$file
 echo "#endif" >>$file
 echo "" >>$file
 
 echo "/***********************************************************************" >>$file
-svn log . >>$file
+git log . >>$file
 echo "***********************************************************************/" >>$file
 
