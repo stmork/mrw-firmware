@@ -6,7 +6,7 @@
 	<property name="bin-path"        value="./bin"/>
 	<property name="image-path"      value="../Bilder/Trac/LichtProfile"/>
 	<property name="mc-path"         value="../mc"/>
-	<property name="findbugs.home"   value="../findbugs"/>
+	<property name="spotbugs.home"   value="../spotbugs"/>
 
 	<!-- ==================================================== -->
 	<!--              Setting up libraries                    --> 
@@ -16,8 +16,8 @@
 		<pathelement path="${bin-path}" />
 	</path>
 		
-	<path id="findbugs.lib">
-		<fileset dir="${findbugs.home}">
+	<path id="spotbugs.lib">
+		<fileset dir="${spotbugs.home}">
 			<include name="lib/*.jar"/>
 		</fileset>
 	</path>
@@ -26,7 +26,7 @@
 	<!--            Setting up target definitions             --> 
 	<!-- ==================================================== -->
 
-	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="findbugs.lib"/>
+	<taskdef name="spotbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="spotbugs.lib"/>
 
 	<!-- ==================================================== -->
 	<!--              Setting up build targets                --> 
@@ -61,9 +61,9 @@
 		</java>
 	</target>
 
-	<target name="findbugs" depends="compile">
+	<target name="spotbugs" depends="compile">
 		<echo message="Checking ${ant.project.name}..."/>
-		<findbugs jvmargs="-Xmx128m" home="${findbugs.home}"
+		<spotbugs jvmargs="-Xmx128m" home="${spotbugs.home}"
 				output="xml:withMessages"
 				outputFile="findbugs-results.xml"
 				classpathref="run.classpath"
@@ -73,6 +73,6 @@
 			<sourcePath path="${src-path}"/>
 			<class location="${bin-path}"/>
 			<auxclasspath refid="run.classpath"/>
-		</findbugs>
+		</spotbugs>
 	</target>
 </project>
