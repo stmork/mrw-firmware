@@ -40,12 +40,12 @@ static double compute_ubbr(int baud, double hz)
 	return hz / (baud << 4) - 1;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	int baud = 115200;
 	int i;
 
-	for (i = 1;i < 8;i++)
+	for (i = 1; i < 8; i++)
 	{
 		double hz    = MHZ * 250000.0 * i;
 		double ubbr  = compute_ubbr(baud, hz);

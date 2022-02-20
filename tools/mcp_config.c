@@ -41,7 +41,7 @@ static void config(int khz)
 
 
 	unsigned char CNF1, CNF2, CNF3;
-	
+
 	CNF1 = (int)BRP | ((SJW - 1) << 6);
 	CNF2 = ((PropSeg - 1) & 0x7) | (((PS1 - 1) & 0x7) << 3) | 0x40 | 0x80;
 	CNF3 = (PS2 - 1) & 0x7;
@@ -60,7 +60,7 @@ static void config(int khz)
 #define R_CNF2  ((PROP_SEG - 1) | ((R_PS1 - 1) << 3) | (1 << SAM) | (1 << BTLMODE))
 #define R_CNF3  (R_PS2 - 1)
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	int khz;
 

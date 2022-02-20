@@ -6,12 +6,12 @@
 static unsigned char nom[MAX];
 static unsigned char denom[MAX];
 
-static void dump(unsigned char *array, char *name)
+static void dump(unsigned char * array, char * name)
 {
 	int i;
 
 	printf ("static const uint8_t %s[%d] PROGMEM =\n{\n\t", name, MAX);
-	for (i = 0;i < MAX;i++)
+	for (i = 0; i < MAX; i++)
 	{
 		printf("0x%02x", array[i]);
 		if (i < (MAX - 1))
@@ -23,12 +23,12 @@ static void dump(unsigned char *array, char *name)
 	printf("};\n");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	int i, k;
 
 	denom[0] = MAX;
-	for (i = 1;i < MAX;i++)
+	for (i = 1; i < MAX; i++)
 	{
 		unsigned short d = MAX;
 		unsigned short n = i;

@@ -27,13 +27,13 @@
 #define F_CAN     125000L
 #define F_SPI  (F_CPU / 2)
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	int i;
 
 	printf("Frame rates:\n");
 	printf("bytes: RS232   SPI CANsf CANef\n");
-	for (i = 0;i <= 8;i++)
+	for (i = 0; i <= 8; i++)
 	{
 		int Fr_baud   = F_BAUD / (i * 10 + 60);
 		int Fr_spi    = F_SPI  / (i *  8 + 80);
