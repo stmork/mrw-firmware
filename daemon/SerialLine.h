@@ -24,14 +24,14 @@ class SerialLine
 	int fd;
 
 public:
-	SerialLine(const char *device);
+	SerialLine(const char * device);
 
 	virtual ~SerialLine()
 	{
 		Close();
 	}
 
-	inline size_t Read(void *buffer, size_t count)
+	inline size_t Read(void * buffer, size_t count)
 	{
 		return read(fd, buffer, count);
 	}

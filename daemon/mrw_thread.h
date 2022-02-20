@@ -37,7 +37,7 @@ protected:
 		if (error_code != 0)
 		{
 			fprintf(stderr, "### pthread # errno: %d (%s)!\n",
-					 error_code,strerror(error_code));
+				error_code, strerror(error_code));
 			fflush(stderr);
 		}
 #endif
@@ -62,7 +62,7 @@ public:
 	 */
 	Mutex()
 	{
-		CheckResult(pthread_mutex_init(&mutex,NULL));
+		CheckResult(pthread_mutex_init(&mutex, NULL));
 	}
 
 	/**
@@ -86,10 +86,10 @@ public:
 
 class Lock
 {
-	Mutex &m_Mutex;
+	Mutex & m_Mutex;
 
 public:
-	inline Lock(Mutex &mutex) : m_Mutex(mutex)
+	inline Lock(Mutex & mutex) : m_Mutex(mutex)
 	{
 		m_Mutex.Lock();
 	}
@@ -115,8 +115,8 @@ public:
 	 */
 	inline Event()
 	{
-		CheckResult(pthread_cond_init(&event,NULL));
-		CheckResult(pthread_mutex_init(&mutex,NULL));
+		CheckResult(pthread_cond_init(&event, NULL));
+		CheckResult(pthread_mutex_init(&mutex, NULL));
 		pulse = false;
 	}
 
@@ -129,7 +129,7 @@ public:
 		CheckResult(pthread_cond_destroy(&event));
 	}
 
-	inline void     Pulse() 
+	inline void     Pulse()
 	{
 		CheckResult(pthread_mutex_lock(&mutex));
 		pulse = true;
@@ -144,7 +144,7 @@ public:
 		success &= CheckResult(pthread_mutex_lock(&mutex));
 		if (!pulse)
 		{
-			success &= CheckResult(pthread_cond_wait(&event,&mutex));
+			success &= CheckResult(pthread_cond_wait(&event, &mutex));
 		}
 		pulse = false;
 		success &= CheckResult(pthread_mutex_unlock(&mutex));
@@ -158,14 +158,14 @@ public:
  */
 class Thread : protected ThreadInfo
 {
-	const char              *m_Name;
+	const char       *       m_Name;
 	int                      m_Prio;
 
 	pthread_t                m_Thread;
 	volatile bool            m_IsRunning;
 	volatile unsigned int    m_Result;
 	volatile ThreadProc      m_CallProc;
-	volatile void           *m_CallArg;
+	volatile void      *     m_CallArg;
 
 public:
 	/**
@@ -173,7 +173,7 @@ public:
 	 *
 	 * @param taskname The new thread name.
 	 */
-	inline Thread(const char *taskname = null)
+	inline Thread(const char * taskname = null)
 	{
 		m_Name      = taskname;
 		m_IsRunning = false;
@@ -189,12 +189,12 @@ public:
 		Stop();
 	}
 
-	inline void Name(const char *taskname = null)
+	inline void Name(const char * taskname = null)
 	{
 		m_Name = taskname;
 	}
 
-	inline bool Start(ThreadProc proc, void *ptr, int priority=0)
+	inline bool Start(ThreadProc proc, void * ptr, int priority = 0)
 	{
 		bool  success;
 		int   error_code;
@@ -208,7 +208,7 @@ public:
 		m_Thread   = 0;
 		m_Prio     = -priority * 5;
 
-		return CheckResult(error_code = pthread_create(&m_Thread,NULL,&Trampoline,this));
+		return CheckResult(error_code = pthread_create(&m_Thread, NULL, &Trampoline, this));
 	}
 
 	inline bool          IsRunning()
@@ -236,16 +236,16 @@ public:
 	inline unsigned int  Wait()
 	{
 		int   result;
-		void *ptr = &result;
+		void * ptr = &result;
 
-		CheckResult(pthread_join(m_Thread,&ptr));
+		CheckResult(pthread_join(m_Thread, &ptr));
 		return m_Result;
 	}
 
 private:
-	static void *Trampoline(void *ptr)
+	static void * Trampoline(void * ptr)
 	{
-		Thread *threadClass = (Thread *)ptr;
+		Thread * threadClass = (Thread *)ptr;
 
 		if (nice(threadClass->m_Prio) == -1)
 		{

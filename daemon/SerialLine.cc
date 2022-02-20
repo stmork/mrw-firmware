@@ -42,14 +42,14 @@
 #include "ClientHandler.h"
 #include "Log.h"
 
-SerialLine::SerialLine(const char *device)
+SerialLine::SerialLine(const char * device)
 {
-	struct termios oldtio,newtio;	
+	struct termios oldtio, newtio;
 
-	fd = open(device, O_RDWR|O_NOCTTY);
+	fd = open(device, O_RDWR | O_NOCTTY);
 	if (fd >= 0)
 	{
-		tcgetattr(fd,&oldtio);
+		tcgetattr(fd, &oldtio);
 		bzero(&newtio, sizeof(newtio));
 		newtio.c_cflag = BAUD | CS8 | CLOCAL | CREAD;
 		newtio.c_iflag = IGNPAR;
@@ -58,7 +58,7 @@ SerialLine::SerialLine(const char *device)
 		newtio.c_cc[VTIME]    = 0;
 		newtio.c_cc[VMIN]     = 1;
 		tcflush(fd, TCIFLUSH);
-		tcsetattr(fd,TCSANOW,&newtio);
+		tcsetattr(fd, TCSANOW, &newtio);
 
 #ifdef TIOCGSERIAL
 		struct serial_struct serinfo;
@@ -85,7 +85,7 @@ void SerialLine::Sync()
 	int     i;
 
 	logger.Info("Synchronizing serial connection...\n");
-	for (i = 0;i < 16;i++)
+	for (i = 0; i < 16; i++)
 	{
 		if (write(fd, &byte, sizeof(byte)) != sizeof(byte))
 		{

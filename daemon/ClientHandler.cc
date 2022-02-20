@@ -23,48 +23,48 @@
 #include "ReceiveBuffer.h"
 #include "UartReader.h"
 
-ClientHandler::ClientHandler(UartReader &reader, int s) : reader(reader)
+ClientHandler::ClientHandler(UartReader & reader, int s) : reader(reader)
 {
 	fd = s;
 	Start(Writer, this);
 }
 
-unsigned int ClientHandler::Writer(void *ptr)
+unsigned int ClientHandler::Writer(void * ptr)
 {
-	ClientHandler *handler = (ClientHandler *)ptr;
-	ReceiveBuffer *item;
-	
+	ClientHandler * handler = (ClientHandler *)ptr;
+	ReceiveBuffer * item;
+
 	do
 	{
 		handler->Event::Wait();
-		
+
 		do
 		{
 			{
 				Lock lock(handler->mutex);
-			
+
 				item = handler->queue.front();
 				if (item != null)
 				{
 					handler->queue.pop();
 				}
 			}
-			
+
 			if (item != null)
 			{
 				item->Write(handler->fd);
 			}
 		}
-		while(item != null);
+		while (item != null);
 	}
 	while (1);
 }
 
-void ClientHandler::Add(ReceiveBuffer &buffer)
+void ClientHandler::Add(ReceiveBuffer & buffer)
 {
 	Lock lock(mutex);
-	ReceiveBuffer *item = new ReceiveBuffer(buffer);
-	
+	ReceiveBuffer * item = new ReceiveBuffer(buffer);
+
 	queue.push(item);
 	Event::Pulse();
 }
@@ -77,7 +77,7 @@ int ClientHandler::Reader()
 
 	reader.Register(this);
 	logger.Info("Starting TCP-Reader...\n");
-	
+
 	do
 	{
 		read_bytes = read(fd, c, sizeof(c));
@@ -85,7 +85,7 @@ int ClientHandler::Reader()
 		{
 			int i;
 
-			for (i = 0; i < read_bytes;i++)
+			for (i = 0; i < read_bytes; i++)
 			{
 				int result = buffer.Receive(c[i]);
 
@@ -105,7 +105,7 @@ int ClientHandler::Reader()
 			return -1;
 		}
 	}
-	while(read_bytes > 0);
+	while (read_bytes > 0);
 
 	logger.Info("Leaving TCP-Reader...\n");
 	reader.Unregister(this);
@@ -122,16 +122,16 @@ void ClientHandler::Close()
 }
 
 static Thread thread("Client handler");
-	
-void ClientHandler::Handle(ClientHandler *handler)
+
+void ClientHandler::Handle(ClientHandler * handler)
 {
 	thread.Start(HandleTcp, handler);
 }
 
-unsigned int ClientHandler::HandleTcp(void *ptr)
+unsigned int ClientHandler::HandleTcp(void * ptr)
 {
-	ClientHandler *handler = (ClientHandler *)ptr;
-	
+	ClientHandler * handler = (ClientHandler *)ptr;
+
 	handler->Reader();
 	delete handler;
 }

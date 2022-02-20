@@ -38,7 +38,7 @@ public:
 		Init();
 	}
 
-	inline ReceiveBuffer(ReceiveBuffer &buffer)
+	inline ReceiveBuffer(ReceiveBuffer & buffer)
 	{
 		input = buffer.input;
 		index = buffer.index;
@@ -64,7 +64,7 @@ public:
 			complete = -1;
 		}
 		else if ((input.can.length + offsetof(CAN_message, data) + 1) == index)
-		{	
+		{
 			if (checksum == 0)
 			{
 				complete = 1;
@@ -78,7 +78,7 @@ public:
 
 				ftime(&now);
 				printf("%ld.%03d # Checksum error [%02x]: ", now.time, now.millitm, checksum);
-				for (i = 0;i < index;i++)
+				for (i = 0; i < index; i++)
 				{
 					printf(" %02x", input.buffer[i]);
 				}
@@ -91,7 +91,7 @@ public:
 		return complete;
 	}
 
-	inline void Dump(const char *comment)
+	inline void Dump(const char * comment)
 	{
 		logger.Dump(&input.can, checksum, comment);
 	}

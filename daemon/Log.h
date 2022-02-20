@@ -33,15 +33,15 @@ class Log : public Mutex
 	mrw_constant_map signal_map;
 
 public:
-	     Log();
-	void Dump(const CAN_message *msg, uint8_t checksum, const char *comment);
-	void Info(const char *message, ...);
-	void Error(const char *message, ...);
+	Log();
+	void Dump(const CAN_message * msg, uint8_t checksum, const char * comment);
+	void Info(const char * message, ...);
+	void Error(const char * message, ...);
 
 private:
-	const char* find_cmd_text(uint8_t code);
-	const char* find_result_text(uint8_t code);
-	const char* find_signal_text(uint8_t code);
+	const char * find_cmd_text(uint8_t code);
+	const char * find_result_text(uint8_t code);
+	const char * find_signal_text(uint8_t code);
 };
 
 extern Log logger;

@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Client request handler
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022  Steffen A. Mork
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef CLIENT_HANDLER_H
 #define CLIENT_HANDLER_H
@@ -26,25 +23,26 @@ class UartReader;
 
 class ClientHandler : public Thread, public Event
 {
-	Mutex mutex;
-	int fd;
-	UartReader &reader;
+	Mutex        mutex;
+	int          fd;
+	UartReader & reader;
 
 	std::queue<ReceiveBuffer *> queue;
+
 public:
-	ClientHandler(UartReader &reader, int s);
+	ClientHandler(UartReader & reader, int s);
 
 	inline virtual ~ClientHandler()
 	{
 		Close();
 	}
 
-	void Add(ReceiveBuffer &buffer);
-	static void Handle(ClientHandler *handler);
+	void Add(ReceiveBuffer & buffer);
+	static void Handle(ClientHandler * handler);
 
 private:
 	static unsigned int HandleTcp(void *);
-	static unsigned int Writer(void *ptr);
+	static unsigned int Writer(void * ptr);
 	int Reader();
 	void Close();
 };

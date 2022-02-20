@@ -21,13 +21,13 @@
 #include "Log.h"
 #include "ClientHandler.h"
 #include "ReceiveBuffer.h"
-#include "UartReader.h" 
+#include "UartReader.h"
 
 #include <errno.h>
 
 #define not_VERBOSE
 
-UartReader::UartReader(SerialLine &uart) : uart(uart), Thread("uart reader")
+UartReader::UartReader(SerialLine & uart) : uart(uart), Thread("uart reader")
 {
 }
 
@@ -36,35 +36,35 @@ void UartReader::Start()
 	Thread::Start(Reader, this, 5);
 }
 
-void UartReader::Register(ClientHandler *handler)
+void UartReader::Register(ClientHandler * handler)
 {
 	::Lock lock(*this);
 
 	clients.insert(handler);
 }
 
-void UartReader::Unregister(ClientHandler *handler)
+void UartReader::Unregister(ClientHandler * handler)
 {
 	::Lock lock(*this);
 
 	clients.erase(handler);
 }
 
-void UartReader::Add(ReceiveBuffer &buffer)
+void UartReader::Add(ReceiveBuffer & buffer)
 {
 	std::set<ClientHandler *>::iterator iter;
-	ClientHandler *handler;
+	ClientHandler * handler;
 
-	for(iter = clients.begin(); iter != clients.end(); iter++)
+	for (iter = clients.begin(); iter != clients.end(); iter++)
 	{
 		handler = *iter;
 		handler->Add(buffer);
 	}
 }
 
-unsigned int UartReader::Reader(void *ptr)
+unsigned int UartReader::Reader(void * ptr)
 {
-	UartReader    *reader = (UartReader *)ptr;
+	UartReader  *  reader = (UartReader *)ptr;
 	ReceiveBuffer  buffer;
 	uint8_t        c[256];
 	size_t         read_bytes;
@@ -81,7 +81,7 @@ unsigned int UartReader::Reader(void *ptr)
 #ifdef _VERBOSE
 			printf("%d:", read_bytes);
 #endif
-			for (i = 0; i < read_bytes;i++)
+			for (i = 0; i < read_bytes; i++)
 			{
 				int result = buffer.Receive(c[i]);
 
@@ -116,6 +116,6 @@ unsigned int UartReader::Reader(void *ptr)
 			return -1;
 		}
 	}
-	while(read_bytes > 0);
+	while (read_bytes > 0);
 	return 1;
 }

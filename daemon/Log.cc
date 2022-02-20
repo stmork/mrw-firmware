@@ -36,7 +36,7 @@ Log logger;
 struct string_map
 {
 	const uint8_t  code;
-	const char    *text;
+	const char  *  text;
 };
 
 struct string_map command_values[] =
@@ -121,21 +121,21 @@ struct string_map signal_values[] =
 	{ SIGNAL_TST,  "SIGNAL_TST" }
 };
 
-const char* Log::find_cmd_text(uint8_t code)
+const char * Log::find_cmd_text(uint8_t code)
 {
 	mrw_constant_map::iterator it = command_map.find(code);
 
 	return it != command_map.end() ? it->second : NULL;
 }
 
-const char *Log::find_result_text(uint8_t code)
+const char * Log::find_result_text(uint8_t code)
 {
 	mrw_constant_map::iterator it = result_map.find(code);
 
 	return it != result_map.end() ? it->second : NULL;
 }
 
-const char *Log::find_signal_text(uint8_t code)
+const char * Log::find_signal_text(uint8_t code)
 {
 	mrw_constant_map::iterator it = signal_map.find(code);
 
@@ -146,26 +146,26 @@ Log::Log()
 {
 	int i;
 
-	for (i = 0; i < sizeof(command_values)/sizeof(struct string_map);i++)
+	for (i = 0; i < sizeof(command_values) / sizeof(struct string_map); i++)
 	{
 		command_map.insert(make_pair(command_values[i].code, command_values[i].text));
 	}
-	for (i = 0; i < sizeof(result_values)/sizeof(struct string_map);i++)
+	for (i = 0; i < sizeof(result_values) / sizeof(struct string_map); i++)
 	{
 		result_map.insert(make_pair(result_values[i].code, result_values[i].text));
 	}
-	for (i = 0; i < sizeof(signal_values)/sizeof(struct string_map);i++)
+	for (i = 0; i < sizeof(signal_values) / sizeof(struct string_map); i++)
 	{
 		signal_map.insert(make_pair(signal_values[i].code, signal_values[i].text));
 	}
 }
 
-void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
+void Log::Dump(const CAN_message * msg, uint8_t checksum, const char * comment)
 {
 	struct timeb  now;
 	::Lock        lock(*this);
 	uint8_t       cmd = msg->data[0];
-	const char   *cmd_text = find_cmd_text(cmd & CMD_MASK);
+	const char  * cmd_text = find_cmd_text(cmd & CMD_MASK);
 
 	ftime(&now);
 	if (cmd_text != NULL)
@@ -174,7 +174,7 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 
 		if (cmd & MSG_RESULT)
 		{
-			const char *res_text = find_result_text(msg->data[1]);
+			const char * res_text = find_result_text(msg->data[1]);
 
 			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
 				now.time, now.millitm,
@@ -183,7 +183,7 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 				res_text != NULL ? res_text : "<unknown>",
 				msg->eid,
 				msg->data[IDX_INFO_START - 1], msg->data[IDX_INFO_START - 2]);
-			for (i = IDX_INFO_START;i < msg->length; i++)
+			for (i = IDX_INFO_START; i < msg->length; i++)
 			{
 				printf(" 0x%02x", msg->data[i]);
 			}
@@ -196,21 +196,21 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 				msg->sid, msg->eid, msg->length, msg->status, cmd_text);
 			if (cmd == SETSGN)
 			{
-				const char *sig_text = find_signal_text(msg->data[1]);
-	
+				const char * sig_text = find_signal_text(msg->data[1]);
+
 				printf(" %s", sig_text != NULL ? sig_text : "???");
 			}
 			else if ((cmd == FLASH_DATA) || (cmd == FLASH_CHECK))
 			{
 				printf(" $%02x%02x%02x", msg->data[3], msg->data[2], msg->data[1]);
-				for (i = 4;i < msg->length; i++)
+				for (i = 4; i < msg->length; i++)
 				{
 					printf(" 0x%02x", msg->data[i]);
 				}
 			}
 			else
 			{
-				for (i = 1;i < msg->length; i++)
+				for (i = 1; i < msg->length; i++)
 				{
 					printf(" 0x%02x", msg->data[i]);
 				}
@@ -225,7 +225,7 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 		printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x",
 			now.time, now.millitm,
 			msg->sid, msg->eid, msg->length, msg->status);
-		for (i = 0;i < msg->length; i++)
+		for (i = 0; i < msg->length; i++)
 		{
 			printf(" 0x%02x", msg->data[i]);
 		}
@@ -234,7 +234,7 @@ void Log::Dump(const CAN_message *msg, uint8_t checksum, const char *comment)
 	fflush(stdout);
 }
 
-void Log::Info(const char *message, ...)
+void Log::Info(const char * message, ...)
 {
 	::Lock lock(*this);
 	va_list args;
@@ -245,7 +245,7 @@ void Log::Info(const char *message, ...)
 	fflush(stdout);
 }
 
-void Log::Error(const char *message, ...)
+void Log::Error(const char * message, ...)
 {
 	::Lock lock(*this);
 	char buffer[256];

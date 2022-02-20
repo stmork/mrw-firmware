@@ -28,7 +28,7 @@
 #include "ServerSocket.h"
 #include "UartReader.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	logger.Info("Start\n");
 	if (argc <= 1)
@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
 	uart.Sync();
 	do
 	{
-		ClientHandler *handler = new ClientHandler(reader, server.Accept());
-		
+		ClientHandler * handler = new ClientHandler(reader, server.Accept());
+
 		ClientHandler::Handle(handler);
 	}
-	while(1);
+	while (1);
 
 	return EXIT_SUCCESS;
 }

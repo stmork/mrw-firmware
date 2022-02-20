@@ -22,7 +22,7 @@ class ServerSocket
 {
 	int s;
 	struct sockaddr_in client_addr;
-	unsigned int clientlen;	
+	unsigned int clientlen;
 
 public:
 	ServerSocket();

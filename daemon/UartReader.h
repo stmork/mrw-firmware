@@ -26,14 +26,14 @@ class ReceiveBuffer;
 
 class UartReader : public Thread, public Mutex
 {
-	SerialLine                &uart;
+	SerialLine        &        uart;
 	std::set<ClientHandler *>  clients;
 
 public:
-	UartReader(SerialLine &uart);
+	UartReader(SerialLine & uart);
 
-	void Register(ClientHandler *handler);
-	void Unregister(ClientHandler *handler);
+	void Register(ClientHandler * handler);
+	void Unregister(ClientHandler * handler);
 	void Start();
 
 	inline int  GetFD()
@@ -42,8 +42,8 @@ public:
 	}
 
 private:
-	static unsigned int Reader(void *ptr);
-	       void         Add(ReceiveBuffer &buffer);
+	static unsigned int Reader(void * ptr);
+	void         Add(ReceiveBuffer & buffer);
 };
 
 #endif
