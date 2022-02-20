@@ -32,7 +32,7 @@
 static void test_occupation(int fd, int unit_no)
 {
 	CAN_message msg;
-	
+
 	msg.sid    = TEST_SID;
 	msg.eid    = unit_no;
 	msg.length = 1;
@@ -41,7 +41,7 @@ static void test_occupation(int fd, int unit_no)
 	uart_send_can_msg(fd, &msg);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int i;
 
@@ -62,9 +62,9 @@ int main(int argc,char *argv[])
 	uart_sync(fd);
 
 #if 0
-	for (i = 0;i < 4;i++)
+	for (i = 0; i < 4; i++)
 #else
-	for (i = 0;1;i++)
+	for (i = 0; 1; i++)
 #endif
 	{
 		test_occupation(fd, TEST_RAIL1);

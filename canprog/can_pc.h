@@ -1,14 +1,8 @@
 /*
 **
-**	$Filename:	can_pc.h $
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	RS232/CAN frame handler
 **
-**	Copyright (C) 2011 committers of this modelrailway project. All rights reserved.
+**	Copyright (C) 2011-2022 committers of this modelrailway project. All rights reserved.
 **
 **	This program and the accompanying materials are made available under the
 **	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -18,6 +12,8 @@
 **
 **
 */
+
+#pragma once
 
 #ifndef UART_PC_H
 #define UART_PC_H
@@ -45,18 +41,18 @@ typedef struct
 	uint8_t checksum;
 } receive_buffer;
 
-extern int  uart_open(char *name);
-extern void uart_dump_can_msg(CAN_message *msg, unsigned char sum, char *comment);
+extern int  uart_open(char * name);
+extern void uart_dump_can_msg(CAN_message * msg, unsigned char sum, char * comment);
 extern void uart_sync(int fd);
-extern int  uart_send_can_msg(int fd, CAN_message *msg);
-extern int  uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int length);
-extern int  uart_send_ext_can_data(int fd, unsigned long id, unsigned char *buffer, int length);
+extern int  uart_send_can_msg(int fd, CAN_message * msg);
+extern int  uart_send_can_data(int fd, unsigned short id, unsigned char * buffer, int length);
+extern int  uart_send_ext_can_data(int fd, unsigned long id, unsigned char * buffer, int length);
 
-extern void  uart_init(receive_buffer *buffer);
-extern int   uart_receive(receive_buffer *buffer,uint8_t byte);
+extern void  uart_init(receive_buffer * buffer);
+extern int   uart_receive(receive_buffer * buffer, uint8_t byte);
 
-extern void  can_fill_message(CAN_message *msg, uint8_t cmd, uint16_t id, uint16_t no);
-extern void  can_add_data(CAN_message *msg, uint8_t data);
+extern void  can_fill_message(CAN_message * msg, uint8_t cmd, uint16_t id, uint16_t no);
+extern void  can_add_data(CAN_message * msg, uint8_t data);
 
 #ifdef __cplusplus
 };

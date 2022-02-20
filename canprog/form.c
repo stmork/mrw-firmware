@@ -19,11 +19,11 @@
 **
 */
 
-#include <stdio.h>  
-#include <stdlib.h> 
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-#include "mrw.h"  
+#include "mrw.h"
 #include "mcp2515.h"
 
 #include "can_pc.h"
@@ -32,7 +32,7 @@
 static void turn_signal(int fd, int pf_signal, int mf_signal)
 {
 	CAN_message msg;
-	
+
 	msg.sid     = 1;
 	msg.length  = 2;
 	msg.status  = 1 << FRAME_EXT;
@@ -48,7 +48,7 @@ static void turn_signal(int fd, int pf_signal, int mf_signal)
 }
 
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	if (argc <= 1)
 	{
@@ -77,7 +77,7 @@ int main(int argc,char *argv[])
 		turn_signal(fd, SIGNAL_OFF, SIGNAL_HP0);
 		sleep(3);
 	}
-	while(1);
+	while (1);
 
 	close(fd);
 	return EXIT_SUCCESS;

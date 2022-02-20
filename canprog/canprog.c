@@ -44,7 +44,7 @@
 // ATmega32 signature
 #define   SIGNATURE_BYTE_1      (unsigned char)0x1E
 #define   SIGNATURE_BYTE_2      (unsigned char)0x95
-#define   SIGNATURE_BYTE_3      (unsigned char)0x02 
+#define   SIGNATURE_BYTE_3      (unsigned char)0x02
 
 static int use_reset = 1;
 
@@ -53,13 +53,13 @@ static int use_reset = 1;
  * Der Buffer wird zurückgegeben und die Größe im Parameter <em>size</em>
  * vermerkt.
  */
-static unsigned char * read_hex(const char *filename, size_t *size)
+static unsigned char * read_hex(const char * filename, size_t * size)
 {
-	FILE          *file = fopen(filename, "r");
+	FILE     *     file = fopen(filename, "r");
 	char           line[128];
-	unsigned char *buffer = NULL;
+	unsigned char * buffer = NULL;
 	unsigned int   i, idx;
-	
+
 	if (file != NULL)
 	{
 		unsigned int count, address, type;
@@ -69,20 +69,20 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 			// Adresse extrahieren
 			if (sscanf(line, ":%02x%04x%02x", &count, &address, &type) == 3)
 			{
-				unsigned char *bytes = NULL;
+				unsigned char * bytes = NULL;
 				unsigned int   checksum = type + count + (address >> 8) + (address & 0xff);
 
-				switch(type)
+				switch (type)
 				{
 				case 0: //data
 					*size = address + count;
 					buffer = (unsigned char *)realloc(buffer, *size + 1);
 					bytes = &buffer[address];
-					for (i = 0, idx = 9;i <= count;i++)
+					for (i = 0, idx = 9; i <= count; i++)
 					{
 						int byte = 0;
 
-						sscanf(&line[idx],"%02x", &byte);
+						sscanf(&line[idx], "%02x", &byte);
 						bytes[i] = byte & 0xff;
 						checksum += byte;
 						idx += 2;
@@ -119,7 +119,7 @@ static unsigned char * read_hex(const char *filename, size_t *size)
 static int ping(int fd)
 {
 	unsigned char  buffer[8];
-	
+
 	buffer[0] = PING;
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
@@ -130,7 +130,7 @@ static int ping(int fd)
 static int reset(int fd)
 {
 	unsigned char  buffer[8];
-	
+
 	buffer[0] = RESET;
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
@@ -138,7 +138,7 @@ static int reset(int fd)
 /**
  * Diese Methode sendet Firmware an die CAN-Knoten.
  */
-static int flash(int fd, unsigned char *buffer, int size, int hid)
+static int flash(int fd, unsigned char * buffer, int size, int hid)
 {
 	unsigned int   address  = 0;
 	unsigned char  checksum = 0;
@@ -155,14 +155,14 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 		// zu einer Sekunde dauern.
 		usleep(DELAY_RESET);
 	}
-	
+
 	// Flash-Vorgang anfordern.
 	msg[0] = FLASH_REQ;
 	msg[1] = (unsigned char)(hid & 0xff);
 	msg[2] = SIGNATURE_BYTE_1;
 	msg[3] = SIGNATURE_BYTE_2;
 	msg[4] = SIGNATURE_BYTE_3;
-	for (i = 0;i < 5;i++)
+	for (i = 0; i < 5; i++)
 	{
 		if (uart_send_can_data(fd, BROADCAST_SID, msg, 5) < 0)
 		{
@@ -204,7 +204,7 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 		printf("-\n");
 		usleep(DELAY_FLASH_PAGE);
 	}
-	
+
 	// Restlichen Überhang schicken.
 	while (size >= 0)
 	{
@@ -236,7 +236,7 @@ static int flash(int fd, unsigned char *buffer, int size, int hid)
 	return uart_send_can_data(fd, BROADCAST_SID, msg, 5) < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int hid = DEFAULT_HARDWARE;
 	int fd;
@@ -251,7 +251,7 @@ int main(int argc,char *argv[])
 
 	if (argc > 3)
 	{
-		if (sscanf(argv[3],"%d", &hid) != 1)
+		if (sscanf(argv[3], "%d", &hid) != 1)
 		{
 			hid = DEFAULT_HARDWARE;
 		}
@@ -268,7 +268,7 @@ int main(int argc,char *argv[])
 	uart_sync(fd);
 
 	size_t   count = 0;
-	unsigned char *buffer = read_hex(argv[2], &count);
+	unsigned char * buffer = read_hex(argv[2], &count);
 
 	if (buffer != NULL)
 	{

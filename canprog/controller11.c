@@ -81,36 +81,36 @@ static void config_ports(int fd)
 	can_fill_message(&msg, CFGRAI, CONTROLLER_SID, 0x00fc);
 	can_add_data(&msg, 16);
 	can_add_data(&msg, 23);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, CONTROLLER_SID, 0x0227);
 	can_add_data(&msg, 17);
 	can_add_data(&msg, 22);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, CONTROLLER_SID, 0x021c);
 	can_add_data(&msg, 18);
 	can_add_data(&msg, 21);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, CONTROLLER_SID, 0x01c3);
 	can_add_data(&msg, 19);
 	can_add_data(&msg, 20);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	for (i = 0; i < 11; i++)
 	{
 		can_fill_message(&msg, CFGLGT, CONTROLLER_SID,  0x100e + i);
 		can_add_data(&msg,   48 + i);    // Anschlusspin
 		can_add_data(&msg,   values[i]);    // Schwellwert
-		uart_send_can_msg(fd, &msg);	
+		uart_send_can_msg(fd, &msg);
 	}
 
 	can_fill_message(&msg, CFGEND, CONTROLLER_SID, 0);
 	uart_send_can_msg(fd, &msg);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	if (argc <= 1)
 	{

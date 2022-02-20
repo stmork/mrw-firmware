@@ -31,12 +31,12 @@
 static int qryerr(int fd)
 {
 	unsigned char  buffer[8];
-	
+
 	buffer[0] = QRYERR;
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int result;
 

@@ -1,14 +1,8 @@
 /*
 **
-**	$Filename:	mrw_dump.c $
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Dump clear text CAN frames.
 **
-**	Copyright (C) 2011 committers of this modelrailway project. All rights reserved.
+**	Copyright (C) 2011-2022 committers of this modelrailway project. All rights reserved.
 **
 **	This program and the accompanying materials are made available under the
 **	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -23,7 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/timeb.h>
+#include <time.h>
 
 #ifdef USE_SID_IN_RESULT
 #define IDX_INFO_START 6
@@ -35,7 +29,7 @@
 struct string_map
 {
 	uint8_t  code;
-	char    *text;
+	char  *  text;
 };
 
 struct string_map cmd_map[] =
@@ -122,12 +116,12 @@ struct string_map signal_map[] =
 
 static unsigned int received = 0;
 
-static char* find_cmd_text(uint8_t code)
+static char * find_cmd_text(uint8_t code)
 {
 	int i = 0;
 	int max = sizeof(cmd_map) / sizeof(struct string_map);
-	
-	for (i = 0;i < max;i++)
+
+	for (i = 0; i < max; i++)
 	{
 		if (cmd_map[i].code == code)
 		{
@@ -137,12 +131,12 @@ static char* find_cmd_text(uint8_t code)
 	return NULL;
 }
 
-static char* find_result_text(uint8_t code)
+static char * find_result_text(uint8_t code)
 {
 	int i = 0;
 	int max = sizeof(result_map) / sizeof(struct string_map);
-	
-	for (i = 0;i < max;i++)
+
+	for (i = 0; i < max; i++)
 	{
 		if (result_map[i].code == code)
 		{
@@ -152,12 +146,12 @@ static char* find_result_text(uint8_t code)
 	return NULL;
 }
 
-static char* find_signal_text(uint8_t code)
+static char * find_signal_text(uint8_t code)
 {
 	int i = 0;
 	int max = sizeof(signal_map) / sizeof(struct string_map);
-	
-	for (i = 0;i < max;i++)
+
+	for (i = 0; i < max; i++)
 	{
 		if (signal_map[i].code == code)
 		{
@@ -167,16 +161,16 @@ static char* find_signal_text(uint8_t code)
 	return NULL;
 }
 
-void dump_can_msg(CAN_message *msg, unsigned char sum, const char *comment)
+void dump_can_msg(CAN_message * msg, unsigned char sum, const char * comment)
 {
-	struct timeb now;
-	int          i;
+	struct timespec now;
+	int             i;
 
-	ftime(&now);
-	printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x",
-		now.time, now.millitm,
+	clock_gettime(CLOCK_REALTIME, &now);
+	printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x",
+		now.tv_sec, now.tv_nsec / 1000000,
 		msg->sid, msg->eid, msg->length, msg->status);
-	for (i = 0;i < msg->length; i++)
+	for (i = 0; i < msg->length; i++)
 	{
 		printf(" 0x%02x", msg->data[i]);
 	}
@@ -184,29 +178,29 @@ void dump_can_msg(CAN_message *msg, unsigned char sum, const char *comment)
 	fflush(stdout);
 }
 
-void dump_mrw_msg(CAN_message *msg, uint8_t checksum, const char *comment)
+void dump_mrw_msg(CAN_message * msg, uint8_t checksum, const char * comment)
 {
 	uint8_t  cmd = msg->data[0];
-	char    *cmd_text = find_cmd_text(cmd & CMD_MASK);
+	char  *  cmd_text = find_cmd_text(cmd & CMD_MASK);
 
 	if (cmd_text != NULL)
 	{
-		struct timeb now;
-		int          i;
+		struct timespec now;
+		int             i;
 
-		ftime(&now);
+		clock_gettime(CLOCK_REALTIME, &now);
 		if (cmd & MSG_RESULT)
 		{
-			char   *res_text = find_result_text(msg->data[1]);
+			char  * res_text = find_result_text(msg->data[1]);
 
-			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
-				now.time, now.millitm,
+			printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
+				now.tv_sec, now.tv_nsec / 1000000,
 				msg->sid, msg->eid, msg->length, msg->status,
 				cmd_text,
 				res_text != NULL ? res_text : "<unknown>",
 				msg->eid,
 				msg->data[IDX_INFO_START - 1], msg->data[IDX_INFO_START - 2]);
-			for (i = IDX_INFO_START;i < msg->length; i++)
+			for (i = IDX_INFO_START; i < msg->length; i++)
 			{
 				printf(" 0x%02x", msg->data[i]);
 			}
@@ -214,26 +208,26 @@ void dump_mrw_msg(CAN_message *msg, uint8_t checksum, const char *comment)
 		}
 		else
 		{
-			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %s",
-				now.time, now.millitm,
+			printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x # %s",
+				now.tv_sec, now.tv_nsec / 1000000,
 				msg->sid, msg->eid, msg->length, msg->status, cmd_text);
 			if (cmd == SETSGN)
 			{
-				char *sig_text = find_signal_text(msg->data[1]);
-	
+				char * sig_text = find_signal_text(msg->data[1]);
+
 				printf(" %s", sig_text != NULL ? sig_text : "???");
 			}
 			else if ((cmd == FLASH_DATA) || (cmd == FLASH_CHECK))
 			{
 				printf(" $%02x%02x%02x", msg->data[3], msg->data[2], msg->data[1]);
-				for (i = 4;i < msg->length; i++)
+				for (i = 4; i < msg->length; i++)
 				{
 					printf(" 0x%02x", msg->data[i]);
 				}
 			}
 			else
 			{
-				for (i = 1;i < msg->length; i++)
+				for (i = 1; i < msg->length; i++)
 				{
 					printf(" 0x%02x", msg->data[i]);
 				}

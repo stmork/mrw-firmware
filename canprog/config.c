@@ -106,7 +106,7 @@ static void config_ports(int fd)
 		can_add_data(&msg,   i);         // Anschlusspin
 		can_add_data(&msg, 26 * i + 12); // Schwellwert
 		can_add_data(&msg,  i);         // Profil
-		uart_send_can_msg(fd, &msg);	
+		uart_send_can_msg(fd, &msg);
 	}
 #endif
 
@@ -116,22 +116,22 @@ static void config_ports(int fd)
 	can_fill_message(&msg, CFGRAI, TEST_SID,  TEST_RAIL1);
 	can_add_data(&msg, 16);
 	can_add_data(&msg, 23);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, TEST_SID,  TEST_RAIL2);
 	can_add_data(&msg, 17);
 	can_add_data(&msg, 22);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, TEST_SID,  TEST_RAIL3);
 	can_add_data(&msg, 18);
 	can_add_data(&msg, 21);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGRAI, TEST_SID,  TEST_RAIL4);
 	can_add_data(&msg, 19);
 	can_add_data(&msg, 20);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 }
 
 static void config_serial(int fd, int module)
@@ -146,26 +146,26 @@ static void config_serial(int fd, int module)
 	can_add_data(&msg, module * 16 + 23);
 	can_add_data(&msg, module * 16 + 22);
 	can_add_data(&msg, module * 16 + 21);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGPL3, TEST_SID,  TEST_PRE_SIGNAL1);
 	can_add_data(&msg, module * 16 + 19);
 	can_add_data(&msg, module * 16 + 18);
 	can_add_data(&msg, module * 16 + 17);
 	can_add_data(&msg, module * 16 + 16);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGPL3, TEST_SID,  TEST_PRE_SIGNAL2);
 	can_add_data(&msg, module * 16 + 7);
 	can_add_data(&msg, module * 16 + 6);
 	can_add_data(&msg, module * 16 + 5);
 	can_add_data(&msg, module * 16 + 4);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 
 	can_fill_message(&msg, CFGSL2, TEST_SID,  TEST_RAIL_SIGNAL);
 	can_add_data(&msg, module * 16 + 15);
 	can_add_data(&msg, module * 16 + 14);
-	uart_send_can_msg(fd, &msg);	
+	uart_send_can_msg(fd, &msg);
 #else
 	uint8_t i;
 
@@ -177,7 +177,7 @@ static void config_serial(int fd, int module)
 		can_fill_message(&msg, CFGLGT, TEST_SID,  TEST_SIMPLE_LIGHT + i);
 		can_add_data(&msg,   48 + i);    // Anschlusspin
 		can_add_data(&msg,   12 * i + 4);    // Schwellwert
-		uart_send_can_msg(fd, &msg);	
+		uart_send_can_msg(fd, &msg);
 	}
 #endif
 
@@ -185,7 +185,7 @@ static void config_serial(int fd, int module)
 	uart_send_can_msg(fd, &msg);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	if (argc <= 1)
 	{

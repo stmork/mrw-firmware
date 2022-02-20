@@ -1,14 +1,8 @@
 /*
 **
-**	$Filename:	testdef.h $
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Some ID definitions for test purposes.
 **
-**	Copyright (C) 2011 committers of this modelrailway project. All rights reserved.
+**	Copyright (C) 2011-2022 committers of this modelrailway project. All rights reserved.
 **
 **	This program and the accompanying materials are made available under the
 **	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -18,6 +12,8 @@
 **
 **
 */
+
+#pragma once
 
 #ifndef TESTDEF_H
 #define TESTDEF_H

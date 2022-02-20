@@ -25,7 +25,7 @@
 
 #include "can_pc.h"
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	unsigned char zero = 0;
 
@@ -46,13 +46,13 @@ int main(int argc,char *argv[])
 	printf("Testing busy indicator of CAN-gateway.\n");
 	printf("Please press CTRL+C to exit!\n");
 
-	while(1)
+	while (1)
 	{
 		if (write(fd, &zero, sizeof(zero)) <= 0)
 		{
 			perror(argv[1]);
 		}
 	}
-	
+
 	return EXIT_SUCCESS;
 }

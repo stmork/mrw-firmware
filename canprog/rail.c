@@ -32,7 +32,7 @@
 static void switch_it(int fd, int unit_no, int cmd)
 {
 	CAN_message msg;
-	
+
 	msg.sid    = TEST_SID;
 	msg.eid    = unit_no;
 	msg.length = 1;
@@ -49,7 +49,7 @@ static void switch_group(int fd, int i)
 	switch_it (fd, TEST_RAIL4, i & 8 ? SETRON : SETROF);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int i;
 
@@ -78,7 +78,7 @@ int main(int argc,char *argv[])
 	}
 	else
 	{
-		for (i = 1;1;i++)
+		for (i = 1; 1; i++)
 		{
 			switch_group(fd, i);
 			if ((i & 15) == 0)

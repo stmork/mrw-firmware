@@ -31,7 +31,7 @@
 
 static receive_buffer buffer;
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	if (argc <= 1)
 	{
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	while(1)
+	while (1)
 	{
 		unsigned char c[16];
 		size_t read_bytes;
@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
 		if (read_bytes > 0)
 		{
 			int i;
-			
-			for (i = 0; i < read_bytes;i++)
+
+			for (i = 0; i < read_bytes; i++)
 			{
 				int result = uart_receive(&buffer, c[i]);
 				switch (result)

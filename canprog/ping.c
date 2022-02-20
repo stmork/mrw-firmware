@@ -34,12 +34,12 @@ static int max   = 500;
 static int ping(int fd)
 {
 	unsigned char  buffer[8];
-	
+
 	buffer[0] = PING;
 	return uart_send_can_data(fd, BROADCAST_SID, buffer, 1);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int i;
 	int result;
@@ -69,7 +69,7 @@ int main(int argc,char *argv[])
 			sleep(1);
 		}
 	}
-	while((++i < max) && (result > 0));
+	while ((++i < max) && (result > 0));
 	close(fd);
 
 	return result > 0 ? EXIT_SUCCESS : EXIT_FAILURE;

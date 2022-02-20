@@ -101,7 +101,7 @@ static void send_info(
 	}
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	if (argc <= 1)
 	{
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 	if (argc > 2)
 	{
 		int cnt = 0;
-		
+
 		if (sscanf(argv[2], "%d", &cnt) == 1)
 		{
 			ctrlcnt = cnt;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	while(1)
+	while (1)
 	{
 		unsigned char c[16];
 		size_t read_bytes;
@@ -137,31 +137,31 @@ int main(int argc, char *argv[])
 		if (read_bytes > 0)
 		{
 			int i;
-			
-			for (i = 0; i < read_bytes;i++)
+
+			for (i = 0; i < read_bytes; i++)
 			{
 				if (uart_receive(&buffer, c[i]) > 0)
 				{
 					dump_mrw_msg(&buffer.input.can, buffer.checksum, "<");
-					switch(buffer.input.can.data[0])
+					switch (buffer.input.can.data[0])
 					{
 					default:
 						send_result(fd, buffer.input.can.data[0],
 							buffer.input.can.sid, buffer.input.can.eid,
-							MSG_OK); 
+							MSG_OK);
 						break;
 
 					case RESET:
 						send_info(fd, buffer.input.can.data[0],
 							buffer.input.can.sid, buffer.input.can.eid,
-							MSG_BOOTED, 0); 
+							MSG_BOOTED, 0);
 						break;
-						
+
 					case GETRBS:
 					case GETDIR:
 						send_info(fd, buffer.input.can.data[0],
 							buffer.input.can.sid, buffer.input.can.eid,
-							MSG_OK, 0); 
+							MSG_OK, 0);
 						break;
 					}
 					uart_init(&buffer);

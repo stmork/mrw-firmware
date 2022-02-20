@@ -44,14 +44,14 @@
  * Diese Methode öffnet eine Verbindung mit einer
  * seriellen Schnittstelle.
  */
-int uart_open(char *name)
+int uart_open(char * name)
 {
-	struct termios oldtio,newtio;	
+	struct termios oldtio, newtio;
 
-	int fd = open(name, O_RDWR|O_NOCTTY);
+	int fd = open(name, O_RDWR | O_NOCTTY);
 	if (fd >= 0)
 	{
-		tcgetattr(fd,&oldtio);
+		tcgetattr(fd, &oldtio);
 		bzero(&newtio, sizeof(newtio));
 		newtio.c_cflag = BAUD | CS8 | CLOCAL | CREAD;
 		newtio.c_iflag = IGNPAR;
@@ -60,7 +60,7 @@ int uart_open(char *name)
 		newtio.c_cc[VTIME]    = 0;
 		newtio.c_cc[VMIN]     = 1;
 		tcflush(fd, TCIFLUSH);
-		tcsetattr(fd,TCSANOW,&newtio);
+		tcsetattr(fd, TCSANOW, &newtio);
 
 #ifdef TIOCGSERIAL
 		struct serial_struct serinfo;
@@ -88,14 +88,14 @@ int uart_open(char *name)
  * Bytes wird zurückgegeben. Ist ein Fehler aufgetaucht,
  * wird -1 zurückgegeben.
  */
-int uart_send_can_msg(int fd, CAN_message *msg)
+int uart_send_can_msg(int fd, CAN_message * msg)
 {
-	unsigned char *ptr = (unsigned char *)msg;
+	unsigned char * ptr = (unsigned char *)msg;
 	unsigned char  sum = 0;
 	size_t         len = offsetof(CAN_message, data[msg->length]);
 	int            i, result;
 
-	for (i = 0;i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		sum -= *ptr++;
 	}
@@ -131,7 +131,7 @@ void uart_sync(int fd)
 	uint8_t buffer[16];
 	int     i;
 
-	for (i = 0;i < sizeof(buffer);i++)
+	for (i = 0; i < sizeof(buffer); i++)
 	{
 		buffer[i] = 0;
 	}
@@ -146,7 +146,7 @@ void uart_sync(int fd)
  * Diese Methode sendet Daten an eine normale CAN-ID. Die CAN-Message
  * wird entsprechend aufbereitet und versendet.
  */
-int uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int length)
+int uart_send_can_data(int fd, unsigned short id, unsigned char * buffer, int length)
 {
 	CAN_message msg;
 	int         i;
@@ -156,7 +156,7 @@ int uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int len
 	msg.sid    = id;
 	msg.eid    = 0;
 
- 	for (i = 0;i < length; i++)
+	for (i = 0; i < length; i++)
 	{
 		msg.data[i] = buffer[i];
 	}
@@ -168,7 +168,7 @@ int uart_send_can_data(int fd, unsigned short id, unsigned char *buffer, int len
  * Diese Methode sendet Daten an eine extended CAN-ID. Die CAN-Message
  * wird entsprechend aufbereitet und versendet.
  */
-int uart_send_ext_can_data(int fd, unsigned long id, unsigned char *buffer, int length)
+int uart_send_ext_can_data(int fd, unsigned long id, unsigned char * buffer, int length)
 {
 	CAN_message msg;
 	int         i;
@@ -178,7 +178,7 @@ int uart_send_ext_can_data(int fd, unsigned long id, unsigned char *buffer, int 
 	msg.sid    = id & SID_MASK;
 	msg.eid    = id >> 16;
 
- 	for (i = 0;i < length; i++)
+	for (i = 0; i < length; i++)
 	{
 		msg.data[i] = buffer[i];
 	}
@@ -186,7 +186,7 @@ int uart_send_ext_can_data(int fd, unsigned long id, unsigned char *buffer, int 
 	return uart_send_can_msg(fd, &msg);
 }
 
-void uart_init(receive_buffer *buffer)
+void uart_init(receive_buffer * buffer)
 {
 	bzero(buffer, sizeof(receive_buffer));
 }
@@ -201,12 +201,12 @@ void uart_init(receive_buffer *buffer)
  * 3. Die übertragenen Bytes inkl. Prüfsumme muss 0 betragen.
  * In allen anderen Fällen wird von einer Neuübertragung ausgegangen
  * und die Prozedur beginnt von 1. aus.
- * 
+ *
  * Wenn das Byte erfolgreich hinzugefügt wurde, wird 1 zurückgegeben.
  * Ansonsten wird der Empfangsbuffer mit Nullen gefüllt und -1 zurück-
  * gegeben.
  */
-int uart_receive(receive_buffer *buffer, uint8_t b)
+int uart_receive(receive_buffer * buffer, uint8_t b)
 {
 	int complete = 0;
 //	printf("%2d: %02x\n", buffer->index, b);
@@ -225,7 +225,7 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 		complete = -1;
 	}
 	else if ((buffer->input.can.length + offsetof(CAN_message, data) + 1) == buffer->index)
-	{	
+	{
 		if (buffer->checksum == 0)
 		{
 			complete = 1;
@@ -236,7 +236,7 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 			int i;
 
 			printf("%ld # Checksum error [%02x]: ", now, buffer->checksum);
-			for (i = 0;i < buffer->index;i++)
+			for (i = 0; i < buffer->index; i++)
 			{
 				printf(" %02x", buffer->input.buffer[i]);
 			}
@@ -252,7 +252,7 @@ int uart_receive(receive_buffer *buffer, uint8_t b)
 /**
  * Diese Methode hängt ein Datenbyte an eine CAN-Message an.
  */
-void can_add_data(CAN_message *msg, uint8_t data)
+void can_add_data(CAN_message * msg, uint8_t data)
 {
 	msg->data[msg->length++] = data;
 }
@@ -261,7 +261,7 @@ void can_add_data(CAN_message *msg, uint8_t data)
  * Diese Methode initialisiert eine CAN-Message mit einem MRW-Kommando,
  * der Controller-ID und der Unit ID.
  */
-void  can_fill_message(CAN_message *msg, uint8_t cmd, uint16_t id, uint16_t no)
+void  can_fill_message(CAN_message * msg, uint8_t cmd, uint16_t id, uint16_t no)
 {
 	msg->sid    = id;
 	msg->eid    = no;

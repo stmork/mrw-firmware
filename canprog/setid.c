@@ -35,14 +35,14 @@
 static int set_id(int fd, int old_id, int new_id)
 {
 	unsigned char  buffer[8];
-	
+
 	buffer[0] = SET_ID;
 	buffer[1] = new_id & 0xff;
 	buffer[2] = new_id >> 8;
 	return uart_send_can_data(fd, old_id, buffer, 3);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int id = TEST_SID;
 

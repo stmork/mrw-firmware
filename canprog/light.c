@@ -32,7 +32,7 @@
 static void sensor(int fd, int lightness)
 {
 	CAN_message msg;
-	
+
 	msg.sid    = BROADCAST_SID;
 	msg.eid    = 0;
 	msg.length = 3;
@@ -43,7 +43,7 @@ static void sensor(int fd, int lightness)
 	uart_send_can_msg(fd, &msg);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char * argv[])
 {
 	int lightness;
 
