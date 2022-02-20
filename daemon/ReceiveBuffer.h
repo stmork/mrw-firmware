@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Receive buffer handling
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022  Steffen A. Mork
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef RECEIVE_BUFFER_H
 #define RECEIVE_BUFFER_H
@@ -73,11 +70,11 @@ public:
 			{
 				Lock lock(logger);
 
-				struct timeb now;
+				struct timespec now;
 				int i;
 
-				ftime(&now);
-				printf("%ld.%03d # Checksum error [%02x]: ", now.time, now.millitm, checksum);
+				clock_gettime(CLOCK_REALTIME, &now);
+				printf("%ld.%03ld # Checksum error [%02x]: ", now.tv_sec, now.tv_nsec / 1000000, checksum);
 				for (i = 0; i < index; i++)
 				{
 					printf(" %02x", input.buffer[i]);

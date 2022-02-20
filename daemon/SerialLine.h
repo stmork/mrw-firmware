@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Serial line handler
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022  Steffen A. Mork
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef SERIAL_LINE_H
 #define SERIAL_LINE_H

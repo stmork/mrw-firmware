@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	Multithreading control
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022  Steffen A. Mork
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef MRW_THREAD_H
 #define MRW_THREAD_H
@@ -196,7 +193,6 @@ public:
 
 	inline bool Start(ThreadProc proc, void * ptr, int priority = 0)
 	{
-		bool  success;
 		int   error_code;
 
 		Stop();

@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	TCP connection handler
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022  Steffen A. Mork
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef SERVER_SOCKET_H
 #define SERVER_SOCKET_H

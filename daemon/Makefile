@@ -1,7 +1,9 @@
-CC	= gcc
-CPP	= gcc
-SRC	= mrw_daemon.cc SerialLine.cc ServerSocket.cc UartReader.cc Log.cc ClientHandler.cc
-PROGS	= mrw_daemon
+CC	     ?= gcc
+CXX      ?= g++
+CPP	     ?= gcc
+SRC	      = mrw_daemon.cc SerialLine.cc ServerSocket.cc UartReader.cc Log.cc ClientHandler.cc
+PROGS	  = mrw_daemon
+CXXFLAGS += -Wall -Wextra
 
 LDLIBS		= -lm -lpthread
 CPPFLAGS	= -I ../mc

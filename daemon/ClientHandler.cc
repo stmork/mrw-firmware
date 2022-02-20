@@ -1,13 +1,8 @@
 /*
 **
-**  $Revision$
-**  $Date$
-**  $Author$
-**  $Id$
-**
 **	Client request handler
 **
-**  Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**  Copyright (C) 2010-2022 committers of this modelrailway project. All rights reserved.
 **
 **  This program and the accompanying materials are made available under the
 **  terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -73,7 +68,7 @@ int ClientHandler::Reader()
 {
 	ReceiveBuffer  buffer;
 	unsigned char  c[256];
-	size_t         read_bytes;
+	ssize_t        read_bytes;
 
 	reader.Register(this);
 	logger.Info("Starting TCP-Reader...\n");
@@ -134,4 +129,6 @@ unsigned int ClientHandler::HandleTcp(void * ptr)
 
 	handler->Reader();
 	delete handler;
+	
+	return 0;
 }

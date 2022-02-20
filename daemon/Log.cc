@@ -1,13 +1,8 @@
 /*
 **
-**  $Revision$
-**  $Date$
-**  $Author$
-**  $Id$
-**
 **	Logger
 **
-**  Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**  Copyright (C) 2010-2022 committers of this modelrailway project. All rights reserved.
 **
 **  This program and the accompanying materials are made available under the
 **  terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -144,7 +139,7 @@ const char * Log::find_signal_text(uint8_t code)
 
 Log::Log()
 {
-	int i;
+	size_t i;
 
 	for (i = 0; i < sizeof(command_values) / sizeof(struct string_map); i++)
 	{
@@ -162,12 +157,12 @@ Log::Log()
 
 void Log::Dump(const CAN_message * msg, uint8_t checksum, const char * comment)
 {
-	struct timeb  now;
-	::Lock        lock(*this);
-	uint8_t       cmd = msg->data[0];
-	const char  * cmd_text = find_cmd_text(cmd & CMD_MASK);
+	struct timespec  now;
+	::Lock           lock(*this);
+	uint8_t          cmd      = msg->data[0];
+	const char  *    cmd_text = find_cmd_text(cmd & CMD_MASK);
 
-	ftime(&now);
+	clock_gettime(CLOCK_REALTIME, &now);
 	if (cmd_text != NULL)
 	{
 		int     i;
@@ -176,8 +171,8 @@ void Log::Dump(const CAN_message * msg, uint8_t checksum, const char * comment)
 		{
 			const char * res_text = find_result_text(msg->data[1]);
 
-			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
-				now.time, now.millitm,
+			printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x # %-12.12s %-20.20s %04x:%02x%02x",
+				now.tv_sec, now.tv_nsec / 1000000,
 				msg->sid, msg->eid, msg->length, msg->status,
 				cmd_text,
 				res_text != NULL ? res_text : "<unknown>",
@@ -191,8 +186,8 @@ void Log::Dump(const CAN_message * msg, uint8_t checksum, const char * comment)
 		}
 		else
 		{
-			printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x # %s",
-				now.time, now.millitm,
+			printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x # %s",
+				now.tv_sec, now.tv_nsec / 1000000,
 				msg->sid, msg->eid, msg->length, msg->status, cmd_text);
 			if (cmd == SETSGN)
 			{
@@ -222,8 +217,8 @@ void Log::Dump(const CAN_message * msg, uint8_t checksum, const char * comment)
 	{
 		int    i;
 
-		printf("%ld.%03d # ID=%04x:%04x len=%d stat=%02x",
-			now.time, now.millitm,
+		printf("%ld.%03ld # ID=%04x:%04x len=%d stat=%02x",
+			now.tv_sec, now.tv_nsec / 1000000,
 			msg->sid, msg->eid, msg->length, msg->status);
 		for (i = 0; i < msg->length; i++)
 		{

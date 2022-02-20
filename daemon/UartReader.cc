@@ -1,13 +1,8 @@
 /*
 **
-**  $Revision$
-**  $Date$
-**  $Author$
-**  $Id$
-**
 **	UART reader
 **
-**  Copyright (C) 2010 committers of this modelrailway project. All rights reserved.
+**  Copyright (C) 2010-2022 committers of this modelrailway project. All rights reserved.
 **
 **  This program and the accompanying materials are made available under the
 **  terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
@@ -27,7 +22,7 @@
 
 #define not_VERBOSE
 
-UartReader::UartReader(SerialLine & uart) : uart(uart), Thread("uart reader")
+UartReader::UartReader(SerialLine & uart) : Thread("uart reader"),  uart(uart)
 {
 }
 
@@ -67,7 +62,7 @@ unsigned int UartReader::Reader(void * ptr)
 	UartReader  *  reader = (UartReader *)ptr;
 	ReceiveBuffer  buffer;
 	uint8_t        c[256];
-	size_t         read_bytes;
+	ssize_t        read_bytes;
 
 	logger.Info("Starting UART-Reader...\n");
 
@@ -76,7 +71,7 @@ unsigned int UartReader::Reader(void * ptr)
 		read_bytes = reader->uart.Read(c, sizeof(c));
 		if (read_bytes > 0)
 		{
-			int i;
+			ssize_t i;
 
 #ifdef _VERBOSE
 			printf("%d:", read_bytes);

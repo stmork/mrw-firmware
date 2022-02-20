@@ -1,17 +1,14 @@
 /*
 **
-**	$Revision$
-**	$Date$
-**	$Author$
-**	$Id$
-**
 **	UART reader
 **
-**	(C) Copyright 2010  Steffen A. Mork
+**	(C) Copyright 2010-2022 committers of this modelrailway project. All rights reserved.
 **	    All Rights Reserved
 **
 **
 */
+
+#pragma once
 
 #ifndef UART_READER_H
 #define UART_READER_H
@@ -36,7 +33,7 @@ public:
 	void Unregister(ClientHandler * handler);
 	void Start();
 
-	inline int  GetFD()
+	inline int  GetFD() const
 	{
 		return uart.GetFD();
 	}
