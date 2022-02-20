@@ -7,13 +7,9 @@ file=revision.h
 
 echo "/*"  >$file
 echo "**" >>$file
-echo "**	\$Filename:	$file \$" >>$file
-echo "**	\$Revision: $revision \$" >>$file
-echo "**	\$Date:	$today \$" >>$file
-echo "**" >>$file
 echo "**	Versions- und Revisionsnummer samt Log" >>$file
 echo "**" >>$file
-echo "**	Copyright (C) 2010 committers of this modelrailway project. All rights reserved." >>$file
+echo "**	Copyright (C) 2010-$year committers of this modelrailway project. All rights reserved." >>$file
 echo "**" >>$file
 echo "**	This program and the accompanying materials are made available under the" >>$file
 echo "**	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0" >>$file
