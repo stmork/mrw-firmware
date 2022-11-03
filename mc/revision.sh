@@ -1,6 +1,7 @@
 #!/bin/bash
 
-revision=${BUILD_NUMBER:-0}
+. ./version.sh
+
 today=`date`
 year=`date +%Y`
 file=revision.h
@@ -24,8 +25,8 @@ echo ""  >>$file
 echo "#ifndef REVISION_H" >>$file
 echo "#define REVISION_H" >>$file
 echo "" >>$file
-echo "#define FIRMWARE_VERSION  4" >>$file
-echo "#define FIRMWARE_REVISION $revision" >>$file
+echo "#define FIRMWARE_VERSION  ${MRW_VERSION}" >>$file
+echo "#define FIRMWARE_REVISION ${MRW_REVISION}" >>$file
 echo "" >>$file
 echo "#endif" >>$file
 echo "" >>$file
