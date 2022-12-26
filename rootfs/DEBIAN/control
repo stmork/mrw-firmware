@@ -3,6 +3,6 @@ Version: %VERSION%
 Section: embedded
 Priority: optional
 Architecture: all
-Maintainer: Steffen A. Mork <linux-dev@morknet.de>
+Maintainer: Steffen A. Mork <info@eisenbahnsteuerung.org>
 Homepage: http://eisenbahnsteuerung.org/
 Description: Firmware for ATmega32 based modelrailways.
