@@ -183,6 +183,7 @@ static int8_t get_timeout(uint8_t dvc_type)
 
 	case TYPE_SIGNAL_PF2:
 	case TYPE_SIGNAL_MF2:
+	case TYPE_SIGNAL_SF2:
 	case TYPE_SIGNAL_PF3:
 	case TYPE_SIGNAL_MF3:
 		to = (F_CPU >> TIMER2_SHIFT) * 4 / 5;
@@ -343,6 +344,7 @@ ISR(TIMER2_OVF_vect)
 			}
 			break;
 
+		case TYPE_SIGNAL_SF2:
 		case TYPE_SIGNAL_PF2:
 		case TYPE_SIGNAL_MF2:
 			form2_turn(&dvc->unit.u_form2, code);
