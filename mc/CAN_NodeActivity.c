@@ -614,7 +614,7 @@ int8_t getVersion(CAN_message *msg)
 		FIRMWARE_VERSION,
 		FIRMWARE_REVISION & 0xff,
 		FIRMWARE_REVISION >> 8);
-	
+
 	return NO_RESULT;
 }
 
@@ -676,7 +676,7 @@ int8_t isCommandPending(CAN_message *msg)
 
 /********************/
 /* Illegal commands */
-/********************/ 
+/********************/
 
 int8_t wrongOperatingTrigger(CAN_message *msg)
 {

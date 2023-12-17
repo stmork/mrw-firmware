@@ -71,7 +71,7 @@ static void can_fill_message(
 {
 	msg->sid      = GATEWAY_SID;
 	msg->eid      = cid;
-	msg->status   = _BV(FRAME_EXT);			
+	msg->status   = _BV(FRAME_EXT);
 
 	msg->length   = 0;
 	msg->data[msg->length++] |= MSG_RESULT;
@@ -282,7 +282,7 @@ static void flash(uint16_t cid)
 					return;
 				}
 				break;
-				
+
 			case FLASH_DATA:
 				address = GET_WORD(&msg.data[1]);
 				idx     = address & PAGE_MASK;
@@ -394,6 +394,8 @@ int main(void)
 			else if (cmd == FLASH_REQ)
 			{
 				mcp2515_write_rx_output_pins(1);
+
+				// BUG: Sending MSG_OK prevents to compare hardware ID anyway.
 				can_reply_message(&msg, cid, MSG_OK);
 				flash(cid);
 				counter = 0;
