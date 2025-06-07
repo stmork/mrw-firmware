@@ -1,0 +1,15 @@
+name: MRW Tools
+on: [push]
+
+jobs:
+  MRW-Tools:
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+         working-directory: ./tools
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare
+        run: make depend
+      - name: Build
+        run: make -j `nproc`

@@ -1,0 +1,15 @@
+name: MRW Updater
+on: [push]
+
+jobs:
+  MRW-Updater:
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+         working-directory: ./canprog
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare
+        run: make depend
+      - name: Build
+        run: make -j `nproc`

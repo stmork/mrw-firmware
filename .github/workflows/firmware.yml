@@ -1,0 +1,19 @@
+name: MRW Firmware
+on: [push]
+
+jobs:
+  MRW-Firmware:
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+         working-directory: ./mc
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update package info
+        run: sudo apt update -y
+      - name: Install needed components
+        run: sudo apt install -y gcc-avr binutils-avr avr-libc
+      - name: Prepare
+        run: ./revision.sh
+      - name: Build
+        run: make -j `nproc`
