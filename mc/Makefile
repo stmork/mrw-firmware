@@ -1,6 +1,6 @@
 MCU		= atmega32
 CC		= avr-gcc
-CFLAGS		= -mmcu=$(MCU) -Wall -Wstrict-prototypes -O3 -funsigned-bitfields -fpack-struct -std=gnu99
+CFLAGS		= -mmcu=$(MCU) -O2 -Wall -Wstrict-prototypes -funsigned-bitfields -fpack-struct -std=gnu99
 CPPFLAGS	= $(CFLAGS)
 LDFLAGS		= -Wl,-Map,usart.map
 SRC		= bootloader.c firmware.c gateway.c test.c\
