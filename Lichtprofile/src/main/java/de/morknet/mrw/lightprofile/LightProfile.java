@@ -1,20 +1,9 @@
 /*
 **
-**	$Filename:	LightProfile.java $
-**	$Revision$
-**	$Author$
-**	$Id$
+**	SPDX-License-Identifier: MIT
+**	SPDX-FileCopyrightText: Copyright (C) 2008-2026 Steffen A. Mork
 **
 **	Light dimming profiles
-**
-**	Copyright (C) 2011 committers of this modelrailway project. All rights reserved.
-**
-**	This program and the accompanying materials are made available under the
-**	terms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0
-**	which accompanies this distribution.
-**
-**	The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-**
 **
 */
 
@@ -230,21 +219,10 @@ public abstract class LightProfile implements Comparable<LightProfile>
 
 			pw.println("/*");
 			pw.println("**");
-			pw.println("**\t$Filename:\tlight_profile.c $"); 
-			pw.println("**\t$Revision$");
-			pw.println("**\t$Author$");
-			pw.println("**\t$Id$");
+			pw.println("**	SPDX-License-Identifier: MIT");
+			pw.println("**	SPDX-FileCopyrightText: Copyright (C) 2008-2026 Steffen A. Mork");
 			pw.println("**");
 			pw.println("**\tLight dimming profiles");
-			pw.println("**");
-			pw.println("**\tCopyright (C) 2016 committers of this modelrailway project. All rights reserved.");
-			pw.println("**");
-			pw.println("**\tThis program and the accompanying materials are made available under the");
-			pw.println("**\tterms of the Eclipse Public License v1.0 and Eclipse Distribution License v. 1.0");
-			pw.println("**\twhich accompanies this distribution.");
-			pw.println("**");
-			pw.println("**\tThe Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html");
-			pw.println("**");
 			pw.println("**");
 			pw.println("*/");
 			pw.println("");
