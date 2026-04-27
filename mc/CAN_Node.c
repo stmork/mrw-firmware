@@ -48,13 +48,11 @@ int8_t get_state_CAN_Node()
 
 void init_CAN_Node(void)
 {
-				int8_t result;
-
 				state = CAN_NODE__INITIAL;
 				CAN_message *msg = null;
 
-				result = initFirmware(msg);
-				result = checkConfiguration(msg);
+				initFirmware(msg);
+				checkConfiguration(msg);
 }
 
 /************************/
@@ -182,6 +180,11 @@ initialisiert.
 			case PING:
 
 				result = ping(msg);
+				break;
+
+			case CFGCRX:
+
+				result = configCrossing(msg);
 				break;
 
 			case CFGSWN:

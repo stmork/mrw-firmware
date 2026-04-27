@@ -34,9 +34,9 @@ static void signal_test(struct mrw_signal *signal)
 	}
 }
 
-/****************************************************************/
-/* 2-begriffiges Signal (Vorsignal/Blocksignal/Gleissperrsignal */
-/****************************************************************/
+/*****************************************************************/
+/* 2-begriffiges Signal (Vorsignal/Blocksignal/Gleissperrsignal) */
+/*****************************************************************/
 
 static void signal_vorsignal2_sig0(struct mrw_signal *signal)
 {
@@ -149,6 +149,25 @@ static void signal4_hp2(struct mrw_signal *signal)
 
 /**
  * Diese Methode ermittelt das Bitmuster für das Signalbild
+ * für Bahnübergänge.
+ */
+static void set_signal1(struct mrw_signal *signal)
+{
+	switch (signal->img)
+	{
+	case SIGNAL_OFF:
+		signal_off(signal);
+		break;
+
+	case SIGNAL_TST:
+	case SIGNAL_CRX:
+		signal_test(signal);
+		break;
+	}
+}
+
+/**
+ * Diese Methode ermittelt das Bitmuster für das Signalbild
  * für zweibegriffige Lichtsignale.
  */
 static void set_signal2(struct mrw_signal *signal)
@@ -249,6 +268,10 @@ void compute_signal(mrw_device *dvc)
 {
 	switch(dvc->unit_type)
 	{
+	case TYPE_CROSSING:
+		set_signal1(&dvc->unit.u_signal);
+		break;
+
 	case TYPE_SIGNAL_PL2:
 	case TYPE_SIGNAL_ML2:
 	case TYPE_SIGNAL_SL2:

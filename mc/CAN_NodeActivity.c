@@ -273,6 +273,23 @@ int8_t  configRaillockLight2(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGCRX */
+int8_t  configCrossing(CAN_message *msg)
+{
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
+	mrw_device *dvc = &config.dvc[config.count];
+
+	dvc->unit_no   = msg->eid;
+	init_light_signal(dvc, &msg->data[1], 1, TYPE_CROSSING);
+	config.count++;
+
+	return MSG_OK;
+}
+
 /* CFGSWN */
 int8_t  configSwitchNew(CAN_message *msg)
 {
@@ -498,7 +515,8 @@ int8_t setSignal(CAN_message *msg)
 	{
 		return cmd_enqueue(dvc, cmd, msg->data[1]);
 	}
-	else if ((dvc->unit_type == TYPE_SIGNAL_SL2) ||
+	else if ((dvc->unit_type == TYPE_CROSSING) ||
+			 (dvc->unit_type == TYPE_SIGNAL_SL2) ||
 			 (dvc->unit_type == TYPE_SIGNAL_PL2) ||
 			 (dvc->unit_type == TYPE_SIGNAL_PL3) ||
 			 (dvc->unit_type == TYPE_SIGNAL_ML2) ||

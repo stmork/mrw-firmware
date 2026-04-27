@@ -33,6 +33,7 @@ extern int8_t configRail(CAN_message *msg);
 extern int8_t configRaillockLight2(CAN_message *msg);
 extern int8_t configSwitchNew(CAN_message *msg);
 extern int8_t configSwitchOld(CAN_message *msg);
+extern int8_t configCrossing(CAN_message *msg);
 extern int8_t getDirection(CAN_message *msg);
 extern int8_t getRailOccupation(CAN_message *msg);
 extern int8_t getVersion(CAN_message *msg);

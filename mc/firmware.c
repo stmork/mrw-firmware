@@ -184,6 +184,7 @@ static int8_t get_timeout(uint8_t dvc_type)
 	case TYPE_SIGNAL_ML3:
 	case TYPE_SIGNAL_ML4:
 	case TYPE_SIMPLE_LIGHT:
+	case TYPE_CROSSING:
 		to = 1;
 		break;
 
@@ -465,6 +466,9 @@ static void init_ports(void)
 			rail_off (&dvc->unit.u_rail);
 			break;
 
+		case TYPE_CROSSING:
+			dvc->unit.u_signal.img = SIGNAL_OFF;
+			break;
 		case TYPE_SIGNAL_SL2:
 			dvc->unit.u_signal.img = SIGNAL_SH0;
 			break;
@@ -524,6 +528,7 @@ static void signal_init(void)
 			case TYPE_SIGNAL_ML2:
 			case TYPE_SIGNAL_ML3:
 			case TYPE_SIGNAL_ML4:
+			case TYPE_CROSSING:
 				// Größe des benötigten Sendepuffers abgleichen
 				for(uint8_t idx = 0; idx < dvc->unit.u_signal.count; idx++)
 				{

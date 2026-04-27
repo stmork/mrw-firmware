@@ -44,6 +44,7 @@
 
 #define SETSGN  (unsigned char)(CAT_SIGNAL|0x01)
 
+#define CFGCRX  (unsigned char)(CAT_CONFIG|0x00)
 #define CFGSWN  (unsigned char)(CAT_CONFIG|0x01)
 #define CFGSWO  (unsigned char)(CAT_CONFIG|0x02)
 #define CFGRAI  (unsigned char)(CAT_CONFIG|0x03)
@@ -76,16 +77,17 @@
 #define SENSOR      (unsigned char)(CAT_EXT|0x0e)
 
 // Signal types
-#define SIGNAL_OFF (unsigned char)0
-#define SIGNAL_HP0 (unsigned char)1
-#define SIGNAL_HP1 (unsigned char)2
-#define SIGNAL_HP2 (unsigned char)3
-#define SIGNAL_VR0 (unsigned char)4
-#define SIGNAL_VR1 (unsigned char)5
-#define SIGNAL_VR2 (unsigned char)6
-#define SIGNAL_SH0 (unsigned char)7
-#define SIGNAL_SH1 (unsigned char)8
-#define SIGNAL_TST (unsigned char)9
+#define SIGNAL_OFF   (unsigned char)0
+#define SIGNAL_HP0   (unsigned char)1
+#define SIGNAL_HP1   (unsigned char)2
+#define SIGNAL_HP2   (unsigned char)3
+#define SIGNAL_VR0   (unsigned char)4
+#define SIGNAL_VR1   (unsigned char)5
+#define SIGNAL_VR2   (unsigned char)6
+#define SIGNAL_SH0   (unsigned char)7
+#define SIGNAL_SH1   (unsigned char)8
+#define SIGNAL_TST   (unsigned char)9
+#define SIGNAL_CRX   (unsigned char)10
 
 // Switch states
 #define SWITCH_STATE_LEFT  (unsigned char)1
@@ -135,6 +137,7 @@
 #define TYPE_SIGNAL_ML4          13
 #define TYPE_LIGHT               14
 #define TYPE_SIMPLE_LIGHT        15
+#define TYPE_CROSSING            16
 
 #define SWITCH_DEPRELL            3
 
