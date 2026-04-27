@@ -8,7 +8,7 @@ jobs:
        run:
          working-directory: ./daemon
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Prepare
         run: make depend
       - name: Build

@@ -8,7 +8,7 @@ jobs:
        run:
          working-directory: ./mc
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Update package info
         run: sudo apt update -y
       - name: Install needed components

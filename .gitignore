@@ -1,0 +1,8 @@
+*.o
+*.out
+*.hex
+*.map
+*.lst
+*.deb
+mc/revision.h
+mc/version.txt
