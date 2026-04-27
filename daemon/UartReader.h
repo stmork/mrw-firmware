@@ -1,10 +1,9 @@
 /*
 **
+**	SPDX-License-Identifier: MIT
+**	SPDX-FileCopyrightText: Copyright (C) 2008-2026 Steffen A. Mork
+**
 **	UART reader
-**
-**	(C) Copyright 2010-2022 committers of this modelrailway project. All rights reserved.
-**	    All Rights Reserved
-**
 **
 */
 

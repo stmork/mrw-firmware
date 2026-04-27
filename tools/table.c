@@ -1,3 +1,12 @@
+/*
+**
+**	SPDX-License-Identifier: MIT
+**	SPDX-FileCopyrightText: Copyright (C) 2008-2026 Steffen A. Mork
+**
+**	Compute soft PWM fractions.
+**
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 

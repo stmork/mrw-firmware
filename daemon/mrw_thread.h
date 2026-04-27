@@ -1,10 +1,9 @@
 /*
 **
+**	SPDX-License-Identifier: MIT
+**	SPDX-FileCopyrightText: Copyright (C) 2008-2026 Steffen A. Mork
+**
 **	Multithreading control
-**
-**	(C) Copyright 2010-2022  Steffen A. Mork
-**	    All Rights Reserved
-**
 **
 */
 
