@@ -192,6 +192,7 @@ uint8_t form3_turn(struct mrw_form3 *signal, uint8_t cmd)
 
 	switch(cmd)
 	{
+	case SIGNAL_SH0:
 	case SIGNAL_HP0:
 	case SIGNAL_VR0:
 	case SIGNAL_OFF:
@@ -201,6 +202,7 @@ uint8_t form3_turn(struct mrw_form3 *signal, uint8_t cmd)
 		clr_pin(&signal->inductor[2]);
 		break;
 
+	case SIGNAL_SH1:
 	case SIGNAL_HP1:
 	case SIGNAL_VR1:
 		pin = 1;

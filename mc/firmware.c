@@ -372,6 +372,7 @@ ISR(TIMER2_OVF_vect)
 				queue_result(cmd, dvc->unit_no, MSG_SWITCH_FAILED);
 				break;
 
+			case TYPE_SIGNAL_SF2:
 			case TYPE_SIGNAL_PF2:
 			case TYPE_SIGNAL_MF2:
 				form2_off(&dvc->unit.u_form2);
@@ -450,6 +451,7 @@ static void init_ports(void)
 			switch_off     (&dvc->unit.u_switch);
 			break;
 
+		case TYPE_SIGNAL_SF2:
 		case TYPE_SIGNAL_PF2:
 		case TYPE_SIGNAL_MF2:
 			form2_init(&dvc->unit.u_form2);

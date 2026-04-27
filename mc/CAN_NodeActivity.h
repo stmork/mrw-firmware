@@ -25,6 +25,7 @@ extern int8_t configMainForm3(CAN_message *msg);
 extern int8_t configMainLight2(CAN_message *msg);
 extern int8_t configMainLight3(CAN_message *msg);
 extern int8_t configMainLight4(CAN_message *msg);
+extern int8_t configShuntForm2(CAN_message *msg);
 extern int8_t configPreForm2(CAN_message *msg);
 extern int8_t configPreForm3(CAN_message *msg);
 extern int8_t configPreLight2(CAN_message *msg);

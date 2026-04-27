@@ -212,6 +212,11 @@ initialisiert.
 				result = configMainForm3(msg);
 				break;
 
+			case CFGSF2:
+
+				result = configShuntForm2(msg);
+				break;
+
 			case CFGPF2:
 
 				result = configPreForm2(msg);

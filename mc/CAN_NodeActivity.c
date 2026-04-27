@@ -164,6 +164,25 @@ int8_t  configMainLight4(CAN_message *msg)
 	return MSG_OK;
 }
 
+/* CFGSF2 */
+int8_t  configShuntForm2(CAN_message *msg)
+{
+	if (IS_CONFIG_FULL)
+	{
+		return MSG_CONFIG_BUFFER_FULL;
+	}
+
+	mrw_device *dvc = &config.dvc[config.count];
+
+	dvc->unit_type = TYPE_SIGNAL_SF2;
+	dvc->unit_no   = msg->eid;
+	config_connection( &dvc->unit.u_form2.inductor[0], msg->data[1]);
+	config_connection( &dvc->unit.u_form2.inductor[1], msg->data[2]);
+	config.count++;
+
+	return MSG_OK;
+}
+
 /* CFGPF2 */
 int8_t  configPreForm2(CAN_message *msg)
 {
